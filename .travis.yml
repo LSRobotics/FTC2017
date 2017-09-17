@@ -1,4 +1,5 @@
 language: android
+install: ./install_license.sh
 android:
   components:
     - build-tools-26.0.1
