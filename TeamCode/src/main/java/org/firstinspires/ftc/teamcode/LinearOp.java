@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.ftccommon.configuration.ScannedDevices;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -51,7 +52,6 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-@Disabled
 public class LinearOp extends LinearOpMode {
 
     // Declare OpMode members.
@@ -61,17 +61,22 @@ public class LinearOp extends LinearOpMode {
     private DcMotor leftBack = null;
     private DcMotor rightBack = null;
 
+    final private String leftFront_name = "left_front_drive";
+    final private String rightFront_name = "right_front_drive";
+    final private String leftBack_name = "left_back_drive";
+    final private String rightBack_name = "right_front_drive";
+
     VuMarkSys vumark = new VuMarkSys(hardwareMap);
     
-    private void initWheels() {
+    private void initMotors() {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         
-        leftFront = hardwareMap.get(DcMotor.class, "left_front_drive");
-        rightFront = hardwareMap.get(DcMotor.class, "right_front_drive");
-        leftBack = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFront = hardwareMap.get(DcMotor.class, "right_front_drive");
+        leftFront = hardwareMap.get(DcMotor.class, leftFront_name);
+        rightFront = hardwareMap.get(DcMotor.class, rightFront_name);
+        leftBack = hardwareMap.get(DcMotor.class, leftBack_name);
+        rightFront = hardwareMap.get(DcMotor.class, rightBack_name);
     
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
@@ -81,7 +86,8 @@ public class LinearOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        
+        initMotors();
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -119,10 +125,10 @@ public class LinearOp extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Motors", 
-                             "Left_FrontWheel (%.2f)",
-                             "Right_FrontWheel (%.2f)",
-                             "Left_BackWheel (%.2f)",
-                             "Right_BackWheel (%.2f)",
+                             "Left FrontWheel (%.2f)",
+                             "Right FrontWheel (%.2f)",
+                             "Left BackWheel (%.2f)",
+                             "Right BackWheel (%.2f)",
                              leftFrontPower,
                              rightFrontPower,
                              leftBackPower,
