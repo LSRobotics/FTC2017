@@ -36,6 +36,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.Statics;
+import org.firstinspires.ftc.teamcode.actuators.*;
 
 
 /**
@@ -57,89 +59,44 @@ public class LinearOp extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor leftFront = null;
-    private DcMotor rightFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightBack = null;
+    //Create objects for access
+    private MecanumDrive mWheel = new MecanumDrive();
 
-
-    final private String leftFront_name = "left_front_drive";
-    final private String rightFront_name = "right_front_drive";
-    final private String leftBack_name = "left_back_drive";
-    final private String rightBack_name = "right_back_drive";
-
-    //VuMarkSys vumark = new VuMarkSys(hardwareMap);
-
-    public void initMotors() {
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        
-        leftFront = hardwareMap.get(DcMotor.class, leftFront_name);
-        rightFront = hardwareMap.get(DcMotor.class, rightFront_name);
-        leftBack = hardwareMap.get(DcMotor.class, leftBack_name);
-        rightBack = hardwareMap.get(DcMotor.class, rightBack_name);
-
-        leftFront.setDirection(DcMotor.Direction.FORWARD);
-        leftBack.setDirection(DcMotor.Direction.FORWARD);
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection(DcMotor.Direction.REVERSE);
-    }
+    private VuMarkSys vumark = new VuMarkSys(hardwareMap);
 
     @Override
     public void runOpMode() {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        //Modules init
+        mWheel.initMotors();
 
-        initMotors();
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
+        waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            
-            //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+            mWheel.mecanumControl(); //Drive the bot
 
-            double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-            double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-            double rightX = gamepad1.right_stick_x;
 
-            // Setup a variable for each drive wheel to save power level for telemetry
-            
-            final double leftFrontPower = r * Math.cos(robotAngle) + rightX;
-            final double rightFrontPower = r * Math.sin(robotAngle) - rightX;
-            final double leftBackPower = r * Math.sin(robotAngle) + rightX;
-            final double rightBackPower = r * Math.cos(robotAngle) - rightX;
-
-            // Send calculated power to wheels
-            leftFront.setPower(leftFrontPower);
-            rightFront.setPower(rightFrontPower);
-            leftBack.setPower(leftBackPower);
-            rightBack.setPower(rightBackPower);
-
-            // Get VuMark informations
-
-            //telemetry.addData("VuMark", vumark.getPos());
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-
+            //Start putting information on the Driver Station
+            telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
+            telemetry.addData("Status", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Motors",
                                "Left FrontWheel (%.2f) "
                              + "Right FrontWheel (%.2f) "
                              + "Left BackWheel (%.2f) "
                              + "Right BackWheel (%.2f)",
-                             leftFrontPower,
-                             rightFrontPower,
-                             leftBackPower,
-                             rightBackPower
+                             mWheel.leftFrontPower,
+                             mWheel.rightFrontPower,
+                             mWheel.leftBackPower,
+                             mWheel.rightBackPower
                              );
 
             telemetry.update();
         }
     }
+
 }
