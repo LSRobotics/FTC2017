@@ -56,19 +56,21 @@ public class LinearOp extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor leftFront = null;
     private DcMotor rightFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightBack = null;
 
+
     final private String leftFront_name = "left_front_drive";
     final private String rightFront_name = "right_front_drive";
     final private String leftBack_name = "left_back_drive";
-    final private String rightBack_name = "right_front_drive";
+    final private String rightBack_name = "right_back_drive";
 
-    VuMarkSys vumark = new VuMarkSys(hardwareMap);
-    
-    private void initMotors() {
+    //VuMarkSys vumark = new VuMarkSys(hardwareMap);
+
+    public void initMotors() {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -76,8 +78,8 @@ public class LinearOp extends LinearOpMode {
         leftFront = hardwareMap.get(DcMotor.class, leftFront_name);
         rightFront = hardwareMap.get(DcMotor.class, rightFront_name);
         leftBack = hardwareMap.get(DcMotor.class, leftBack_name);
-        rightFront = hardwareMap.get(DcMotor.class, rightBack_name);
-    
+        rightBack = hardwareMap.get(DcMotor.class, rightBack_name);
+
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -86,10 +88,11 @@ public class LinearOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        initMotors();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        initMotors();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -119,16 +122,17 @@ public class LinearOp extends LinearOpMode {
             rightBack.setPower(rightBackPower);
 
             // Get VuMark informations
-            telemetry.addData("VuMark", vumark.getPos());
+
+            //telemetry.addData("VuMark", vumark.getPos());
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Motors", 
-                             "Left FrontWheel (%.2f)",
-                             "Right FrontWheel (%.2f)",
-                             "Left BackWheel (%.2f)",
-                             "Right BackWheel (%.2f)",
+
+            telemetry.addData("Motors",
+                               "Left FrontWheel (%.2f) "
+                             + "Right FrontWheel (%.2f) "
+                             + "Left BackWheel (%.2f) "
+                             + "Right BackWheel (%.2f)",
                              leftFrontPower,
                              rightFrontPower,
                              leftBackPower,
