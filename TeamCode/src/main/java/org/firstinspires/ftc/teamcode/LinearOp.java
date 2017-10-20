@@ -29,15 +29,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.configuration.ScannedDevices;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.ftccommon.configuration.ScannedDevices;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.Statics;
+//import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.actuators.*;
+import org.firstinspires.ftc.teamcode.databases.*;
+
+
 
 
 /**
@@ -59,18 +61,29 @@ public class LinearOp extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
+    private boolean isDPadUphanged = false,
+                    isDPadDownChanged = false,
+                    isJleftXChanged = false,
+                    isJleftYChanged = false,
+                    isJrightXChanged = false,
+                    isJrightYChanged = false,
+                    isLBChanged = false;
+
+
     //Create objects for access
     private MecanumDrive mWheel = new MecanumDrive();
-
+    private ServoControl jArm = new ServoControl();
+    GamepadSpace previous;
     private VuMarkSys vumark = new VuMarkSys(hardwareMap);
+
+
 
     @Override
     public void runOpMode() {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        //Modules init
-        mWheel.initMotors();
+        initModules();//Modules init
 
         waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
@@ -78,26 +91,77 @@ public class LinearOp extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            detectGPChange();
 
-            mWheel.mecanumControl(); //Drive the bot
+            if (isLBChanged) { //Sniping Mode Switch
+                if (gamepad1.left_bumper) {mWheel.speed = 0.3; jArm.speed = 0.3;} // Change the speed of Mecanum Wheels if Y key got pressed
+                else {mWheel.speed = 1.0;jArm.speed = 1.0;}
+            }
 
+
+            if (isJleftXChanged || isJleftYChanged || isJrightXChanged || isJrightYChanged) {
+                mWheel.move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
+            } //Drive the bot if any joystick moved
+
+
+
+            if (isDPadUphanged || isDPadDownChanged)
+                jArm.move(gamepad1.dpad_up ? 1 : 0, gamepad1.dpad_down ? 1 : 0); //Move the arm if triggered DPAD Up or Down
+
+            //Save Data for next loop
+            saveGPData();
 
             //Start putting information on the Driver Station
             telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Motors",
-                               "Left FrontWheel (%.2f) "
-                             + "Right FrontWheel (%.2f) "
-                             + "Left BackWheel (%.2f) "
-                             + "Right BackWheel (%.2f)",
-                             mWheel.leftFrontPower,
-                             mWheel.rightFrontPower,
-                             mWheel.leftBackPower,
-                             mWheel.rightBackPower
-                             );
+                    "Left FrontWheel (%.2f) "
+                            + "Right FrontWheel (%.2f) "
+                            + "Left BackWheel (%.2f) "
+                            + "Right BackWheel (%.2f)",
+                    mWheel.leftFrontPower,
+                    mWheel.rightFrontPower,
+                    mWheel.leftBackPower,
+                    mWheel.rightBackPower
+            );
 
             telemetry.update();
         }
     }
 
+    private void initModules() {
+
+        //Jewel Arm
+        jArm.deviceName = Statics.Servos.jewel;
+        jArm.toFORWARD = true;
+        jArm.initMotors();
+
+        //Mecanum Wheel
+        mWheel.FLDeviceName = Statics.MecanumWheel.Front.left;
+        mWheel.FRDeviceName = Statics.MecanumWheel.Front.right;
+        mWheel.BLDeviceName = Statics.MecanumWheel.Back.left;
+        mWheel.BRDeviceName = Statics.MecanumWheel.Front.right;
+        mWheel.initMotors();
+
+    }
+
+    private void detectGPChange() {
+        isDPadUphanged    = gamepad1.dpad_up != previous.DPadUp? true : false;
+        isDPadDownChanged = gamepad1.dpad_down != previous.DPadDown? true : false;
+        isLBChanged       = gamepad1.left_bumper != previous.LB? true : false;
+        isJleftXChanged   = gamepad1.left_stick_x != previous.JleftX? true : false;
+        isJleftYChanged   = gamepad1.left_stick_y != previous.JleftY? true : false;
+        isJrightXChanged  = gamepad1.right_stick_x != previous.JrightX? true : false;
+        isJrightYChanged  = gamepad1.right_stick_y != previous.JrightY? true : false;
+    }
+
+    private void saveGPData() {
+        previous.DPadDown = gamepad1.dpad_down;
+        previous.DPadUp = gamepad1.dpad_up;
+        previous.LB = gamepad1.left_bumper;
+        previous.JleftX = gamepad1.left_stick_x;
+        previous.JleftY = gamepad1.left_stick_y;
+        previous.JrightX = gamepad1.right_stick_x;
+        previous.JrightY = gamepad1.right_stick_y;
+    }
 }

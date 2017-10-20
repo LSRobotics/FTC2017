@@ -7,7 +7,6 @@ package org.firstinspires.ftc.teamcode.actuators;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.LinearOp;
-import org.firstinspires.ftc.teamcode.Statics;
 
 public class MecanumDrive extends LinearOp{
 
@@ -19,18 +18,21 @@ public class MecanumDrive extends LinearOp{
     public double rightFrontPower;
     public double leftBackPower;
     public double rightBackPower;
-
-
+    public double speed = 0.1;
+    public String FLDeviceName;
+    public String FRDeviceName;
+    public String BLDeviceName;
+    public String BRDeviceName;
 
     public void initMotors() {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
 
-        leftFront = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Front.left);
-        rightFront = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Front.right);
-        leftBack = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Back.left);
-        rightBack = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Back.right);
+        leftFront = hardwareMap.get(DcMotor.class, FLDeviceName);
+        rightFront = hardwareMap.get(DcMotor.class, FRDeviceName);
+        leftBack = hardwareMap.get(DcMotor.class, BLDeviceName);
+        rightBack = hardwareMap.get(DcMotor.class, BRDeviceName);
 
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
@@ -38,12 +40,11 @@ public class MecanumDrive extends LinearOp{
         rightBack.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public void mecanumControl() {
+    public void move(float leftX, float leftY, float rightX, float rightY) {
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
 
-        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-        double rightX = gamepad1.right_stick_x;
+        double r = Math.hypot(leftX, leftY);
+        double robotAngle = Math.atan2(leftY, leftX) - Math.PI / 4;
 
         // Setup a variable for each drive wheel to save power level for telemetry
 
