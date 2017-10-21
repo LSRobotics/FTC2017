@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ServoControl extends LinearOp {
     private Servo servoOBJ = null;
-    public double servoPos = 0;
+    private double servoPos = 0;
     public double speed = 0.1;
-    public String deviceName = new String();
+    public String deviceName;
     public boolean toFORWARD = true;
 
     public void initMotors() {

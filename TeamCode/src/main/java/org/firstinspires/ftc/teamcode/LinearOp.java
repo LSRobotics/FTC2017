@@ -66,14 +66,13 @@ public class LinearOp extends LinearOpMode {
                     isJleftXChanged = false,
                     isJleftYChanged = false,
                     isJrightXChanged = false,
-                    isJrightYChanged = false,
                     isLBChanged = false;
 
 
     //Create objects for access
-    private MecanumDrive mWheel = new MecanumDrive();
-    private ServoControl jArm = new ServoControl();
-    GamepadSpace previous;
+    private MecanumDrive mWheel;
+    private ServoControl jArm;
+    private GamepadSpace previous;
     private VuMarkSys vumark = new VuMarkSys(hardwareMap);
 
     @Override
@@ -97,8 +96,8 @@ public class LinearOp extends LinearOpMode {
             }
 
 
-            if (isJleftXChanged || isJleftYChanged || isJrightXChanged || isJrightYChanged) {
-                mWheel.move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
+            if (isJleftXChanged || isJleftYChanged || isJrightXChanged) {
+                mWheel.move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             } //Drive the bot if any joystick moved
 
 
@@ -140,19 +139,18 @@ public class LinearOp extends LinearOpMode {
         mWheel.FLDeviceName = Statics.MecanumWheel.Front.left;
         mWheel.FRDeviceName = Statics.MecanumWheel.Front.right;
         mWheel.BLDeviceName = Statics.MecanumWheel.Back.left;
-        mWheel.BRDeviceName = Statics.MecanumWheel.Front.right;
+        mWheel.BRDeviceName = Statics.MecanumWheel.Back.right;
         mWheel.initMotors();
 
     }
 
     private void detectGPChange() {
-        isDPadUphanged    = gamepad1.dpad_up != previous.DPadUp? true : false;
-        isDPadDownChanged = gamepad1.dpad_down != previous.DPadDown? true : false;
-        isLBChanged       = gamepad1.left_bumper != previous.LB? true : false;
-        isJleftXChanged   = gamepad1.left_stick_x != previous.JleftX? true : false;
-        isJleftYChanged   = gamepad1.left_stick_y != previous.JleftY? true : false;
-        isJrightXChanged  = gamepad1.right_stick_x != previous.JrightX? true : false;
-        isJrightYChanged  = gamepad1.right_stick_y != previous.JrightY? true : false;
+        isDPadUphanged    = gamepad1.dpad_up != previous.DPadUp;
+        isDPadDownChanged = gamepad1.dpad_down != previous.DPadDown;
+        isLBChanged       = gamepad1.left_bumper != previous.LB;
+        isJleftXChanged   = gamepad1.left_stick_x != previous.JleftX;
+        isJleftYChanged   = gamepad1.left_stick_y != previous.JleftY;
+        isJrightXChanged  = gamepad1.right_stick_x != previous.JrightX;
     }
 
     private void saveGPData() {
@@ -162,6 +160,5 @@ public class LinearOp extends LinearOpMode {
         previous.JleftX = gamepad1.left_stick_x;
         previous.JleftY = gamepad1.left_stick_y;
         previous.JrightX = gamepad1.right_stick_x;
-        previous.JrightY = gamepad1.right_stick_y;
     }
 }

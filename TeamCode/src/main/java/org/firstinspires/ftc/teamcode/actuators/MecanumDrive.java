@@ -42,7 +42,7 @@ public class MecanumDrive extends LinearOp{
         rightBack.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public void move(float leftX, float leftY, float rightX, float rightY) {
+    public void move(float leftX, float leftY, float rightX) {
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
 
         double r = Math.hypot(leftX, leftY);
@@ -57,9 +57,9 @@ public class MecanumDrive extends LinearOp{
         rightBackPower = r * Math.cos(robotAngle) - rightX;
 
         // Send calculated power to wheels
-        leftFront.setPower(leftFrontPower);
-        rightFront.setPower(rightFrontPower);
-        leftBack.setPower(leftBackPower);
-        rightBack.setPower(rightBackPower);
+        leftFront.setPower(leftFrontPower*speed);
+        rightFront.setPower(rightFrontPower*speed);
+        leftBack.setPower(leftBackPower*speed);
+        rightBack.setPower(rightBackPower*speed);
     }
 }
