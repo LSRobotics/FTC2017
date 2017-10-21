@@ -35,11 +35,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 //import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.actuators.*;
 import org.firstinspires.ftc.teamcode.databases.*;
-
-
 
 
 /**
@@ -61,6 +60,7 @@ public class LinearOp extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
+
     private boolean isDPadUphanged = false,
                     isDPadDownChanged = false,
                     isJleftXChanged = false,
@@ -75,8 +75,6 @@ public class LinearOp extends LinearOpMode {
     private ServoControl jArm = new ServoControl();
     GamepadSpace previous;
     private VuMarkSys vumark = new VuMarkSys(hardwareMap);
-
-
 
     @Override
     public void runOpMode() {
@@ -115,19 +113,21 @@ public class LinearOp extends LinearOpMode {
             telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Motors",
-                    "Left FrontWheel (%.2f) "
-                            + "Right FrontWheel (%.2f) "
-                            + "Left BackWheel (%.2f) "
-                            + "Right BackWheel (%.2f)",
-                    mWheel.leftFrontPower,
-                    mWheel.rightFrontPower,
-                    mWheel.leftBackPower,
-                    mWheel.rightBackPower
-            );
+
+                               "Left FrontWheel (%.2f) "
+                             + "Right FrontWheel (%.2f) "
+                             + "Left BackWheel (%.2f) "
+                             + "Right BackWheel (%.2f)",
+                             mWheel.leftFrontPower,
+                             mWheel.rightFrontPower,
+                             mWheel.leftBackPower,
+                             mWheel.rightBackPower
+                             );
 
             telemetry.update();
         }
     }
+
 
     private void initModules() {
 

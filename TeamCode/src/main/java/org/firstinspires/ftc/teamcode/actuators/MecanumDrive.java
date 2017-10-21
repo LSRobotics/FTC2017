@@ -18,11 +18,13 @@ public class MecanumDrive extends LinearOp{
     public double rightFrontPower;
     public double leftBackPower;
     public double rightBackPower;
+
     public double speed = 0.1;
     public String FLDeviceName;
     public String FRDeviceName;
     public String BLDeviceName;
     public String BRDeviceName;
+
 
     public void initMotors() {
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -45,6 +47,7 @@ public class MecanumDrive extends LinearOp{
 
         double r = Math.hypot(leftX, leftY);
         double robotAngle = Math.atan2(leftY, leftX) - Math.PI / 4;
+
 
         // Setup a variable for each drive wheel to save power level for telemetry
 
