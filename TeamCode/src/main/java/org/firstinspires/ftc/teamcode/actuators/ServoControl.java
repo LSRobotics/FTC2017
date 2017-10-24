@@ -14,11 +14,16 @@ public class ServoControl extends LinearOp {
     public String deviceName;
     public boolean toFORWARD = true;
 
-    public void initMotors() {
-        servoOBJ = hardwareMap.get(Servo.class, deviceName);
+    public void initMotors(String DName) {
+        servoOBJ = hardwareMap.get(Servo.class, DName);
         if(toFORWARD) servoOBJ.setDirection(Servo.Direction.FORWARD);
         else servoOBJ.setDirection(Servo.Direction.REVERSE);
     }
+
+    public void initMotors(){
+        initMotors(deviceName);
+    }
+
     public int move(double plus, double minus) {
         //Right trigger ==> Plus; Left trigger ==> Minus
 

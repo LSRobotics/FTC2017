@@ -26,7 +26,7 @@ public class MecanumDrive extends LinearOp{
     public String BRDeviceName;
 
 
-    public void initMotors() {
+    public void initMotors(String FL, String FR, String BL, String BR) {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -42,9 +42,13 @@ public class MecanumDrive extends LinearOp{
         rightBack.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    public void initMotors(){
+        initMotors(FLDeviceName,FRDeviceName,BLDeviceName,BRDeviceName);
+    }
+
     public void move(float leftX, float leftY, float rightX) {
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
-
+s
         double r = Math.hypot(leftX, leftY);
         double robotAngle = Math.atan2(leftY, leftX) - Math.PI / 4;
 
@@ -56,10 +60,14 @@ public class MecanumDrive extends LinearOp{
         leftBackPower = r * Math.sin(robotAngle) + rightX;
         rightBackPower = r * Math.cos(robotAngle) - rightX;
 
+        leftFrontPower *= speed;
+        rightFrontPower *= speed;
+        leftBackPower *= speed;
+        rightBackPower *= speed;
         // Send calculated power to wheels
-        leftFront.setPower(leftFrontPower*speed);
-        rightFront.setPower(rightFrontPower*speed);
-        leftBack.setPower(leftBackPower*speed);
-        rightBack.setPower(rightBackPower*speed);
+        leftFront.setPower(leftFrontPower);
+        rightFront.setPower(rightFrontPower);
+        leftBack.setPower(leftBackPower);
+        rightBack.setPower(rightBackPower);
     }
 }

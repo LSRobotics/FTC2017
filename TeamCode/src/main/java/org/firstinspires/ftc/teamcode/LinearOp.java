@@ -58,7 +58,7 @@ import org.firstinspires.ftc.teamcode.databases.*;
 public class LinearOp extends LinearOpMode {
 
     // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    final private ElapsedTime runtime = new ElapsedTime();
 
 
     private boolean isDPadUphanged = false,
@@ -70,10 +70,10 @@ public class LinearOp extends LinearOpMode {
 
 
     //Create objects for access
-    private MecanumDrive mWheel;
-    private ServoControl jArm;
-    private GamepadSpace previous;
-    private VuMarkSys vumark = new VuMarkSys(hardwareMap);
+    final private MecanumDrive mWheel = new MecanumDrive();
+    final private ServoControl jArm = new ServoControl();
+    final private GamepadSpace previous = new GamepadSpace();
+    final private VuMarkSys vumark = new VuMarkSys(hardwareMap);
 
     @Override
     public void runOpMode() {
