@@ -48,7 +48,6 @@ public class MecanumDrive extends LinearOp{
 
     public void move(float leftX, float leftY, float rightX) {
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
-s
         double r = Math.hypot(leftX, leftY);
         double robotAngle = Math.atan2(leftY, leftX) - Math.PI / 4;
 

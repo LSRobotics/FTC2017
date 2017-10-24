@@ -58,7 +58,7 @@ import org.firstinspires.ftc.teamcode.databases.*;
 public class LinearOp extends LinearOpMode {
 
     // Declare OpMode members.
-    final private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime runtime = new ElapsedTime();
 
 
     private boolean isDPadUphanged = false,
@@ -70,10 +70,9 @@ public class LinearOp extends LinearOpMode {
 
 
     //Create objects for access
-    final private MecanumDrive mWheel = new MecanumDrive();
-    final private ServoControl jArm = new ServoControl();
-    final private GamepadSpace previous = new GamepadSpace();
-    final private VuMarkSys vumark = new VuMarkSys(hardwareMap);
+    private MecanumDrive mWheel = new MecanumDrive();
+    private ServoControl jArm = new ServoControl();
+    private GamepadSpace previous = new GamepadSpace();
 
     @Override
     public void runOpMode() {
@@ -109,7 +108,7 @@ public class LinearOp extends LinearOpMode {
             saveGPData();
 
             //Start putting information on the Driver Station
-            telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
+            //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Motors",
 
