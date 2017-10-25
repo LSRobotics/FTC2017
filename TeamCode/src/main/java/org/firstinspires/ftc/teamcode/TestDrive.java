@@ -56,8 +56,8 @@ import org.firstinspires.ftc.teamcode.databases.*;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-public class LinearOp extends LinearOpMode {
+@TeleOp(name="Test Drive", group="Linear Opmode")
+public class TestDrive extends LinearOpMode {
 
     //Tank Drive Class
     final private class TankDrive {
@@ -234,17 +234,13 @@ public class LinearOp extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() {
-
+    public void runOpMode(){
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         jArm.init();
         mWheel.init();
-
-        waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             detectGPChange();
