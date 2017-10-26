@@ -270,16 +270,13 @@ public class LinearOp extends LinearOpMode {
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-            telemetry.addData("\nMotors",
-                               "Left FrontWheel (%.2f) \n "
-                             + "Right FrontWheel (%.2f) \n "
-                             + "Left BackWheel (%.2f) \n"
-                             + "Right BackWheel (%.2f) \n",
-                             mWheel.leftFrontPower,
-                             mWheel.rightFrontPower,
-                             mWheel.leftBackPower,
-                             mWheel.rightBackPower
-                             );
+            telemetry.addData("Mecanum Wheels", " " );
+            telemetry.addData("Left Front Wheel", mWheel.leftFrontPower);
+            telemetry.addData("Right Front Wheel", mWheel.rightFrontPower);
+            telemetry.addData("Left Back Wheel", mWheel.leftBackPower);
+            telemetry.addData("Right Back Wheel", mWheel.leftBackPower);
+            telemetry.addData("Gamepad", " ");
+            telemetry.addData("Left Joystick", "(" + previous.JleftX + ", " + previous.JleftY + ")");
 
             telemetry.update();
         }
