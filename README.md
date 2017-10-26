@@ -3,9 +3,9 @@ This is the code for FTC 2017 season.
 
 ## Travis-CI build status
 
-LSRobotics(Main) Branch [![Build Status](https://travis-ci.org/LSRobotics/FTC2017.svg?branch=master)](https://travis-ci.org/LSRobotics/FTC2017)
+LSRobotics(Main) Branch [![Build Status](https://travis-ci.org/LSRobotics/FTC-11319-S18.svg?branch=master)](https://travis-ci.org/LSRobotics/FTC-11319-S18)
 
-LBYPatrick's branch [![Build Status](https://travis-ci.org/LBYPatrick/FTC2017.svg?branch=master)](https://travis-ci.org/LBYPatrick/FTC2017)
+LBYPatrick's branch [![Build Status](https://travis-ci.org/LBYPatrick/FTC2018-team11319-RC.svg?branch=master)](https://travis-ci.org/LBYPatrick/FTC2018-team11319-RC)
 
 ## About Pushing Code
 Please, Please open a branch and pull request before merging into the main branch!
