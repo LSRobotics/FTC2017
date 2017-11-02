@@ -10,7 +10,9 @@ final public class ServoControl {
 
     private static Servo servoOBJ = null;
     public double servoPos = 0;
-    public int servoSwitch = 0;
+    private double servoTempPos = 0;
+    private boolean toOriginalDirection = true;
+    public int servoSwitch = -1;
     public double speed = 1.0;
     public boolean toFORWARD = true;
     public double minPos = 0;
@@ -23,36 +25,25 @@ final public class ServoControl {
         maxPos = max;
         servoOBJ.setDirection(forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE);
     }
+    public void move_glyphGrabber(){
 
-    public int move_jewelArm(boolean plus, boolean minus) {
-        //Right trigger ==> Plus; Left trigger ==> Minus
+        if(toOriginalDirection) servoTempPos += 0.001;
+        if(!toOriginalDirection) servoTempPos -= 0.001;
 
-        if (plus == minus) return 1;
-        else {
+        if(servoTempPos >= maxPos) {servoPos = maxPos; toOriginalDirection = false;}
+        if(servoTempPos <= minPos) {servoPos = minPos; toOriginalDirection = true;}
 
-            if(plus) servoSwitch += 1; else servoSwitch -= 1;
-
-            if (servoSwitch > 2) servoSwitch = 2;
-            else if (servoSwitch < 0) servoSwitch = 0;
-
+    }
+    public int move_jewelArm() {
+            servoSwitch ++;
             switch (servoSwitch) {
-                case 0:
-                    servoPos = maxPos;
-                    break;
-                case 1:
-                    servoPos = (maxPos + minPos)/2;
-                case 2:
-                    servoPos = minPos;
+                case 0:servoPos = maxPos;break;
+                case 1:servoPos = (maxPos + minPos)/2;break;
+                case 2:servoPos = minPos;break;
+                default:servoPos = maxPos;servoSwitch = -1;break;
             }
-
-            //servoPos += ((plus? 1:0) * 0.01 * speed); // Determines whether going forward
-
-            //Out-of-Range Detection
-            //if (servoPos < minPos) servoPos = minPos;
-            //else if (servoPos > maxPos) servoPos = maxPos;
 
             servoOBJ.setPosition(servoPos);
             return 0;
         }
-    }
 }

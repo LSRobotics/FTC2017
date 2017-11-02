@@ -35,7 +35,7 @@ final public class MecanumDrive {
     final public void move(double leftX, double leftY, double rightX) {
 
         leftX = -leftX; //Essential for FTC 2018
-        rightX = rightX * 0.5;
+        rightX *= -0.5;
 
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
         double r = Math.hypot(leftX, leftY);

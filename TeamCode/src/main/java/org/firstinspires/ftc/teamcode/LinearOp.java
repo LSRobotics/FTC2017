@@ -68,34 +68,33 @@ public class LinearOp extends LinearOpMode {
 
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
-    private boolean isDPadUpChanged = false;
-    private boolean isDPadDownChanged = false;
-    private boolean isJleftXChanged = false;
-    private boolean isJleftYChanged = false;
-    private boolean isJrightXChanged = false;
-    private boolean isLBChanged = false;
+    private boolean isTriangleChanged = false,
+                    isJleftXChanged = false,
+                    isJleftYChanged = false,
+                    isJrightXChanged = false,
+                    isLBChanged = false,
+                    isLTChanged = false,
+                    isRTChanged = false;
 
 
     private void detectGPChange() {
-        isDPadUpChanged   = gamepad1.dpad_up != previous.DPadUp;
-        isDPadDownChanged = gamepad1.dpad_down != previous.DPadDown;
-        isLBChanged       = gamepad1.left_bumper != previous.LB;
-        isJleftXChanged   = gamepad1.left_stick_x != previous.JleftX;
-        isJleftYChanged   = gamepad1.left_stick_y != previous.JleftY;
-        isJrightXChanged  = gamepad1.right_stick_x != previous.JrightX;
-        boolean isLTChanged = gamepad1.left_trigger != previous.LT;
-        boolean isRTChanged = gamepad1.right_trigger != previous.RT;
+        isTriangleChanged   = gamepad1.y != previous.Triangle;
+        isLBChanged         = gamepad1.left_bumper != previous.LB;
+        isJleftXChanged     = gamepad1.left_stick_x != previous.JleftX;
+        isJleftYChanged     = gamepad1.left_stick_y != previous.JleftY;
+        isJrightXChanged    = gamepad1.right_stick_x != previous.JrightX;
+        isLTChanged         = gamepad1.left_trigger != previous.LT;
+        isRTChanged         = gamepad1.right_trigger != previous.RT;
     }
 
     private void saveGPData() {
-        previous.DPadDown = gamepad1.dpad_down;
-        previous.DPadUp = gamepad1.dpad_up;
-        previous.LB = gamepad1.left_bumper;
-        previous.JleftX = gamepad1.left_stick_x;
-        previous.JleftY = gamepad1.left_stick_y;
-        previous.JrightX = gamepad1.right_stick_x;
-        previous.LT = gamepad1.left_trigger;
-        previous.RT = gamepad1.right_trigger;
+        previous.Triangle  = gamepad1.y;
+        previous.LB        = gamepad1.left_bumper;
+        previous.JleftX    = gamepad1.left_stick_x;
+        previous.JleftY    = gamepad1.left_stick_y;
+        previous.JrightX   = gamepad1.right_stick_x;
+        previous.LT        = gamepad1.left_trigger;
+        previous.RT        = gamepad1.right_trigger;
     }
 
     private void initialize(){
@@ -137,8 +136,8 @@ public class LinearOp extends LinearOpMode {
             } //Drive the bot if any joystick moved
 
 
-            if (isDPadDownChanged || isDPadUpChanged)
-                jArm.move_jewelArm(gamepad1.dpad_up ? true : false, gamepad1.dpad_down ? true : false); //Move the arm if triggered DPAD Up or Down
+            if (isTriangleChanged)
+                jArm.move_jewelArm(); //Move the arm if triggered DPAD Up or Down
 
             //Save Data for next loop
             saveGPData();

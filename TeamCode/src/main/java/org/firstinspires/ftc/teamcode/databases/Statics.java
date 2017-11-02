@@ -19,7 +19,8 @@ final public class Statics {
 
     final public static class Servos{
             final public static String jewel = "jewel_arm";
-            final public static String left_glyphGrabber = "left_glyph_grabber";
+            final public static String left_glyphGrabber = "glyph_left_grabber";
+            final public static String right_glyphGrabber = "glyph_right_grabber";
     }
 
     final public static class Vuforia {
