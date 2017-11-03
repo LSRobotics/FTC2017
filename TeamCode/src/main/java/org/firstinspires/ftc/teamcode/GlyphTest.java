@@ -26,13 +26,13 @@ public class GlyphTest extends LinearOpMode {
 
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
-    private boolean isLTChanged = false,
-                    isRTChanged = false;
+    private boolean isLTPressed = false,
+                    isRTPressed = false;
 
 
     private void detectGPChange() {
-        isLTChanged         = gamepad1.left_trigger != previous.LT;
-        isRTChanged         = gamepad1.right_trigger != previous.RT;
+        isLTPressed         = gamepad1.left_trigger != 0;
+        isRTPressed        = gamepad1.right_trigger != 0;
     }
 
     private void saveGPData() {
@@ -64,7 +64,15 @@ public class GlyphTest extends LinearOpMode {
 
             detectGPChange();
 
-            if(isLTChanged || isRTChanged) {
+            if(isLTPressed) {
+                glyphGrabber_left.side = false;
+                glyphGrabber_right.side = true;
+                glyphGrabber_left.move_glyphGrabber();
+                glyphGrabber_right.move_glyphGrabber();
+             }
+            else if(isRTPressed) {
+                glyphGrabber_left.side = true;
+                glyphGrabber_right.side = false;
                 glyphGrabber_left.move_glyphGrabber();
                 glyphGrabber_right.move_glyphGrabber();
             }
@@ -74,6 +82,8 @@ public class GlyphTest extends LinearOpMode {
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
+            telemetry.addData("Left Grabber:", glyphGrabber_left.servoPos);
+            telemetry.addData("Right Grabber:", glyphGrabber_right.servoPos);
             telemetry.update();
         }
     }

@@ -16,7 +16,6 @@ final public class MecanumDrive {
     public double rightFrontPower;
     public double leftBackPower;
     public double rightBackPower;
-
     public double speed = 1.0;
 
     public MecanumDrive(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor backLeftMotor, DcMotor backRightMotor){
