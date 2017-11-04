@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.MecanumDrive;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
 import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
 import org.firstinspires.ftc.teamcode.databases.Statics;
@@ -22,7 +20,7 @@ public class GlyphTest extends LinearOpMode {
     //Initialize objects
     private ServoControl glyphGrabber_left;
     private ServoControl glyphGrabber_right;
-    final GamepadSpace previous = new GamepadSpace();
+    final private GamepadSpace previous = new GamepadSpace();
 
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
@@ -32,7 +30,7 @@ public class GlyphTest extends LinearOpMode {
 
     private void detectGPChange() {
         isLTPressed         = gamepad1.left_trigger != 0;
-        isRTPressed        = gamepad1.right_trigger != 0;
+        isRTPressed         = gamepad1.right_trigger!= 0;
     }
 
     private void saveGPData() {
@@ -64,20 +62,16 @@ public class GlyphTest extends LinearOpMode {
 
             detectGPChange();
 
-            if(isLTPressed) {
-                glyphGrabber_left.side = false;
-                glyphGrabber_right.side = true;
-                glyphGrabber_left.move_glyphGrabber();
-                glyphGrabber_right.move_glyphGrabber();
+            if(isLTPressed) { //LT for moving the grabbers inward
+                glyphGrabber_left.moveGlyphGrabber(true);
+                glyphGrabber_right.moveGlyphGrabber(true);
              }
-            else if(isRTPressed) {
-                glyphGrabber_left.side = true;
-                glyphGrabber_right.side = false;
-                glyphGrabber_left.move_glyphGrabber();
-                glyphGrabber_right.move_glyphGrabber();
+            else if(isRTPressed) { //RT for moving the grabbers outward
+                glyphGrabber_left.moveGlyphGrabber(false);
+                glyphGrabber_right.moveGlyphGrabber(false);
             }
             //Save Data for next loop
-            saveGPData();
+            //saveGPData();
 
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations

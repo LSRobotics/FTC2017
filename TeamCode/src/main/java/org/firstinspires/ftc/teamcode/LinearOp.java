@@ -62,7 +62,7 @@ public class LinearOp extends LinearOpMode {
     //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Servos.left_glyphGrabber);
 
     //Initialize objects
-    private MecanumDrive mWheel;
+    private DriveTrain mWheel;
     private ServoControl jArm;
     private GamepadSpace previous;
 
@@ -72,9 +72,9 @@ public class LinearOp extends LinearOpMode {
                     isJleftXChanged = false,
                     isJleftYChanged = false,
                     isJrightXChanged = false,
-                    isLBChanged = false,
-                    isLTChanged = false,
-                    isRTChanged = false;
+                    isLBChanged = false;
+                    //isLTChanged = false,
+                    //isRTChanged = false;
 
 
     private void detectGPChange() {
@@ -83,11 +83,12 @@ public class LinearOp extends LinearOpMode {
         isJleftXChanged     = gamepad1.left_stick_x != previous.JleftX;
         isJleftYChanged     = gamepad1.left_stick_y != previous.JleftY;
         isJrightXChanged    = gamepad1.right_stick_x != previous.JrightX;
-        isLTChanged         = gamepad1.left_trigger != previous.LT;
-        isRTChanged         = gamepad1.right_trigger != previous.RT;
+        //isLTChanged         = gamepad1.left_trigger != previous.LT;
+        //isRTChanged         = gamepad1.right_trigger != previous.RT;
     }
 
     private void saveGPData() {
+
         previous.Triangle  = gamepad1.y;
         previous.LB        = gamepad1.left_bumper;
         previous.JleftX    = gamepad1.left_stick_x;
@@ -98,12 +99,12 @@ public class LinearOp extends LinearOpMode {
     }
 
     private void initialize(){
-        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Front.left);
-        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Front.right);
-        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Back.left);
-        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.Back.right);
+        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.frontLeft);
+        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.frontRight);
+        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.rearLeft);
+        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.rearRight);
         Servo s0 = hardwareMap.get(Servo.class, Statics.Servos.jewel);
-        mWheel = new MecanumDrive(FL, FR, BL, BR);
+        mWheel = new DriveTrain(FL, FR, BL, BR);
         jArm = new ServoControl(s0, true, 0.13, 0.7);
         previous = new GamepadSpace();
 
@@ -126,18 +127,17 @@ public class LinearOp extends LinearOpMode {
 
             if (isLBChanged) { //Sniping Mode Switch
                 // Change the speed of Mecanum Wheels if Y key got pressed
-                if (gamepad1.left_bumper) {mWheel.speed = 0.3;jArm.speed = 0.3;}
-                else {mWheel.speed = 1.0;jArm.speed = 1.0;}
+                if (gamepad1.left_bumper) mWheel.updateSpeedLimit(0.6);
+                else mWheel.updateSpeedLimit(1.0);
             }
 
-
             if (isJleftXChanged || isJleftYChanged || isJrightXChanged) {
-                mWheel.move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                mWheel.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             } //Drive the bot if any joystick moved
 
 
             if (isTriangleChanged)
-                jArm.move_jewelArm(); //Move the arm if triggered DPAD Up or Down
+                jArm.moveJewelArm(); //Move the arm if triggered DPAD Up or Down
 
             //Save Data for next loop
             saveGPData();
@@ -146,10 +146,10 @@ public class LinearOp extends LinearOpMode {
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Mecanum Wheels   ", " ");
-            telemetry.addData("Left Front Wheel ", mWheel.leftFrontPower);
-            telemetry.addData("Right Front Wheel", mWheel.rightFrontPower);
-            telemetry.addData("Left Back Wheel  ", mWheel.leftBackPower);
-            telemetry.addData("Right Back Wheel ", mWheel.leftBackPower);
+            telemetry.addData("Left Front Wheel ", mWheel.frontLeftPower);
+            telemetry.addData("Right Front Wheel", mWheel.frontRightPower);
+            telemetry.addData("Left Back Wheel  ", mWheel.rearLeftPower);
+            telemetry.addData("Right Back Wheel ", mWheel.rearRightPower);
             telemetry.addData("Gamepad          ", " ");
             telemetry.addData("Left Joystick    ", "(" + previous.JleftX + ", " + previous.JleftY + ")");
             telemetry.addData("Jewel Arm        ", jArm.servoPos);

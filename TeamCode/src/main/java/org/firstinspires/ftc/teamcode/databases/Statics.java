@@ -6,21 +6,18 @@ package org.firstinspires.ftc.teamcode.databases;
 
 final public class Statics {
     final public static class MecanumWheel {
-        public static final class Front {
-            final public static String left = "left_front_drive";
-            final public static String right = "right_front_drive";
-        }
 
-        final public static class Back {
-            final public static String left = "left_back_drive";
-            final public static String right = "right_back_drive";
-        }
+        final public static String frontLeft  = "front_left_drive",
+                                   frontRight = "front_right_drive",
+                                   rearLeft   = "rear_left_drive",
+                                   rearRight  = "rear_right_drive";
+
     }
 
     final public static class Servos{
-            final public static String jewel = "jewel_arm";
-            final public static String left_glyphGrabber = "glyph_left_grabber";
-            final public static String right_glyphGrabber = "glyph_right_grabber";
+            final public static String jewel = "jewel_arm",
+                                       left_glyphGrabber = "glyph_left_grabber",
+                                       right_glyphGrabber = "glyph_right_grabber";
     }
 
     final public static class Vuforia {

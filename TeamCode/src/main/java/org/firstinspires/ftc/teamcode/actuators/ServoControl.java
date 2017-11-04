@@ -10,37 +10,29 @@ final public class ServoControl {
 
     private static Servo servoOBJ = null;
     public double servoPos = 0;
-    private boolean toOriginalDirection = true;
-    public int servoSwitch = -1;
-    public double speed = 1.0;
-    public boolean toFORWARD = true;
-    public double minPos = 0;
-    public double maxPos = 0;
-    public boolean side;
+    private int servoSwitch = -1;
+    private double minPos = 0;
+    private double maxPos = 0;
 
     public ServoControl(Servo device, boolean forward, double min, double max) {
         servoOBJ = device;
-        toFORWARD = forward;
         minPos = min;
         maxPos = max;
-        servoOBJ.setDirection(forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE);
+        servoOBJ.setDirection((forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
     }
-    public void move_glyphGrabber(){
+    public void moveGlyphGrabber(boolean inward){
 
-        if(toOriginalDirection){
-            if(side) servoPos += 0.001;
-            else if(!side) servoPos -= 0.001;
-        }
-        if(!toOriginalDirection) {
-            if(side) servoPos -= 0.001;
-            else if(!side) servoPos += 0.001;
-        }
-        if(servoPos >= maxPos) {servoPos = maxPos; toOriginalDirection = false;}
-        if(servoPos <= minPos) {servoPos = minPos; toOriginalDirection = true;}
+        if(inward) servoPos -= 0.01; else servoPos += 0.01;
 
+        //Out-of-limit detection & correction
+
+        if(servoPos > maxPos) servoPos = maxPos;
+        else if (servoPos < minPos) servoPos = minPos;
+
+        //Set the position
         servoOBJ.setPosition(servoPos);
     }
-    public int move_jewelArm() {
+    public int moveJewelArm() {
             servoSwitch ++;
             switch (servoSwitch) {
                 case 0:servoPos = maxPos;break;
