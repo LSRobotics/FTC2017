@@ -40,8 +40,8 @@ public class GlyphTest extends LinearOpMode {
 
     private void initialize(){
 
-        Servo s1 = hardwareMap.get(Servo.class, Statics.Servos.left_glyphGrabber);
-        Servo s2 = hardwareMap.get(Servo.class, Statics.Servos.right_glyphGrabber);
+        Servo s1 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
+        Servo s2 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
         glyphGrabber_left = new ServoControl(s1, true, -1, 1);
         glyphGrabber_right = new ServoControl(s2,false,-1,1);
 

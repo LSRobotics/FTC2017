@@ -56,10 +56,10 @@ import org.firstinspires.ftc.teamcode.actuators.*;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-public class LinearOp extends LinearOpMode {
+@TeleOp(name="LinearOp Sophomore", group="Linear Opmode")
+public class LinearOpSophomore extends LinearOpMode {
 
-    //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Servos.left_glyphGrabber);
+    //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
 
     //Initialize objects
     private DriveTrain mWheel;
@@ -99,11 +99,11 @@ public class LinearOp extends LinearOpMode {
     }
 
     private void initialize(){
-        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.frontLeft);
-        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.frontRight);
-        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.rearLeft);
-        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.MecanumWheel.rearRight);
-        Servo s0 = hardwareMap.get(Servo.class, Statics.Servos.jewel);
+        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontLeft);
+        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
+        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
+        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
+        Servo s0 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         mWheel = new DriveTrain(FL, FR, BL, BR);
         jArm = new ServoControl(s0, true, 0.13, 0.7);
         previous = new GamepadSpace();
