@@ -15,31 +15,28 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 2017/11/5.
  */
 @TeleOp(name="LinearOp Freshman", group="Linear Opmode")
-public class LinearOpFreshman extends LinearOpMode {
+public class LinearOp9 extends LinearOpMode {
 
         //Initialize objects
-        private DriveTrain tankWheel;
-        private GamepadSpace previous;
+        private     DriveTrain      tankWheel;
+        private     GamepadSpace    previous;
 
         // Declare OpMode members.
         final private ElapsedTime runtime = new ElapsedTime();
-        private boolean isJleftYChanged = false,
-                isJrightXChanged = false,
-                isLBChanged = false;
 
         private void detectGPChange() {
-            isLBChanged         = gamepad1.left_bumper != previous.LB;
-            isJleftYChanged     = gamepad1.left_stick_y != previous.JleftY;
-            isJrightXChanged    = gamepad1.right_stick_x != previous.JrightX;
+            previous.stat.LB         = gamepad1.left_bumper != previous.LB;
+            previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
+            previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
         }
 
         private void saveGPData() {
 
             previous.Triangle  = gamepad1.y;
             previous.LB        = gamepad1.left_bumper;
-            previous.JleftX    = gamepad1.left_stick_x;
-            previous.JleftY    = gamepad1.left_stick_y;
-            previous.JrightX   = gamepad1.right_stick_x;
+            previous.JLeftX    = gamepad1.left_stick_x;
+            previous.JLeftY    = gamepad1.left_stick_y;
+            previous.JRightX   = gamepad1.right_stick_x;
             previous.LT        = gamepad1.left_trigger;
             previous.RT        = gamepad1.right_trigger;
         }
@@ -67,13 +64,13 @@ public class LinearOpFreshman extends LinearOpMode {
 
                 detectGPChange();
 
-                if (isLBChanged) { //Sniping Mode Switch
+                if (previous.stat.LB) { //Sniping Mode Switch
                     // Change the speed of Mecanum Wheels if Y key got pressed
                     if (gamepad1.left_bumper) tankWheel.updateSpeedLimit(0.6);
                     else tankWheel.updateSpeedLimit(1.0);
                 }
 
-                if (isJleftYChanged || isJrightXChanged) {
+                if (previous.stat.JLeftY || previous.stat.JRightX) {
                     tankWheel.tankDrive(gamepad1.left_stick_y, gamepad1.right_stick_x);
                 } //Drive the bot if any joystick moved
 

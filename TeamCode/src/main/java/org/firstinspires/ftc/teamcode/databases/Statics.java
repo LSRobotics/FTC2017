@@ -8,24 +8,24 @@ final public class Statics {
 
     final public static class Freshman{
         final public static class TankWheel {
-            final public static String left = "left_tank_motor";
-            final public static String right = "right_tank_motor";
+            final public static String left = "left_tank_motor",
+                                right = "right_tank_motor";
         }
     }
 
     final public static class Sophomore {
         final public static class MecanumWheel {
 
-            final public static String frontLeft = "front_left_drive",
-                    frontRight = "front_right_drive",
-                    rearLeft = "rear_left_drive",
-                    rearRight = "rear_right_drive";
+           final public static String frontLeft = "front_left_drive",
+                                frontRight = "front_right_drive",
+                                  rearLeft = "rear_left_drive",
+                                 rearRight = "rear_right_drive";
 
         }
 
         final public static class Servos {
             final public static String jewel = "jewel_arm",
-                    left_glyphGrabber = "glyph_left_grabber",
+                     left_glyphGrabber = "glyph_left_grabber",
                     right_glyphGrabber = "glyph_right_grabber";
         }
 

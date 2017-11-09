@@ -57,43 +57,39 @@ import org.firstinspires.ftc.teamcode.actuators.*;
  */
 
 @TeleOp(name="LinearOp Sophomore", group="Linear Opmode")
-public class LinearOpSophomore extends LinearOpMode {
+public class LinearOp10 extends LinearOpMode {
 
     //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
 
     //Initialize objects
-    private DriveTrain mWheel;
-    private ServoControl jArm;
-    private GamepadSpace previous;
+    private     DriveTrain      mWheel;
+
+    private     ServoControl    jArm;
+    private     Servo           jArmObj;
+
+    final private GamepadSpace previous = new GamepadSpace();
+
+
 
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
-    private boolean isTriangleChanged = false,
-                    isJleftXChanged = false,
-                    isJleftYChanged = false,
-                    isJrightXChanged = false,
-                    isLBChanged = false;
-                    //isLTChanged = false,
-                    //isRTChanged = false;
 
 
     private void detectGPChange() {
-        isTriangleChanged   = gamepad1.y != previous.Triangle;
-        isLBChanged         = gamepad1.left_bumper != previous.LB;
-        isJleftXChanged     = gamepad1.left_stick_x != previous.JleftX;
-        isJleftYChanged     = gamepad1.left_stick_y != previous.JleftY;
-        isJrightXChanged    = gamepad1.right_stick_x != previous.JrightX;
-        //isLTChanged         = gamepad1.left_trigger != previous.LT;
-        //isRTChanged         = gamepad1.right_trigger != previous.RT;
+        previous.stat.Triangle   = gamepad1.y != previous.Triangle;
+        previous.stat.LB         = gamepad1.left_bumper != previous.LB;
+        previous.stat.JLeftX     = gamepad1.left_stick_x != previous.JLeftX;
+        previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
+        previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
     }
 
     private void saveGPData() {
 
         previous.Triangle  = gamepad1.y;
         previous.LB        = gamepad1.left_bumper;
-        previous.JleftX    = gamepad1.left_stick_x;
-        previous.JleftY    = gamepad1.left_stick_y;
-        previous.JrightX   = gamepad1.right_stick_x;
+        previous.JLeftX    = gamepad1.left_stick_x;
+        previous.JLeftY    = gamepad1.left_stick_y;
+        previous.JRightX   = gamepad1.right_stick_x;
         previous.LT        = gamepad1.left_trigger;
         previous.RT        = gamepad1.right_trigger;
     }
@@ -103,10 +99,10 @@ public class LinearOpSophomore extends LinearOpMode {
         DcMotor FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
-        Servo s0 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         mWheel = new DriveTrain(FL, FR, BL, BR);
-        jArm = new ServoControl(s0, true, 0.13, 0.7);
-        previous = new GamepadSpace();
+
+        jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
+        jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
 
     }
 
@@ -125,19 +121,19 @@ public class LinearOpSophomore extends LinearOpMode {
 
             detectGPChange();
 
-            if (isLBChanged) { //Sniping Mode Switch
+            if (previous.stat.LB) { //Sniping Mode Switch
                 // Change the speed of Mecanum Wheels if Y key got pressed
                 if (gamepad1.left_bumper) mWheel.updateSpeedLimit(0.6);
                 else mWheel.updateSpeedLimit(1.0);
             }
 
-            if (isJleftXChanged || isJleftYChanged || isJrightXChanged) {
+            if (previous.stat.JLeftX || previous.stat.JLeftY || previous.stat.JRightX) {
                 mWheel.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             } //Drive the bot if any joystick moved
 
 
-            if (isTriangleChanged)
-                jArm.moveJewelArm(); //Move the arm if triggered DPAD Up or Down
+            if (previous.stat.Triangle)
+                jArm.moveJewelArm(jArmObj); //Move the arm if triggered DPAD Up or Down
 
             //Save Data for next loop
             saveGPData();
@@ -151,7 +147,7 @@ public class LinearOpSophomore extends LinearOpMode {
             telemetry.addData("Left Back Wheel  ", mWheel.rearLeftPower);
             telemetry.addData("Right Back Wheel ", mWheel.rearRightPower);
             telemetry.addData("Gamepad          ", " ");
-            telemetry.addData("Left Joystick    ", "(" + previous.JleftX + ", " + previous.JleftY + ")");
+            telemetry.addData("Left Joystick    ", "(" + previous.JLeftX + ", " + previous.JLeftY + ")");
             telemetry.addData("Jewel Arm        ", jArm.servoPos);
             telemetry.update();
         }

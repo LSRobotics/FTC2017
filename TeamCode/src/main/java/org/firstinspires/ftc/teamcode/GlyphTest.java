@@ -18,19 +18,19 @@ public class GlyphTest extends LinearOpMode {
     //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Servos.left_glyphGrabber);
 
     //Initialize objects
-    private ServoControl glyphGrabber_left;
-    private ServoControl glyphGrabber_right;
-    final private GamepadSpace previous = new GamepadSpace();
+    private     ServoControl    GGrabberL;
+    private     ServoControl    GGrabberR;
+    private     Servo           GGrabberLObj;
+    private     Servo           GGrabberRObj;
 
-    // Declare OpMode members.
-    final private ElapsedTime runtime = new ElapsedTime();
-    private boolean isLTPressed = false,
-                    isRTPressed = false;
+    final private GamepadSpace previous = new GamepadSpace();
+    final private ElapsedTime   runtime = new ElapsedTime();
+
 
 
     private void detectGPChange() {
-        isLTPressed         = gamepad1.left_trigger != 0;
-        isRTPressed         = gamepad1.right_trigger!= 0;
+        previous.stat.LT         = gamepad1.left_trigger != 0;
+        previous.stat.RT         = gamepad1.right_trigger!= 0;
     }
 
     private void saveGPData() {
@@ -40,10 +40,11 @@ public class GlyphTest extends LinearOpMode {
 
     private void initialize(){
 
-        Servo s1 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
-        Servo s2 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
-        glyphGrabber_left = new ServoControl(s1, true, -1, 1);
-        glyphGrabber_right = new ServoControl(s2,false,-1,1);
+        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
+        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
+
+        GGrabberL = new ServoControl(GGrabberLObj, true, -1, 1);
+        GGrabberR = new ServoControl(GGrabberRObj,false,-1,1);
 
     }
 
@@ -62,13 +63,13 @@ public class GlyphTest extends LinearOpMode {
 
             detectGPChange();
 
-            if(isLTPressed) { //LT for moving the grabbers inward
-                glyphGrabber_left.moveGlyphGrabber(true);
-                glyphGrabber_right.moveGlyphGrabber(true);
+            if(previous.stat.LT) { //LT for moving the grabbers inward
+                GGrabberL.moveGlyphGrabber(GGrabberLObj,true);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj,true);
              }
-            else if(isRTPressed) { //RT for moving the grabbers outward
-                glyphGrabber_left.moveGlyphGrabber(false);
-                glyphGrabber_right.moveGlyphGrabber(false);
+            else if(previous.stat.RT) { //RT for moving the grabbers outward
+                GGrabberL.moveGlyphGrabber(GGrabberLObj,false);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj,false);
             }
             //Save Data for next loop
             //saveGPData();
@@ -76,8 +77,8 @@ public class GlyphTest extends LinearOpMode {
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-            telemetry.addData("Left Grabber:", glyphGrabber_left.servoPos);
-            telemetry.addData("Right Grabber:", glyphGrabber_right.servoPos);
+            telemetry.addData("Left Grabber:", GGrabberL.servoPos);
+            telemetry.addData("Right Grabber:", GGrabberR.servoPos);
             telemetry.update();
         }
     }

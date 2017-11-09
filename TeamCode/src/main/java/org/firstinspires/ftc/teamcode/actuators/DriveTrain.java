@@ -10,16 +10,16 @@ import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
-    private static DcMotor FL = null;
-    private static DcMotor FR = null;
-    private static DcMotor RL = null;
-    private static DcMotor RR = null;
-    private double speedLevel = 1.0;
-    public double frontLeftPower;
-    public double frontRightPower;
-    public double rearLeftPower;
-    public double rearRightPower;
-    private boolean is4WD = false;
+    private     static   DcMotor FL                 = null;
+    private     static   DcMotor FR                 = null;
+    private     static   DcMotor RL                 = null;
+    private     static   DcMotor RR                 = null;
+    private              double  speedLevel         = 1.0;
+    public               double  frontLeftPower;
+    public               double  frontRightPower;
+    public               double  rearLeftPower;
+    public               double  rearRightPower;
+    private              boolean is4WD              = false;
 
     public void updateSpeedLimit(double speed) {
         speedLevel = speed;
