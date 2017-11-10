@@ -14,6 +14,9 @@ final public class Statics {
     }
 
     final public static class Sophomore {
+
+        final public static String glyphLift = "glyph_lift_motor";
+
         final public static class MecanumWheel {
 
            final public static String frontLeft = "front_left_drive",

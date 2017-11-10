@@ -14,6 +14,10 @@ public class ServoControl {
     private     int     servoSwitch = -1;
     private     double  minPos      = 0;
     private     double  maxPos      = 0;
+    public      double  maxSpeed    = 1.0;
+    private     double  speedLevel  = 1.0;
+
+    public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
 
     public ServoControl(Servo servoObj, boolean forward, double min, double max) {
         minPos = min;
@@ -22,8 +26,8 @@ public class ServoControl {
     }
     public void moveGlyphGrabber(Servo servoObj, boolean inward){
 
-        if(inward) servoPos -= 0.005;
-        else       servoPos += 0.005;
+        if(inward) servoPos -= 0.005*speedLevel;
+        else       servoPos += 0.005*speedLevel;
 
         //Out-of-limit detection & correction
 
@@ -33,7 +37,7 @@ public class ServoControl {
         //Set the position
         servoObj.setPosition(servoPos);
     }
-    public int moveJewelArm(Servo servoObj) {
+    public void moveJewelArm(Servo servoObj) {
             servoSwitch ++;
 
             switch (servoSwitch) {
@@ -44,6 +48,5 @@ public class ServoControl {
             }
 
             servoObj.setPosition(servoPos);
-            return 0;
         }
 }

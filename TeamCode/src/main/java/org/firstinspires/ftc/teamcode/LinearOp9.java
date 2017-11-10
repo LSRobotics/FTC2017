@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
 import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
 import org.firstinspires.ftc.teamcode.databases.Statics;
+import org.firstinspires.ftc.teamcode.Utils;
 
 /**
  * Created by LBYPatrick on 2017/11/5.
@@ -24,7 +25,7 @@ public class LinearOp9 extends LinearOpMode {
         // Declare OpMode members.
         final private ElapsedTime runtime = new ElapsedTime();
 
-        private void detectGPChange() {
+        private void collectGPStat() {
             previous.stat.LB         = gamepad1.left_bumper != previous.LB;
             previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
             previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
@@ -62,7 +63,7 @@ public class LinearOp9 extends LinearOpMode {
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
 
-                detectGPChange();
+                collectGPStat();
 
                 if (previous.stat.LB) { //Sniping Mode Switch
                     // Change the speed of Mecanum Wheels if Y key got pressed

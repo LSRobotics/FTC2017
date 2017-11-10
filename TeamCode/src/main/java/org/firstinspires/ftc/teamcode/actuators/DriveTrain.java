@@ -14,6 +14,7 @@ public class DriveTrain {
     private     static   DcMotor FR                 = null;
     private     static   DcMotor RL                 = null;
     private     static   DcMotor RR                 = null;
+    public               double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     public               double  frontLeftPower;
     public               double  frontRightPower;
@@ -22,7 +23,7 @@ public class DriveTrain {
     private              boolean is4WD              = false;
 
     public void updateSpeedLimit(double speed) {
-        speedLevel = speed;
+        speedLevel = speed*maxSpeed;
 
         FL.setPower(frontLeftPower * speedLevel);
         FR.setPower(frontRightPower * speedLevel);

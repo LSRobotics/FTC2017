@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.databases.*;
 import org.firstinspires.ftc.teamcode.actuators.*;
+import org.firstinspires.ftc.teamcode.Utils;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -75,7 +76,7 @@ public class LinearOp10 extends LinearOpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
 
-    private void detectGPChange() {
+    private void collectGPStat() {
         previous.stat.Triangle   = gamepad1.y != previous.Triangle;
         previous.stat.LB         = gamepad1.left_bumper != previous.LB;
         previous.stat.JLeftX     = gamepad1.left_stick_x != previous.JLeftX;
@@ -119,7 +120,7 @@ public class LinearOp10 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            detectGPChange();
+            collectGPStat();
 
             if (previous.stat.LB) { //Sniping Mode Switch
                 // Change the speed of Mecanum Wheels if Y key got pressed

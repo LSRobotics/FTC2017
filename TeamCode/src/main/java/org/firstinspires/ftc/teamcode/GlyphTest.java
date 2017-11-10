@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
 import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
 import org.firstinspires.ftc.teamcode.databases.Statics;
+import org.firstinspires.ftc.teamcode.Utils;
 
 /**
  * Created by LBYPatrick on 11/2/2017.
@@ -28,7 +29,7 @@ public class GlyphTest extends LinearOpMode {
 
 
 
-    private void detectGPChange() {
+    private void collectGPStat() {
         previous.stat.LT         = gamepad1.left_trigger != 0;
         previous.stat.RT         = gamepad1.right_trigger!= 0;
     }
@@ -61,7 +62,7 @@ public class GlyphTest extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            detectGPChange();
+            collectGPStat();
 
             if(previous.stat.LT) { //LT for moving the grabbers inward
                 GGrabberL.moveGlyphGrabber(GGrabberLObj,true);
