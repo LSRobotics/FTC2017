@@ -67,6 +67,10 @@ public class LinearOp10 extends LinearOpMode {
 
     private     ServoControl    jArm;
     private     Servo           jArmObj;
+    private     ServoControl    GGrabberL;
+    private     ServoControl    GGrabberR;
+    private     Servo           GGrabberLObj;
+    private     Servo           GGrabberRObj;
 
     final private GamepadSpace previous = new GamepadSpace();
 
@@ -82,6 +86,9 @@ public class LinearOp10 extends LinearOpMode {
         previous.stat.JLeftX     = gamepad1.left_stick_x != previous.JLeftX;
         previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
         previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
+        previous.stat.LT         = gamepad1.left_trigger != 0;
+        previous.stat.RT         = gamepad1.right_trigger!= 0;
+        previous.stat.Circle     = gamepad1.b != previous.Circle;
     }
 
     private void saveGPData() {
@@ -93,6 +100,8 @@ public class LinearOp10 extends LinearOpMode {
         previous.JRightX   = gamepad1.right_stick_x;
         previous.LT        = gamepad1.left_trigger;
         previous.RT        = gamepad1.right_trigger;
+        previous.Circle    = gamepad1.b;
+
     }
 
     private void initialize(){
@@ -105,10 +114,20 @@ public class LinearOp10 extends LinearOpMode {
         jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
 
+        //Glyph Grabbers
+        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
+        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
+
+        GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
+        GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
+
+
     }
 
     @Override
     public void runOpMode() {
+
+        boolean toShowSecondPage = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -116,6 +135,7 @@ public class LinearOp10 extends LinearOpMode {
         initialize();
         waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
+
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -133,23 +153,43 @@ public class LinearOp10 extends LinearOpMode {
             } //Drive the bot if any joystick moved
 
 
-            if (previous.stat.Triangle)
-                jArm.moveJewelArm(jArmObj); //Move the arm if triggered DPAD Up or Down
+            //Jewel Arm
+            if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
+            //Glyph Grabber Inward
+            if(previous.stat.LT) {
+                GGrabberL.moveGlyphGrabber(GGrabberLObj,true);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj,true);
+            }
+            //Glyph Grabber Outward
+            else if(previous.stat.RT) {
+                GGrabberL.moveGlyphGrabber(GGrabberLObj,false);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj,false);
+            }
+
+            if(previous.stat.Circle) {
+                toShowSecondPage = !toShowSecondPage;
+            }
             //Save Data for next loop
             saveGPData();
 
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-            telemetry.addData("Mecanum Wheels   ", " ");
-            telemetry.addData("Left Front Wheel ", mWheel.frontLeftPower);
-            telemetry.addData("Right Front Wheel", mWheel.frontRightPower);
-            telemetry.addData("Left Back Wheel  ", mWheel.rearLeftPower);
-            telemetry.addData("Right Back Wheel ", mWheel.rearRightPower);
-            telemetry.addData("Gamepad          ", " ");
-            telemetry.addData("Left Joystick    ", "(" + previous.JLeftX + ", " + previous.JLeftY + ")");
-            telemetry.addData("Jewel Arm        ", jArm.servoPos);
+            if(toShowSecondPage) {
+                telemetry.addData("FL encoder: ", mWheel.FL.getCurrentPosition());
+                telemetry.addData("FR encoder: ", mWheel.FR.getCurrentPosition());
+                telemetry.addData("RL encoder: ", mWheel.RL.getCurrentPosition());
+                telemetry.addData("RR encoder: ", mWheel.RR.getCurrentPosition());
+                telemetry.addData("Jewel Arm:  ", jArm.servoPos);
+            }
+            else {
+                telemetry.addData("FL Wheel:        ", mWheel.frontLeftPower);
+                telemetry.addData("FR Wheel:        ", mWheel.frontRightPower);
+                telemetry.addData("RL Wheel:        ", mWheel.rearLeftPower);
+                telemetry.addData("RR Wheel:        ", mWheel.rearRightPower);
+                telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
+            }
             telemetry.update();
         }
     }

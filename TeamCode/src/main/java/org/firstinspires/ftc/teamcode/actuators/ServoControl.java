@@ -26,8 +26,8 @@ public class ServoControl {
     }
     public void moveGlyphGrabber(Servo servoObj, boolean inward){
 
-        if(inward) servoPos -= 0.005*speedLevel;
-        else       servoPos += 0.005*speedLevel;
+        if(inward) servoPos -= 0.15*speedLevel;
+        else       servoPos += 0.15*speedLevel;
 
         //Out-of-limit detection & correction
 

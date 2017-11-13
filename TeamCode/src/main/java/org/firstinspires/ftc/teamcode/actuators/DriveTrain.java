@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
-    private     static   DcMotor FL                 = null;
-    private     static   DcMotor FR                 = null;
-    private     static   DcMotor RL                 = null;
-    private     static   DcMotor RR                 = null;
+    public      static   DcMotor FL                 = null;
+    public      static   DcMotor FR                 = null;
+    public      static   DcMotor RL                 = null;
+    public      static   DcMotor RR                 = null;
     public               double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     public               double  frontLeftPower;
