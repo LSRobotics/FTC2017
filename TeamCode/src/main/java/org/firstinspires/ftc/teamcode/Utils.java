@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.databases.*;
  */
 
 class Utils {
-    final public static void overclock(DcMotorControl object, double speed) {object.maxSpeed = speed;}
-    final public static void overclock(ServoControl object, double speed) { object.maxSpeed = speed;}
-    final public static void overclock(DriveTrain object, double speed) {object.maxSpeed = speed;}
+    final public void overclock(DcMotorControl object, double speed) {object.maxSpeed = speed;}
+    final public void overclock(ServoControl object, double speed) { object.maxSpeed = speed;}
+    final public void overclock(DriveTrain object, double speed) {object.maxSpeed = speed;}
 }

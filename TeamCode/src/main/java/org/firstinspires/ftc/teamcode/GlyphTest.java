@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Utils;
 /**
  * Created by LBYPatrick on 11/2/2017.
  */
-@TeleOp(name = "Glyph Test", group = "Linear Opmode")
+@TeleOp(name = "Glyph Test", group = "Sophomore")
 public class GlyphTest extends LinearOpMode {
 
     //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Servos.left_glyphGrabber);

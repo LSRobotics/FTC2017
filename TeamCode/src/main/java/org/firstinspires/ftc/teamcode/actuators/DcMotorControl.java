@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class DcMotorControl {
 
-    final   private     double  sensitivity = 0.1;
+            public      double  sensitivity = 0.5;
             public      double  maxSpeed = 1.0;
             private     double  speedLevel = 1.0;
             private     double  motorSpeed = 0;
@@ -18,7 +18,6 @@ public class DcMotorControl {
     }
 
     public void moveLift(DcMotor dcMotorObj, boolean up, boolean down) {
-
 
         if ((up && down) || (!up && !down)) motorSpeed = 0;
         if (up) motorSpeed = sensitivity;

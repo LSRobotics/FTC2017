@@ -57,10 +57,9 @@ import org.firstinspires.ftc.teamcode.Utils;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="LinearOp Sophomore", group="Linear Opmode")
+@TeleOp(name="Test Drive", group="Sophomore")
 public class LinearOp10 extends LinearOpMode {
 
-    //final private Servo S1 = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
 
     //Initialize objects
     private     DriveTrain      mWheel;
@@ -168,7 +167,7 @@ public class LinearOp10 extends LinearOpMode {
             }
 
             if(previous.stat.Circle) {
-                toShowSecondPage = !toShowSecondPage;
+                if(gamepad1.b) toShowSecondPage = !toShowSecondPage;
             }
             //Save Data for next loop
             saveGPData();

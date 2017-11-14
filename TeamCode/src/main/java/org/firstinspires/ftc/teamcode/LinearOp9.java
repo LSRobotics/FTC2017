@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Utils;
 /**
  * Created by LBYPatrick on 2017/11/5.
  */
-@TeleOp(name="LinearOp Freshman", group="Linear Opmode")
+@TeleOp(name="Test Drive", group="Freshman")
 public class LinearOp9 extends LinearOpMode {
 
         //Initialize objects

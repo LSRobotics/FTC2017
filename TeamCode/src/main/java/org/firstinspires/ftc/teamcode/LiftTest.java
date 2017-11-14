@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Utils;
  * Created by LBYPatrick on 11/10/2017.
  */
 
-@TeleOp(name = "Glyph Lift Test", group = "Linear Opmode")
+@TeleOp(name = "Glyph Lift Test", group = "Shared")
 
 public class LiftTest extends LinearOpMode {
     private     DcMotorControl  GLift;
@@ -73,6 +73,7 @@ public class LiftTest extends LinearOpMode {
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             telemetry.addData("Lift Motor: ", GLiftObj.getPower());
+            telemetry.addData("Lift Motor Encoder: ",GLiftObj.getCurrentPosition());
             telemetry.update();
         }
     }

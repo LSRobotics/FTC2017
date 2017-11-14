@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 11/13/2017.
  */
 
-@TeleOp(name = "Glyph Intake Test", group = "Linear Opmode")
+@TeleOp(name = "Glyph Intake Test", group = "Freshman")
 
 public class GlyphIntakeTest extends LinearOpMode{
     private     DcMotor                leftIntakeObj;
@@ -45,6 +45,8 @@ public class GlyphIntakeTest extends LinearOpMode{
 
         leftIntake = new DcMotorControl(leftIntakeObj, true);
         rightIntake = new DcMotorControl(rightIntakeObj,false);
+        leftIntake.sensitivity = 1.0;
+        rightIntake.sensitivity = 1.0;
 
     }
 
