@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 11/13/2017.
  */
 
-@TeleOp(name = "Glyph Intake Test", group = "Freshman")
+@TeleOp(name = "Glyph Intake Test FRESH", group = "Freshman")
 
 public class GlyphIntakeTest extends LinearOpMode{
     private     DcMotor                leftIntakeObj;

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 /**
  * Created by LBYPatrick on 11/14/2017.
  */
-@TeleOp(name = "Autonomous",group = "Sophomore")
+@TeleOp(name = "Autonomous SOPH",group = "Sophomore")
 public class AutonSOPH extends LinearOpMode {
 
     //Initialize objects

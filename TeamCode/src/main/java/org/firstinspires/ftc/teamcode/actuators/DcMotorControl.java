@@ -20,8 +20,8 @@ public class DcMotorControl {
     public void moveLift(DcMotor dcMotorObj, boolean up, boolean down) {
 
         if ((up && down) || (!up && !down)) motorSpeed = 0;
-        if (up) motorSpeed = sensitivity;
-        if (down) motorSpeed = -sensitivity;
+        else if (up) motorSpeed = sensitivity;
+        else if (down) motorSpeed = -sensitivity;
 
         dcMotorObj.setPower(motorSpeed*speedLevel);
     }

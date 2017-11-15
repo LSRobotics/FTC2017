@@ -57,7 +57,7 @@ import org.firstinspires.ftc.teamcode.Utils;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Test Drive", group="Sophomore")
+@TeleOp(name="Test Drive SOPH", group="Sophomore")
 public class LinearOp10 extends LinearOpMode {
 
 

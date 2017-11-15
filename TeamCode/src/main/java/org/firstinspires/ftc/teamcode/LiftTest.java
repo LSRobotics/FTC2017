@@ -62,7 +62,7 @@ public class LiftTest extends LinearOpMode {
                 else GLift.updateSpeedLimit(GLiftObj,1.0);
             }
 
-            if(previous.stat.DPadUp || previous.stat.DPadDown) { //LT for moving the grabbers inward
+            if(previous.stat.DPadUp || previous.stat.DPadDown) {
                 GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
             }
 
