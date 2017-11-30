@@ -207,6 +207,7 @@ public class LinearOp10B2 extends LinearOpMode {
                 telemetry.addData("RL Wheel:        ", mWheel.FL.getPower());
                 telemetry.addData("RR Wheel:        ", mWheel.FR.getPower());
                 telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
+                telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
             }
             telemetry.update();
         }

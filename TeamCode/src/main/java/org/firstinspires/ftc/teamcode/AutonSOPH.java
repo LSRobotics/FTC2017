@@ -83,7 +83,7 @@ public class AutonSOPH extends LinearOpMode {
 
         //Move Forward
         stageTime.reset();
-        mWheel.tankDrive(1,0);
+        mWheel.tankDrive(-1,0);
         while(stageTime.seconds() <= 1.0) {
             telemetry.addData("Current Stage: ", "Moving forward");
             telemetry.addData( "Global Time: ", globalTime.seconds());
@@ -94,7 +94,7 @@ public class AutonSOPH extends LinearOpMode {
 
         //Turn left
         stageTime.reset();
-        mWheel.tankDrive(0,0.5);
+        mWheel.tankDrive(0,-0.5);
         while(stageTime.seconds() <= 0.5){
             telemetry.addData("Current Stage", "Turning Left");
             telemetry.addData("Global Time",globalTime.seconds());
