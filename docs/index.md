@@ -31,4 +31,6 @@ FRC 5181 LaSalle Robotics, PA.
 
 # Configuration 
 
+1. In the phone, hit **Configure Bot**, then **New** a config for you robot based on the device names you specified in the code.
+
 Coming soon...

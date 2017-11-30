@@ -18,10 +18,8 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 @TeleOp(name = "Glyph Intake Test FRESH", group = "Freshman")
 
 public class GlyphIntakeTest extends LinearOpMode{
-    private     DcMotor                leftIntakeObj;
-    private     DcMotorControl         leftIntake;
-    private     DcMotor                rightIntakeObj;
-    private     DcMotorControl         rightIntake;
+    private     DcMotor                intakeObj;
+    private     DcMotorControl         intake;
 
     final private GamepadSpace previous = new GamepadSpace();
     final private ElapsedTime runtime = new ElapsedTime();
@@ -40,13 +38,10 @@ public class GlyphIntakeTest extends LinearOpMode{
 
     private void initialize(){
 
-        leftIntakeObj = hardwareMap.get(DcMotor.class, Statics.Freshman.leftIntake);
-        rightIntakeObj = hardwareMap.get(DcMotor.class, Statics.Freshman.rightIntake);
+        intakeObj = hardwareMap.get(DcMotor.class, Statics.Freshman.Intake);
 
-        leftIntake = new DcMotorControl(leftIntakeObj, true);
-        rightIntake = new DcMotorControl(rightIntakeObj,false);
-        leftIntake.sensitivity = 1.0;
-        rightIntake.sensitivity = 1.0;
+        intake = new DcMotorControl(intakeObj, true);
+        intake.sensitivity = 1.0;
 
     }
 
@@ -65,22 +60,14 @@ public class GlyphIntakeTest extends LinearOpMode{
 
             collectGPStat();
 
-            if(previous.stat.LT) { //LT for moving the grabbers inward
-                leftIntake.moveLift(leftIntakeObj,true,false);
-                rightIntake.moveLift(rightIntakeObj,true,false);
-            }
-            else if(previous.stat.RT) { //RT for moving the grabbers outward
-                leftIntake.moveLift(leftIntakeObj,false,true);
-                rightIntake.moveLift(rightIntakeObj,false,true);
-            }
+            intake.moveLift(intakeObj,previous.stat.LT,previous.stat.RT);
             //Save Data for next loop
             //saveGPData();
 
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-            telemetry.addData("Left Intake:", leftIntakeObj.getPower());
-            telemetry.addData("Right Intake:", rightIntakeObj.getPower());
+            telemetry.addData("Intake:", intakeObj.getPower());
             telemetry.update();
         }
     }

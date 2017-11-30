@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 /**
  * Created by LBYPatrick on 11/14/2017.
  */
-@TeleOp(name = "Autonomous SOPH",group = "Sophomore")
+@TeleOp(name = "Autonomous SOPH",group = "autonomous")
 public class AutonSOPH extends LinearOpMode {
 
     //Initialize objects
@@ -26,20 +26,29 @@ public class AutonSOPH extends LinearOpMode {
     private     ServoControl    GGrabberR;
     private     Servo           GGrabberLObj;
     private     Servo           GGrabberRObj;
+    private     boolean         currentPLAN = false;
     // Declare OpMode members.
     final private ElapsedTime globalTime = new ElapsedTime();
     final private ElapsedTime stageTime = new ElapsedTime();
 
     private void initialize() {
-        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontLeft);
-        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
+
+        DcMotor FL = null;
+        DcMotor FR = null;
+
+        if(currentPLAN) {
+            FL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontLeft);
+            FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
+        }
+
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
-        mWheel = new DriveTrain(FL, FR, BL, BR);
+
+        if(currentPLAN) mWheel = new DriveTrain(FL, FR, BL, BR);
+        else            mWheel = new DriveTrain(BL,BR);
 
         jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
-
         //Glyph Grabbers
         GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
         GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
@@ -50,25 +59,59 @@ public class AutonSOPH extends LinearOpMode {
 
     }
 
+    private void planA() {
+        //Move Jewels
+
+
+        //Move Forward
+        stageTime.reset();
+        mWheel.mecanumDrive(0,1,0);
+        while(stageTime.seconds() <= 1.0) {
+            telemetry.addData("Current Stage: ", "Moving forward");
+            telemetry.addData( "Global Time: ", globalTime.seconds());
+            telemetry.addData("Stage Time: ", stageTime.seconds());
+            telemetry.update();
+        }
+        mWheel.mecanumDrive(0,0,0);
+
+
+        //Turn left
+    }
+
+    private void planB() {
+        //Move Jewels
+
+        //Move Forward
+        stageTime.reset();
+        mWheel.tankDrive(1,0);
+        while(stageTime.seconds() <= 1.0) {
+            telemetry.addData("Current Stage: ", "Moving forward");
+            telemetry.addData( "Global Time: ", globalTime.seconds());
+            telemetry.addData("Stage Time: ", stageTime.seconds());
+            telemetry.update();
+        }
+        mWheel.tankDrive(0,0);
+
+        //Turn left
+        stageTime.reset();
+        mWheel.tankDrive(0,0.5);
+        while(stageTime.seconds() <= 0.5){
+            telemetry.addData("Current Stage", "Turning Left");
+            telemetry.addData("Global Time",globalTime.seconds());
+            telemetry.addData("Stage Time",stageTime.seconds());
+        }
+        mWheel.tankDrive(0,0);
+
+
+
+    }
 
     @Override
     public void runOpMode() {
 
-    //Move Jewels
+        initialize();
 
-
-    //Move Forward
-    stageTime.reset();
-    mWheel.mecanumDrive(0,1,0);
-    while(stageTime.seconds() <= 1.0) {
-        telemetry.addData("Current Stage: ", "Moving forward");
-        telemetry.addData( "Global Time: ", globalTime.seconds());
-        telemetry.addData("Stage Time: ", stageTime.seconds());
-        telemetry.update();
-    }
-    mWheel.mecanumDrive(0,0,0);
-
-
-    //Turn left
+        if(currentPLAN) planA();
+        else planB();
     }
 }

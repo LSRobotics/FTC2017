@@ -58,6 +58,7 @@ public class DriveTrain {
 
     final public void tankDrive(double joystickLeftY, double joystickRightX) {
 
+        joystickLeftY = -joystickLeftY; joystickRightX = -joystickRightX; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
         frontLeftPower = Range.clip((-joystickLeftY) + joystickRightX, -1.0, 1.0);

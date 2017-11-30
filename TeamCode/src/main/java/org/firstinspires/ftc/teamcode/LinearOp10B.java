@@ -31,18 +31,21 @@ package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.ftccommon.configuration.ScannedDevices;
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
+import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
+import org.firstinspires.ftc.teamcode.actuators.ServoControl;
+import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
+import org.firstinspires.ftc.teamcode.databases.Statics;
+
+//import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.databases.*;
-import org.firstinspires.ftc.teamcode.actuators.*;
-import org.firstinspires.ftc.teamcode.Utils;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -57,8 +60,8 @@ import org.firstinspires.ftc.teamcode.Utils;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Test Drive SOPH", group="Sophomore")
-public class LinearOp10 extends LinearOpMode {
+@TeleOp(name="Test Drive SOPH B", group="Sophomore")
+public class LinearOp10B extends LinearOpMode {
 
 
     //Initialize objects
@@ -70,7 +73,7 @@ public class LinearOp10 extends LinearOpMode {
     private     ServoControl    GGrabberR;
     private     Servo           GGrabberLObj;
     private     Servo           GGrabberRObj;
-    private     DcMotorControl  GLift;
+    private DcMotorControl      GLift;
     private     DcMotor         GLiftObj;
 
     final private GamepadSpace previous = new GamepadSpace();
@@ -90,8 +93,8 @@ public class LinearOp10 extends LinearOpMode {
         previous.stat.LT         = gamepad1.left_trigger != 0;
         previous.stat.RT         = gamepad1.right_trigger!= 0;
         previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp         = gamepad1.dpad_up;
-        previous.stat.DPadDown       = gamepad1.dpad_down;
+        previous.stat.DPadUp         = gamepad1.dpad_up != previous.DPadUp;
+        previous.stat.DPadDown       = gamepad1.dpad_down != previous.DPadDown;
     }
 
     private void saveGPData() {
@@ -110,11 +113,12 @@ public class LinearOp10 extends LinearOpMode {
     }
 
     private void initialize(){
-        DcMotor FL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontLeft);
-        DcMotor FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
+        //DcMotor FL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontLeft);
+        //DcMotor FR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.frontRight);
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
-        mWheel = new DriveTrain(FL, FR, BL, BR);
+        //mWheel = new DriveTrain(FL, FR, BL, BR);
+        mWheel = new DriveTrain(BL,BR);
 
         jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
@@ -155,7 +159,8 @@ public class LinearOp10 extends LinearOpMode {
             }
 
             if (previous.stat.JLeftX || previous.stat.JLeftY || previous.stat.JRightX) {
-                mWheel.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                //mWheel.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                mWheel.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_x);
             } //Drive the bot if any joystick moved
 
 
@@ -181,7 +186,10 @@ public class LinearOp10 extends LinearOpMode {
                 if(gamepad1.left_bumper) GLift.updateSpeedLimit(GLiftObj,0.6);
                 else GLift.updateSpeedLimit(GLiftObj,1.0);
             }
-                GLift.moveLift(GLiftObj,previous.stat.DPadUp,previous.stat.DPadDown);
+
+            if(previous.stat.DPadUp || previous.stat.DPadDown) {
+                GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
+            }
             //Save Data for next loop
             saveGPData();
 
@@ -189,17 +197,17 @@ public class LinearOp10 extends LinearOpMode {
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
             if(toShowSecondPage) {
-                telemetry.addData("FL encoder: ", mWheel.FL.getCurrentPosition());
-                telemetry.addData("FR encoder: ", mWheel.FR.getCurrentPosition());
-                telemetry.addData("RL encoder: ", mWheel.RL.getCurrentPosition());
-                telemetry.addData("RR encoder: ", mWheel.RR.getCurrentPosition());
+                //telemetry.addData("FL encoder: ", mWheel.FL.getCurrentPosition());
+                //telemetry.addData("FR encoder: ", mWheel.FR.getCurrentPosition());
+                telemetry.addData("RL encoder: ", mWheel.FL.getCurrentPosition());
+                telemetry.addData("RR encoder: ", mWheel.FR.getCurrentPosition());
                 telemetry.addData("Jewel Arm:  ", jArm.servoPos);
             }
             else {
-                telemetry.addData("FL Wheel:        ", mWheel.frontLeftPower);
-                telemetry.addData("FR Wheel:        ", mWheel.frontRightPower);
-                telemetry.addData("RL Wheel:        ", mWheel.rearLeftPower);
-                telemetry.addData("RR Wheel:        ", mWheel.rearRightPower);
+                // telemetry.addData("FL Wheel:        ", mWheel.frontLeftPower);
+                // telemetry.addData("FR Wheel:        ", mWheel.frontRightPower);
+                telemetry.addData("RL Wheel:        ", mWheel.FL.getPower());
+                telemetry.addData("RR Wheel:        ", mWheel.FR.getPower());
                 telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
             }
             telemetry.update();

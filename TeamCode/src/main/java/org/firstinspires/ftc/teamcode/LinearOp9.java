@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
 import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
@@ -21,6 +22,10 @@ public class LinearOp9 extends LinearOpMode {
         //Initialize objects
         private     DriveTrain      tankWheel;
         private     GamepadSpace    previous;
+        private     DcMotorControl  GLift;
+        private     DcMotor         GLiftObj;
+    private     DcMotor                intakeObj;
+    private     DcMotorControl         intake;
 
         // Declare OpMode members.
         final private ElapsedTime runtime = new ElapsedTime();
@@ -29,6 +34,10 @@ public class LinearOp9 extends LinearOpMode {
             previous.stat.LB         = gamepad1.left_bumper != previous.LB;
             previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
             previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
+            previous.stat.DPadUp         = gamepad1.dpad_up != previous.DPadUp;
+            previous.stat.DPadDown       = gamepad1.dpad_down != previous.DPadDown;
+            previous.stat.LT         = gamepad1.left_trigger != 0;
+            previous.stat.RT         = gamepad1.right_trigger!= 0;
         }
 
         private void saveGPData() {
@@ -40,6 +49,8 @@ public class LinearOp9 extends LinearOpMode {
             previous.JRightX   = gamepad1.right_stick_x;
             previous.LT        = gamepad1.left_trigger;
             previous.RT        = gamepad1.right_trigger;
+            previous.DPadUp    = gamepad1.dpad_up;
+            previous.DPadDown  = gamepad1.dpad_down;
         }
 
         private void initialize(){
@@ -47,6 +58,12 @@ public class LinearOp9 extends LinearOpMode {
             DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.Freshman.TankWheel.right);
             tankWheel = new DriveTrain(leftMotor,rightMotor);
             previous = new GamepadSpace();
+            GLiftObj = hardwareMap.get(DcMotor.class, Statics.Sophomore.glyphLift);
+            GLift = new DcMotorControl(GLiftObj,false);
+
+            intakeObj = hardwareMap.get(DcMotor.class, Statics.Freshman.Intake);
+            intake = new DcMotorControl(intakeObj, true);
+            intake.sensitivity = 1.0;
 
         }
 
@@ -75,6 +92,16 @@ public class LinearOp9 extends LinearOpMode {
                     tankWheel.tankDrive(gamepad1.left_stick_y, gamepad1.right_stick_x);
                 } //Drive the bot if any joystick moved
 
+                if(previous.stat.LB){
+                    if(gamepad1.left_bumper) GLift.updateSpeedLimit(GLiftObj,0.6);
+                    else GLift.updateSpeedLimit(GLiftObj,1.0);
+                }
+
+                if(previous.stat.DPadUp || previous.stat.DPadDown) {
+                    GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
+                }
+
+                intake.moveLift(intakeObj,previous.stat.LT,previous.stat.RT);
                 //Save Data for next loop
                 saveGPData();
 
