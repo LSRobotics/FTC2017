@@ -7,15 +7,17 @@ package org.firstinspires.ftc.teamcode.databases;
 final public class Statics {
 
     final public static class Freshman{
-        final public static class TankWheel {
-            final public static String left = "left_tank_motor",
-                                right = "right_tank_motor";
-        }
+        final public static boolean visualizing = false;
+
+        final public static String LWheel = "left_tank_motor";
+        final public static String RWheel = "right_tank_motor";
+
         final public static String Intake = "intake_motor";
     }
 
     final public static class Sophomore {
 
+        final public static boolean visualizing = false;
         final public static String glyphLift = "glyph_lift_motor";
 
         final public static class MecanumWheel {
@@ -24,7 +26,6 @@ final public class Statics {
                                 frontRight = "front_right_drive",
                                   rearLeft = "rear_left_drive",
                                  rearRight = "rear_right_drive";
-
         }
 
         final public static class Servos {

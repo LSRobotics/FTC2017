@@ -60,7 +60,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Test Drive SOPH B", group="Sophomore")
+@TeleOp(name="SOPH_tankDrive_DualStick", group="Sophomore")
 public class LinearOp10B extends LinearOpMode {
 
 
@@ -84,7 +84,7 @@ public class LinearOp10B extends LinearOpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
 
-    private void collectGPStat() {
+    final private void collectGPStat() {
         previous.stat.Triangle   = gamepad1.y != previous.Triangle;
         previous.stat.LB         = gamepad1.left_bumper != previous.LB;
         previous.stat.JLeftX     = gamepad1.left_stick_x != previous.JLeftX;
@@ -93,8 +93,8 @@ public class LinearOp10B extends LinearOpMode {
         previous.stat.LT         = gamepad1.left_trigger != 0;
         previous.stat.RT         = gamepad1.right_trigger!= 0;
         previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp         = gamepad1.dpad_up != previous.DPadUp;
-        previous.stat.DPadDown       = gamepad1.dpad_down != previous.DPadDown;
+        previous.stat.DPadUp     = gamepad1.dpad_up != previous.DPadUp;
+        previous.stat.DPadDown   = gamepad1.dpad_down != previous.DPadDown;
     }
 
     private void saveGPData() {

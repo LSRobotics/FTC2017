@@ -12,8 +12,8 @@ public class ServoControl {
     //private static Servo servoObj = null;
     public      double  servoPos    = 0;
     private     int     servoSwitch = -1;
-    private     double  minPos      = 0;
-    private     double  maxPos      = 0;
+    public      double  minPos      = 0;
+    public      double  maxPos      = 0;
     public      double  maxSpeed    = 1.0;
     private     double  speedLevel  = 1.0;
 

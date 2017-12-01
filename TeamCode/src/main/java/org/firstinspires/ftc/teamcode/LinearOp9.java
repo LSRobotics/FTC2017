@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Utils;
 /**
  * Created by LBYPatrick on 2017/11/5.
  */
-@TeleOp(name="Test Drive FRESH", group="Freshman")
+@TeleOp(name="FRESH_tankDrive", group="Freshman")
 public class LinearOp9 extends LinearOpMode {
 
         //Initialize objects
@@ -54,8 +54,8 @@ public class LinearOp9 extends LinearOpMode {
         }
 
         private void initialize(){
-            DcMotor leftMotor = hardwareMap.get(DcMotor.class, Statics.Freshman.TankWheel.left);
-            DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.Freshman.TankWheel.right);
+            DcMotor leftMotor = hardwareMap.get(DcMotor.class, Statics.Freshman.LWheel);
+            DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.Freshman.RWheel);
             tankWheel = new DriveTrain(leftMotor,rightMotor);
             previous = new GamepadSpace();
             GLiftObj = hardwareMap.get(DcMotor.class, Statics.Sophomore.glyphLift);
@@ -101,16 +101,20 @@ public class LinearOp9 extends LinearOpMode {
                     GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
                 }
 
+                //Intake
                 intake.moveLift(intakeObj,previous.stat.LT,previous.stat.RT);
                 //Save Data for next loop
                 saveGPData();
 
                 //Start putting information on the Driver Stations
                 //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
+
                 telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-                telemetry.addData("Tank Wheels   ", " ");
-                telemetry.addData("Left Front Wheel ", tankWheel.FL.getPower() + "\n\tencoder: " + tankWheel.FL.getCurrentPosition());
-                telemetry.addData("Right Front Wheel", tankWheel.FR.getPower() + "\n\tencoder: " + tankWheel.FR.getCurrentPosition());
+                if(Statics.Freshman.visualizing) {
+                    telemetry.addData("Tank Wheels   ", " ");
+                    telemetry.addData("Left Front Wheel ", tankWheel.FL.getPower() + "\n\tencoder: " + tankWheel.FL.getCurrentPosition());
+                    telemetry.addData("Right Front Wheel", tankWheel.FR.getPower() + "\n\tencoder: " + tankWheel.FR.getCurrentPosition());
+                }
                 telemetry.update();
             }
         }

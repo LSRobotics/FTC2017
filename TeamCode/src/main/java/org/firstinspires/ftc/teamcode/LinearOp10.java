@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.ftccommon.configuration.ScannedDevices;
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
@@ -58,6 +59,8 @@ import org.firstinspires.ftc.teamcode.Utils;
  */
 
 @TeleOp(name="Test Drive SOPH", group="Sophomore")
+@Disabled
+
 public class LinearOp10 extends LinearOpMode {
 
 

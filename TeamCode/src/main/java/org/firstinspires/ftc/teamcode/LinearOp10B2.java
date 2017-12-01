@@ -60,9 +60,8 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Test Drive SOPH B 2", group="Sophomore")
+@TeleOp(name="SOPH_tankDrive_monoStick", group="Sophomore")
 public class LinearOp10B2 extends LinearOpMode {
-
 
     //Initialize objects
     private     DriveTrain      mWheel;
@@ -84,7 +83,7 @@ public class LinearOp10B2 extends LinearOpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
 
-    private void collectGPStat() {
+    final private void collectGPStat() {
         previous.stat.Triangle   = gamepad1.y != previous.Triangle;
         previous.stat.LB         = gamepad1.left_bumper != previous.LB;
         previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
@@ -92,8 +91,8 @@ public class LinearOp10B2 extends LinearOpMode {
         previous.stat.LT         = gamepad1.left_trigger != 0;
         previous.stat.RT         = gamepad1.right_trigger!= 0;
         previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp         = gamepad1.dpad_up != previous.DPadUp;
-        previous.stat.DPadDown       = gamepad1.dpad_down != previous.DPadDown;
+        previous.stat.DPadUp     = gamepad1.dpad_up != previous.DPadUp;
+        previous.stat.DPadDown   = gamepad1.dpad_down != previous.DPadDown;
     }
 
     private void saveGPData() {
@@ -136,6 +135,7 @@ public class LinearOp10B2 extends LinearOpMode {
     public void runOpMode() {
 
         boolean toShowSecondPage = false;
+        boolean toOpenGrabbers = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -156,9 +156,9 @@ public class LinearOp10B2 extends LinearOpMode {
                 else mWheel.updateSpeedLimit(1.0);
             }
 
-            if ( previous.stat.JRightY || previous.stat.JRightX) {
+            if (previous.stat.JRightY || previous.stat.JRightX) {
                 //mWheel.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-                mWheel.tankDrive(gamepad1.right_stick_y,gamepad1.right_stick_x);
+                mWheel.tankDrive(gamepad1.right_stick_y, gamepad1.right_stick_x);
             } //Drive the bot if any joystick moved
 
 
@@ -166,27 +166,30 @@ public class LinearOp10B2 extends LinearOpMode {
             if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
             //Glyph Grabber Inward
-            if(previous.stat.LT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj,true);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj,true);
+            if (previous.stat.LT) {
+                GGrabberL.moveGlyphGrabber(GGrabberLObj, true);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj, true);
             }
             //Glyph Grabber Outward
-            else if(previous.stat.RT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj,false);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj,false);
+            else if (previous.stat.RT) {
+                GGrabberL.moveGlyphGrabber(GGrabberLObj, false);
+                GGrabberR.moveGlyphGrabber(GGrabberRObj, false);
             }
 
-            if(previous.stat.Circle) {
-                if(gamepad1.b) toShowSecondPage = !toShowSecondPage;
+            if (previous.stat.Circle) { //Toggle Grabbers
+                //if (gamepad1.b) toShowSecondPage = !toShowSecondPage;
+                toOpenGrabbers = !toOpenGrabbers;
+                if(toOpenGrabbers) {GGrabberLObj.setPosition(GGrabberL.maxPos);GGrabberRObj.setPosition(GGrabberR.maxPos);}
+                else {GGrabberLObj.setPosition((GGrabberL.maxPos + GGrabberL.minPos) / 2);GGrabberRObj.setPosition((GGrabberR.maxPos + GGrabberR.minPos) / 2);}
             }
 
-            if(previous.stat.LB){
-                if(gamepad1.left_bumper) GLift.updateSpeedLimit(GLiftObj,0.6);
-                else GLift.updateSpeedLimit(GLiftObj,1.0);
+            if (previous.stat.LB) {
+                if (gamepad1.left_bumper) GLift.updateSpeedLimit(GLiftObj, 0.6);
+                else GLift.updateSpeedLimit(GLiftObj, 1.0);
             }
 
-            if(previous.stat.DPadUp || previous.stat.DPadDown) {
-                GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
+            if (previous.stat.DPadUp || previous.stat.DPadDown) {
+                GLift.moveLift(GLiftObj, gamepad1.dpad_up, gamepad1.dpad_down);
             }
             //Save Data for next loop
             saveGPData();
@@ -194,20 +197,22 @@ public class LinearOp10B2 extends LinearOpMode {
             //Start putting information on the Driver Station
             //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-            if(toShowSecondPage) {
-                //telemetry.addData("FL encoder: ", mWheel.FL.getCurrentPosition());
-                //telemetry.addData("FR encoder: ", mWheel.FR.getCurrentPosition());
-                telemetry.addData("RL encoder: ", mWheel.FL.getCurrentPosition());
-                telemetry.addData("RR encoder: ", mWheel.FR.getCurrentPosition());
-                telemetry.addData("Jewel Arm:  ", jArm.servoPos);
-            }
-            else {
-                // telemetry.addData("FL Wheel:        ", mWheel.frontLeftPower);
-                // telemetry.addData("FR Wheel:        ", mWheel.frontRightPower);
-                telemetry.addData("RL Wheel:        ", mWheel.FL.getPower());
-                telemetry.addData("RR Wheel:        ", mWheel.FR.getPower());
-                telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
-                telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
+
+            if (Statics.Sophomore.visualizing) {
+                if (toShowSecondPage) {
+                    //telemetry.addData("FL encoder: ", mWheel.FL.getCurrentPosition());
+                    //telemetry.addData("FR encoder: ", mWheel.FR.getCurrentPosition());
+                    telemetry.addData("RL encoder: ", mWheel.FL.getCurrentPosition());
+                    telemetry.addData("RR encoder: ", mWheel.FR.getCurrentPosition());
+                    telemetry.addData("Jewel Arm:  ", jArm.servoPos);
+                } else {
+                    // telemetry.addData("FL Wheel:        ", mWheel.frontLeftPower);
+                    // telemetry.addData("FR Wheel:        ", mWheel.frontRightPower);
+                    telemetry.addData("RL Wheel:        ", mWheel.FL.getPower());
+                    telemetry.addData("RR Wheel:        ", mWheel.FR.getPower());
+                    telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
+                    telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
+                }
             }
             telemetry.update();
         }
