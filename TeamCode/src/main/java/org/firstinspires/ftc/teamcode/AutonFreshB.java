@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 11/14/2017.
  */
 @Autonomous(name = "FRESH_POS_B",group = "Freshman")
-public class AutonFreshB extends LinearOpMode {
+final public class AutonFreshB extends LinearOpMode {
 
     //Initialize objects
     private     DriveTrain      mWheel;
@@ -24,7 +24,6 @@ public class AutonFreshB extends LinearOpMode {
     final private ElapsedTime stageTime = new ElapsedTime();
 
     private void initialize() {
-
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Freshman.LWheel);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Freshman.RWheel);
 
@@ -75,7 +74,6 @@ public class AutonFreshB extends LinearOpMode {
 
 
         wait(3.0);
-
 
         stageTime.reset();
         mWheel.tankDrive(-1,0);

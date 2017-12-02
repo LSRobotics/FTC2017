@@ -17,6 +17,7 @@ public class ServoControl {
     public      double  maxSpeed    = 1.0;
     private     double  speedLevel  = 1.0;
 
+
     public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
 
     public ServoControl(Servo servoObj, boolean forward, double min, double max) {
@@ -26,8 +27,8 @@ public class ServoControl {
     }
     public void moveGlyphGrabber(Servo servoObj, boolean inward){
 
-        if(inward) servoPos -= 0.01*speedLevel;
-        else       servoPos += 0.01*speedLevel;
+        if(inward) servoPos -= 0.03*speedLevel;
+        else       servoPos += 0.03*speedLevel;
 
         //Out-of-limit detection & correction
 

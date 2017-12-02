@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
-import org.firstinspires.ftc.teamcode.actuators.ServoControl;
+import org.firstinspires.ftc.teamcode.actuators.*;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
 /**
  * Created by LBYPatrick on 11/14/2017.
  */
 @Autonomous(name = "FRESH_POS_A",group = "Freshman")
-public class AutonFreshA extends LinearOpMode {
+final public class AutonFreshA extends LinearOpMode {
 
     //Initialize objects
+
     private     DriveTrain      mWheel;
 
     // Declare OpMode members.
@@ -24,6 +24,7 @@ public class AutonFreshA extends LinearOpMode {
     final private ElapsedTime stageTime = new ElapsedTime();
 
     private void initialize() {
+
 
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Freshman.LWheel);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Freshman.RWheel);

@@ -181,9 +181,9 @@ public class LinearOp10B2 extends LinearOpMode {
                 GGrabberR.moveGlyphGrabber(GGrabberRObj, false);
             }
 
-            if (previous.stat.Circle) { //Toggle Grabbers
+            if (previous.stat.Circle && gamepad1.b) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberLObj.setPosition(GGrabberL.maxPos);GGrabberRObj.setPosition(GGrabberR.maxPos);}
+                if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
                 else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
             }
 
@@ -207,7 +207,8 @@ public class LinearOp10B2 extends LinearOpMode {
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", DriveTrain.FL.getPower());
                     telemetry.addData("RR Wheel:        ", DriveTrain.FR.getPower());
-                    telemetry.addData("GGrabbers:       ", GGrabberL.servoPos);
+                    telemetry.addData("GGrabbers:       ", GGrabberL.servoPos + " " + GGrabberR.servoPos);
+
                     telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
             }
             telemetry.update();

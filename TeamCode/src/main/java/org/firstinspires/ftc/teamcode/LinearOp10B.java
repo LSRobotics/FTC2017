@@ -171,9 +171,9 @@ public class LinearOp10B extends LinearOpMode {
                 GGrabberR.moveGlyphGrabber(GGrabberRObj,false);
             }
 
-            if(previous.stat.Circle) {
+            if(previous.stat.Circle && gamepad1.b) {
                     toCloseGrabbers = !toCloseGrabbers;
-                    if(!toCloseGrabbers) {GGrabberLObj.setPosition(GGrabberL.maxPos);GGrabberRObj.setPosition(GGrabberR.maxPos);}
+                    if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
                     else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
             }
 

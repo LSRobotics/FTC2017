@@ -39,8 +39,8 @@ final public class Statics {
         }
 
         final public static class Auton {
-            final public static double stageOneTime = 0.384,
-                                       stageTwoTime = 0.5,
+            final public static double stageOneTime = 0.2688,
+                                       stageTwoTime = 1.0,
                                        stageThreeTime = 0.3;
 
         }
