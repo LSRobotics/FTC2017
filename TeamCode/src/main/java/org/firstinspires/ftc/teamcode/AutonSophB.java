@@ -19,13 +19,6 @@ public class AutonSophB extends LinearOpMode {
     //Initialize objects
     private     DriveTrain      mWheel;
 
-    private     ServoControl    jArm;
-    private     Servo           jArmObj;
-    private     ServoControl    GGrabberL;
-    private     ServoControl    GGrabberR;
-    private     Servo           GGrabberLObj;
-    private     Servo           GGrabberRObj;
-
     // Declare OpMode members.
     final private ElapsedTime globalTime = new ElapsedTime();
     final private ElapsedTime stageTime = new ElapsedTime();
@@ -37,16 +30,26 @@ public class AutonSophB extends LinearOpMode {
 
         mWheel = new DriveTrain(BL,BR);
 
-        jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
-        jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
+        Servo jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
+        ServoControl jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
         //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
+        Servo GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
+        Servo GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
 
-        GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
-        GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
+        ServoControl GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
+        ServoControl GGrabberR = new ServoControl(GGrabberRObj, true, -1, 1);
 
 
+    }
+
+    private void wait(double seconds) {
+        stageTime.reset();
+        while(stageTime.seconds() <= seconds) {
+            telemetry.addData("Current Stage: ", "Idle");
+            telemetry.addData( "Global Time: ", globalTime.seconds());
+            telemetry.addData("Stage Time: ", stageTime.seconds());
+            telemetry.update();
+        }
     }
 
     @Override
@@ -54,12 +57,10 @@ public class AutonSophB extends LinearOpMode {
 
         initialize();
 
-        //Move Jewels
-
         //Move Forward
         stageTime.reset();
         mWheel.tankDrive(-1,0);
-        while(stageTime.seconds() <= 1.0) {
+        while(stageTime.seconds() <= 0.384) {
             telemetry.addData("Current Stage: ", "Moving forward");
             telemetry.addData( "Global Time: ", globalTime.seconds());
             telemetry.addData("Stage Time: ", stageTime.seconds());
@@ -67,18 +68,11 @@ public class AutonSophB extends LinearOpMode {
         }
         mWheel.tankDrive(0,0);
 
-        //Stop the bot for a second
-        stageTime.reset();
-        while(stageTime.seconds() <= 1.0) {
-            telemetry.addData("Current Stage: ", "Idle");
-            telemetry.addData( "Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
+        wait(3.0);
 
-        //Turn left
+        //Turn right
         stageTime.reset();
-        mWheel.tankDrive(0,0.5);
+        mWheel.tankDrive(0,1);
         while(stageTime.seconds() <= 0.5){
             telemetry.addData("Current Stage", "Turning Left");
             telemetry.addData("Global Time",globalTime.seconds());
@@ -86,14 +80,7 @@ public class AutonSophB extends LinearOpMode {
         }
         mWheel.tankDrive(0,0);
 
-        //Stop the bot for another second
-        stageTime.reset();
-        while(stageTime.seconds() <= 1.0) {
-            telemetry.addData("Current Stage: ", "Idle");
-            telemetry.addData( "Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
+        wait(3.0);
 
         stageTime.reset();
         mWheel.tankDrive(-1,0);

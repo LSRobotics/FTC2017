@@ -19,9 +19,6 @@ public class AutonFreshA extends LinearOpMode {
     //Initialize objects
     private     DriveTrain      mWheel;
 
-    private     Servo           GGrabberLObj;
-    private     Servo           GGrabberRObj;
-
     // Declare OpMode members.
     final private ElapsedTime globalTime = new ElapsedTime();
     final private ElapsedTime stageTime = new ElapsedTime();
@@ -33,18 +30,23 @@ public class AutonFreshA extends LinearOpMode {
 
         mWheel = new DriveTrain(BL,BR);
 
-        //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
+    }
 
+
+    private void wait(double seconds) {
+        stageTime.reset();
+        while(stageTime.seconds() <= seconds) {
+            telemetry.addData("Current Stage: ", "Idle");
+            telemetry.addData( "Global Time: ", globalTime.seconds());
+            telemetry.addData("Stage Time: ", stageTime.seconds());
+            telemetry.update();
+        }
     }
 
     @Override
     public void runOpMode() {
 
         initialize();
-
-        //Move Jewels
 
         //Move Forward
         stageTime.reset();
@@ -57,33 +59,19 @@ public class AutonFreshA extends LinearOpMode {
         }
         mWheel.tankDrive(0,0);
 
-        //Stop the bot for a second
-        stageTime.reset();
-        while(stageTime.seconds() <= 1.0) {
-            telemetry.addData("Current Stage: ", "Idle");
-            telemetry.addData( "Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
+        wait(3.0);
 
         //Turn left
         stageTime.reset();
-        mWheel.tankDrive(0,-0.5);
-        while(stageTime.seconds() <= 0.5){
+        mWheel.tankDrive(0,-1);
+        while(stageTime.seconds() <= 0.75){
             telemetry.addData("Current Stage", "Turning Left");
             telemetry.addData("Global Time",globalTime.seconds());
             telemetry.addData("Stage Time",stageTime.seconds());
         }
         mWheel.tankDrive(0,0);
 
-        //Stop the bot for another second
-        stageTime.reset();
-        while(stageTime.seconds() <= 1.0) {
-            telemetry.addData("Current Stage: ", "Idle");
-            telemetry.addData( "Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
+        wait(3.0);
 
         stageTime.reset();
         mWheel.tankDrive(-1,0);

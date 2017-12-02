@@ -107,13 +107,12 @@ public class LinearOp9 extends LinearOpMode {
                 saveGPData();
 
                 //Start putting information on the Driver Stations
-                //telemetry.addData("VuMark", vumark.getPos()); // Get VuMark informations
 
                 telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
                 if(Statics.Freshman.visualizing) {
                     telemetry.addData("Tank Wheels   ", " ");
-                    telemetry.addData("Left Front Wheel ", tankWheel.FL.getPower() + "\n\tencoder: " + tankWheel.FL.getCurrentPosition());
-                    telemetry.addData("Right Front Wheel", tankWheel.FR.getPower() + "\n\tencoder: " + tankWheel.FR.getCurrentPosition());
+                    telemetry.addData("Left Front Wheel ", DriveTrain.FL.getPower() + "\n\tencoder: " + DriveTrain.FL.getCurrentPosition());
+                    telemetry.addData("Right Front Wheel", DriveTrain.FR.getPower() + "\n\tencoder: " + DriveTrain.FR.getCurrentPosition());
                 }
                 telemetry.update();
             }
