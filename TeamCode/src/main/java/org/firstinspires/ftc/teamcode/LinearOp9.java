@@ -111,8 +111,8 @@ public class LinearOp9 extends LinearOpMode {
                 telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
                 if(Statics.Freshman.visualizing) {
                     telemetry.addData("Tank Wheels   ", " ");
-                    telemetry.addData("Left Front Wheel ", DriveTrain.FL.getPower() + "\n\tencoder: " + DriveTrain.FL.getCurrentPosition());
-                    telemetry.addData("Right Front Wheel", DriveTrain.FR.getPower() + "\n\tencoder: " + DriveTrain.FR.getCurrentPosition());
+                    telemetry.addData("Left Front Wheel ", tankWheel.getSpeed(1) + "\n\tencoder: ");
+                    telemetry.addData("Right Front Wheel", tankWheel.getSpeed(0) + "\n\tencoder: ");
                 }
                 telemetry.update();
             }

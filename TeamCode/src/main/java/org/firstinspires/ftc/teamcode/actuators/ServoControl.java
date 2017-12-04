@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by LBYPatrick on 10/27/2017.
  */
 
-public class ServoControl {
+final public class ServoControl {
 
 
     //private static Servo servoObj = null;
-    public      double  servoPos    = 0;
+    private     double  servoPos    = 0;
     private     int     servoSwitch = -1;
     public      double  minPos      = 0;
     public      double  maxPos      = 0;
@@ -50,4 +50,8 @@ public class ServoControl {
 
             servoObj.setPosition(servoPos);
         }
+
+    public double getPos() {
+        return servoPos;
+    }
 }

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by LBYPatrick on 11/9/2017.
  */
 
-public class DcMotorControl {
+final public class DcMotorControl {
 
             public      double  sensitivity = 1.0;
             public      double  maxSpeed = 1.0;

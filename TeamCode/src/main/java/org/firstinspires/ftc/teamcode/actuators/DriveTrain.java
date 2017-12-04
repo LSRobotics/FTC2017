@@ -8,31 +8,20 @@ import com.qualcomm.robotcore.util.Range;
  * Created by LBYPatrick on 2017/11/3.
  */
 
-public class DriveTrain {
+final public class DriveTrain {
 
-    public      static   DcMotor FL                 = null;
-    public      static   DcMotor FR                 = null;
-    public      static   DcMotor RL                 = null;
-    public      static   DcMotor RR                 = null;
+    private     static   DcMotor FL                 = null;
+    private     static   DcMotor FR                 = null;
+    private     static   DcMotor RL                 = null;
+    private     static   DcMotor RR                 = null;
     public               double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
-    public               double  frontLeftPower;
-    public               double  frontRightPower;
-    public               double  rearLeftPower;
-    public               double  rearRightPower;
+    private              double  frontLeftPower;
+    private              double  frontRightPower;
+    private              double  rearLeftPower;
+    private              double  rearRightPower;
     private              boolean is4WD              = false;
 
-    public void updateSpeedLimit(double speed) {
-        speedLevel = speed*maxSpeed;
-
-        FL.setPower(frontLeftPower * speedLevel);
-        FR.setPower(frontRightPower * speedLevel);
-        if(is4WD){
-            RL.setPower(rearLeftPower * speedLevel);
-            RR.setPower(rearRightPower * speedLevel);
-        }
-
-    }
     //Constructor for 4WD
     public DriveTrain(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor rearLeftMotor, DcMotor rearRightMotor) {
 
@@ -56,7 +45,7 @@ public class DriveTrain {
         is4WD = false;
     }
 
-    final public void tankDrive(double joystickLeftY, double joystickRightX) {
+    public void tankDrive(double joystickLeftY, double joystickRightX) {
 
         joystickLeftY = -joystickLeftY; joystickRightX = -joystickRightX; // FTC 2018 tuning
 
@@ -76,7 +65,7 @@ public class DriveTrain {
 
     }
 
-    final public void mecanumDrive(double joystickLeftX, double joystickLeftY, double joystickRightX) {
+    public void mecanumDrive(double joystickLeftX, double joystickLeftY, double joystickRightX) {
 
         joystickLeftX = -joystickLeftX;joystickRightX *= -0.5; //Tuning for FTC 2018
 
@@ -97,4 +86,37 @@ public class DriveTrain {
         RL.setPower(rearLeftPower);
         RR.setPower(rearRightPower * speedLevel);
     }
+
+    public void updateSpeedLimit(double speed) {
+        speedLevel = speed*maxSpeed;
+
+        FL.setPower(frontLeftPower * speedLevel);
+        FR.setPower(frontRightPower * speedLevel);
+        if(is4WD){
+            RL.setPower(rearLeftPower * speedLevel);
+            RR.setPower(rearRightPower * speedLevel);
+        }
+
+    }
+
+    public double getEncoderInfo(int motorPosition) {
+        switch (motorPosition) {
+            case 0  : return FR.getCurrentPosition();
+            case 1  : return FL.getCurrentPosition();
+            case 2  : return RL.getCurrentPosition();
+            case 3  : return RR.getCurrentPosition();
+            default : return 256;
+        }
+    }
+
+    public double getSpeed(int motorPosition) {
+        switch (motorPosition) {
+            case 0  : return FR.getPower();
+            case 1  : return FL.getPower();
+            case 2  : return RL.getPower();
+            case 3  : return RR.getPower();
+            default : return 256;
+        }
+    }
+
 }
