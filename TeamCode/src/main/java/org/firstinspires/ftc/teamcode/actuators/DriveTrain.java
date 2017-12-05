@@ -50,7 +50,7 @@ final public class DriveTrain {
 
     public void tankDrive(double forwardBack, double rotation) {
 
-        rotation = -rotation * 2; // FTC 2018 tuning
+        rotation = -rotation; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
         this.frontLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);

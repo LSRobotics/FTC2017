@@ -108,8 +108,8 @@ final public class TeleOp9T extends LinearOpMode {
                     telemetry.addData("Tank Wheels   ", " ");
                     telemetry.addData("Left Front Wheel ", tankWheel.getSpeed(1) + "\n\tencoder: ");
                     telemetry.addData("Right Front Wheel", tankWheel.getSpeed(0) + "\n\tencoder: ");
-                    telemetry.update();
                 }
+                telemetry.update();
             }
             telemetry.addData("Status","Stopped");
             telemetry.update();

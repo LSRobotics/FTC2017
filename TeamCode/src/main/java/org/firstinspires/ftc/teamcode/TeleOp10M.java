@@ -189,8 +189,9 @@ final public class TeleOp10M extends LinearOpMode {
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(1));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
-                    telemetry.update();
+
             }
+            telemetry.update();
         }
 
         telemetry.addData("Status","Stopped");
