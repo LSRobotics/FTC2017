@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.actuators;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -45,13 +44,14 @@ final public class DriveTrain {
         is4WD = false;
     }
 
-    public void tankDrive(double joystickLeftY, double joystickRightX) {
+    public void tankDrive(double forwardBack, double rotation) {
 
-        joystickLeftY = -joystickLeftY; joystickRightX = -joystickRightX; // FTC 2018 tuning
+        forwardBack = -forwardBack;
+        rotation = -rotation; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
-        frontLeftPower = Range.clip((-joystickLeftY) + joystickRightX, -1.0, 1.0);
-        frontRightPower = Range.clip((-joystickLeftY) - joystickRightX, -1.0, 1.0);
+        frontLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
+        frontRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
         frontLeftPower *= speedLevel;frontRightPower *= speedLevel;
         if (is4WD) {rearLeftPower = frontLeftPower; rearRightPower = frontRightPower;}
 
@@ -65,18 +65,19 @@ final public class DriveTrain {
 
     }
 
-    public void mecanumDrive(double joystickLeftX, double joystickLeftY, double joystickRightX) {
+    public void mecanumDrive(double sideMove, double forwardBack, double rotation) {
 
-        joystickLeftX = -joystickLeftX;joystickRightX *= -0.5; //Tuning for FTC 2018
+        forwardBack = -forwardBack;
+        sideMove = -sideMove;rotation *= -0.5; //Tuning for FTC 2018
 
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
-        double r = Math.hypot(joystickLeftX, joystickLeftY);
-        double robotAngle = Math.atan2(joystickLeftY, joystickLeftX) - Math.PI / 4;
+        double r = Math.hypot(sideMove, forwardBack);
+        double robotAngle = Math.atan2(forwardBack, sideMove) - Math.PI / 4;
 
-        frontLeftPower = r * Math.cos(robotAngle) + joystickRightX;
-        frontRightPower = r * Math.sin(robotAngle) - joystickRightX;
-        rearLeftPower = r * Math.sin(robotAngle) + joystickRightX;
-        rearRightPower = r * Math.cos(robotAngle) - joystickRightX;
+        frontLeftPower = r * Math.cos(robotAngle) + rotation;
+        frontRightPower = r * Math.sin(robotAngle) - rotation;
+        rearLeftPower = r * Math.sin(robotAngle) + rotation;
+        rearRightPower = r * Math.cos(robotAngle) - rotation;
 
         frontLeftPower *= 0.987; frontRightPower *= 0.987; rearRightPower *= 0.987;
 
@@ -119,4 +120,5 @@ final public class DriveTrain {
         }
     }
 
+    public boolean get4WDStat() {return is4WD;}
 }

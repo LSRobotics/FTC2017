@@ -29,8 +29,7 @@ final public class DcMotorControl {
         dcMotorObj.setPower(motorSpeed*speedLevel);
     }
 
-    public void updateSpeedLimit(DcMotor dcMotorObj, double speed){
+    public void updateSpeedLimit(double speed){
         speedLevel = speed * maxSpeed;
-        dcMotorObj.setPower(motorSpeed*speedLevel);
     }
 }

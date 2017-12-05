@@ -6,46 +6,25 @@ package org.firstinspires.ftc.teamcode.databases;
 
 final public class Statics {
 
-    final public static class Freshman{
+        public static final boolean FRESH_VISUALIZING = false;
+        public static final String  FRESH_L_WHEEL = "left_tank_motor";
+        public static final String FRESH_R_WHEEL = "right_tank_motor";
+        public static final String FRESH_INTAKE = "intake_motor";
+        public static final double FRESH_AUTON_STAGE_ONE_TIME = 0.32;
 
-        public static boolean visualizing = false;
-        public static String LWheel = "left_tank_motor";
-        public static String RWheel = "right_tank_motor";
-        public static String Intake = "intake_motor";
-        final public static class Auton {
-            final public static double stageOneTime = 0.32;
-        }
+        public static final boolean SOPH_VISUALIZING = false;
 
+        public static final String GLYPH_LIFT = "glyph_lift_motor";
+        public static final String SOPH_FL_WHEEL = "front_left_drive";
+        public static final String SOPH_FR_WHEEL = "front_right_drive";
+        public static final String SOPH_RL_WHEEL = "rear_left_drive";
+        public static final String SOPH_RR_WHEEL = "rear_right_drive";
+        public static final String SOPH_SERVO_JEWEL = "jewel_arm";
+        public static String SOPH_LEFT_GLYPH_GRABBER = "glyph_left_grabber";
+        public static final String SOPH_RIGHT_GLYPH_GRABBER = "glyph_right_grabber";
+        public static String SOPH_VUFORIA_LICENSE_KEY = "AaqInFv/////AAAAGWgXZPyJL0f1o4/jFY9175+ChDm/B5AHc9pxmiOo8JTr1gMh3DluNlhLlVr+LzyCyUOjQdefC/Wms7sJj2mgzM0ydQ8VVgYuCmSqdx997Hdf0Xie43eqklVg+9GKxIxPtuKoOWWsooHDxs4m2G60qySXftQoTkuE94lF9r6AnEys0FFMcNC6eyO7Qo4DvOJJ6Qm6SBKAkFqhyO1kyKepCdclLrxi9NvaG3Tnpl/zN3H+fEg4fPZyWiREccROjyUzhcnQJ9uH/5cNqMns7mW2codvxT2xq9hFdDo0TxRZU3yppM35VUchlN2QITm/6hTMRQ61UVRGcQHQUm/8LKtLBAQn1iNYXFpgPuXD8rbTYJWw";
 
-    }
-
-    final public static class Sophomore {
-
-        public static boolean visualizing = true;
-        public static String glyphLift = "glyph_lift_motor";
-
-        final public static class MecanumWheel {
-
-            public static String frontLeft = "front_left_drive",
-                                frontRight = "front_right_drive",
-                                  rearLeft = "rear_left_drive",
-                                 rearRight = "rear_right_drive";
-        }
-
-        final public static class Servos {
-            public static String jewel = "jewel_arm",
-                     left_glyphGrabber = "glyph_left_grabber",
-                    right_glyphGrabber = "glyph_right_grabber";
-        }
-
-        final public static class Vuforia {
-            public static String licenceKey = "AaqInFv/////AAAAGWgXZPyJL0f1o4/jFY9175+ChDm/B5AHc9pxmiOo8JTr1gMh3DluNlhLlVr+LzyCyUOjQdefC/Wms7sJj2mgzM0ydQ8VVgYuCmSqdx997Hdf0Xie43eqklVg+9GKxIxPtuKoOWWsooHDxs4m2G60qySXftQoTkuE94lF9r6AnEys0FFMcNC6eyO7Qo4DvOJJ6Qm6SBKAkFqhyO1kyKepCdclLrxi9NvaG3Tnpl/zN3H+fEg4fPZyWiREccROjyUzhcnQJ9uH/5cNqMns7mW2codvxT2xq9hFdDo0TxRZU3yppM35VUchlN2QITm/6hTMRQ61UVRGcQHQUm/8LKtLBAQn1iNYXFpgPuXD8rbTYJWw";
-        }
-
-        final public static class Auton {
-            final public static double stageOneTime = 0.2688,
-                                       stageTwoTime = 1.0,
-                                       stageThreeTime = 0.3;
-        }
-    }
+        public static final double SOPH_AUTON_STAGE_ONE_TIME = 0.2688;
+        public static final double SOPH_AUTON_STAGE_TWO_TIME = 1.0;
+        public static final double SOPH_AUTON_STAGE_THREE_TIME = 0.3;
 }

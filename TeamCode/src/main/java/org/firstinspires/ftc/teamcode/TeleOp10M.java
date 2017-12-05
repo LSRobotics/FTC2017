@@ -60,14 +60,13 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="SOPH_tankDrive_monoStick", group="Sophomore")
-public class LinearOp10B2 extends LinearOpMode {
+@TeleOp(name="SOPH_tankDrive_DualStick", group="Sophomore")
+final public class TeleOp10M extends LinearOpMode {
+
 
     //Initialize objects
     private     DriveTrain      mWheel;
 
-    //private     ServoControl    jArm;
-    //private     Servo           jArmObj;
     private     ServoControl    GGrabberL;
     private     ServoControl    GGrabberR;
     private     Servo           GGrabberLObj;
@@ -77,52 +76,51 @@ public class LinearOp10B2 extends LinearOpMode {
 
     final private GamepadSpace previous = new GamepadSpace();
 
+
+
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
 
 
     private void collectGPStat() {
-        //previous.stat.Triangle   = gamepad1.y != previous.Triangle;
-        previous.stat.LB         = gamepad1.left_bumper != previous.LB;
+
+        previous.stat.LB         = gamepad1.left_bumper;
+        previous.stat.RB         = gamepad1.right_bumper;
+        previous.stat.LT         = gamepad1.left_trigger != previous.LT;
+        previous.stat.RT         = gamepad1.right_trigger!= previous.RT;
+        previous.stat.JLeftX     = gamepad1.left_stick_x != previous.JLeftX;
         previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
-        previous.stat.JRightY    = gamepad1.right_stick_y != previous.JRightY;
-        previous.stat.LT         = gamepad1.left_trigger != 0;
-        previous.stat.RT         = gamepad1.right_trigger!= 0;
         previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp     = gamepad1.dpad_up != previous.DPadUp;
-        previous.stat.DPadDown   = gamepad1.dpad_down != previous.DPadDown;
+        previous.stat.Square     = gamepad1.x;
     }
 
     private void saveGPData() {
 
-       // previous.Triangle  = gamepad1.y;
-        previous.LB        = gamepad1.left_bumper;
-        previous.JRightY   = gamepad1.right_stick_y;
+        previous.JLeftX    = gamepad1.left_stick_x;
         previous.JRightX   = gamepad1.right_stick_x;
         previous.LT        = gamepad1.left_trigger;
         previous.RT        = gamepad1.right_trigger;
         previous.Circle    = gamepad1.b;
-        previous.DPadUp    = gamepad1.dpad_up;
-        previous.DPadDown  = gamepad1.dpad_down;
 
     }
 
     private void initialize(){
-        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
-        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
-        //mWheel = new DriveTrain(FL, FR, BL, BR);
-        mWheel = new DriveTrain(BL,BR);
+        DcMotor BL = hardwareMap.dcMotor.get(Statics.SOPH_RL_WHEEL);
+        DcMotor BR = hardwareMap.dcMotor.get(Statics.SOPH_RR_WHEEL);
+        DcMotor FL = hardwareMap.dcMotor.get(Statics.SOPH_FL_WHEEL);
+        DcMotor FR = hardwareMap.dcMotor.get(Statics.SOPH_FR_WHEEL);
+        mWheel = new DriveTrain(FL,FR,BL,BR);
 
         //jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
-        // jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
+        //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
 
         //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
+        GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
+        GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
 
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
-        GLiftObj = hardwareMap.get(DcMotor.class, Statics.Sophomore.glyphLift);
+        GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
 
     }
@@ -130,9 +128,7 @@ public class LinearOp10B2 extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        boolean toShowSecondPage = false;
-        boolean toCloseGrabbers = true;
-        double  globalSpeed;
+        boolean toCloseGrabbers = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -147,68 +143,51 @@ public class LinearOp10B2 extends LinearOpMode {
 
             collectGPStat();
 
-            //Toggle Snipping Mode
-            if (previous.stat.LB) {
-                if (gamepad1.left_bumper) globalSpeed = 0.6;
-                else                      globalSpeed = 1.0;
-
-                //Apply Speed
-                mWheel.updateSpeedLimit(globalSpeed);
-                GGrabberL.updateSpeedLimit(globalSpeed);
-                GGrabberR.updateSpeedLimit(globalSpeed);
-                GLift.updateSpeedLimit(GLiftObj,globalSpeed);
-
+            if (previous.stat.Square) { //Sniping Mode Switch
+                mWheel.updateSpeedLimit(0.6);
+                GLift.updateSpeedLimit(0.6);
+                GGrabberL.updateSpeedLimit(0.6);
+                GGrabberR.updateSpeedLimit(0.6);
+            }
+            else {
+                mWheel.updateSpeedLimit(1.0);
+                GLift.updateSpeedLimit(1.0);
+                GGrabberL.updateSpeedLimit(1.0);
+                GGrabberR.updateSpeedLimit(1.0);
             }
 
 
-            //Right joystick for driving
-            if (previous.stat.JRightY || previous.stat.JRightX) {
-                mWheel.tankDrive(gamepad1.right_stick_y, gamepad1.right_stick_x);
+            if (previous.stat.LT || previous.stat.RT || previous.stat.JLeftX) {
+                mWheel.mecanumDrive(0,-(gamepad1.right_trigger-gamepad1.left_trigger),gamepad1.left_stick_x);
             }
 
-
-            //Jewel Arm (Currently Disabled)
+            //Jewel Arm (Currently disabled)
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
-            //Glyph Grabber Inward
-            if (previous.stat.LT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj, true);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj, true);
-            }
-            //Glyph Grabber Outward
-            else if (previous.stat.RT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj, false);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj, false);
+            if (previous.stat.LB || previous.stat.RB) { //L1 & R1 for Glyph Lift
+                GLift.moveLift(GLiftObj, gamepad1.right_bumper, gamepad1.left_bumper);
             }
 
-            if (previous.stat.Circle && gamepad1.b) { //Toggle Grabbers
-                toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
-                else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
+            //Glyph Grabber
+            if(previous.stat.Circle && gamepad1.b) {
+                    toCloseGrabbers = !toCloseGrabbers;
+                    if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
+                    else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
             }
 
-            if (previous.stat.LB) {
-                if (gamepad1.left_bumper) GLift.updateSpeedLimit(GLiftObj, 0.6);
-                else GLift.updateSpeedLimit(GLiftObj, 1.0);
-            }
-
-            if (previous.stat.DPadUp || previous.stat.DPadDown) {
-                GLift.moveLift(GLiftObj, gamepad1.dpad_up, gamepad1.dpad_down);
-            }
             //Save Data for next loop
             saveGPData();
 
             //Start putting information on the Driver Station
             telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
 
-            if (Statics.Sophomore.visualizing) {
-                    telemetry.addData("RL encoder: ", "");
-                    telemetry.addData("RR encoder: ", "");
+            if(Statics.SOPH_VISUALIZING) {
+                    telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(1));
+                    telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(0));
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(1));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
-                    telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
             }
             telemetry.update();
         }

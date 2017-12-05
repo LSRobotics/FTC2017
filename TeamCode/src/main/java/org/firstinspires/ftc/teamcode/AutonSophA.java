@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.*;
-import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
 /**
@@ -19,6 +17,7 @@ final public class AutonSophA extends LinearOpMode {
 
     //Initialize objects
     private     DriveTrain      mWheel;
+    private AutonHelper auton;
     private Servo GGrabberLObj;
     private Servo GGrabberRObj;
     private ServoControl GGrabberL;
@@ -32,22 +31,23 @@ final public class AutonSophA extends LinearOpMode {
 
     private void initialize() {
 
-        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearLeft);
-        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.Sophomore.MecanumWheel.rearRight);
+        DcMotor BL = hardwareMap.get(DcMotor.class, Statics.SOPH_RL_WHEEL);
+        DcMotor BR = hardwareMap.get(DcMotor.class, Statics.SOPH_RR_WHEEL);
 
         mWheel = new DriveTrain(BL,BR);
 
-        Servo jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
+        Servo jArmObj = hardwareMap.get(Servo.class, Statics.SOPH_SERVO_JEWEL);
         ServoControl jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
         //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.left_glyphGrabber);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.right_glyphGrabber);
-
+        GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
+        GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj, true, -1, 1);
 
-        GLiftObj = hardwareMap.dcMotor.get(Statics.Sophomore.glyphLift);
+        GLiftObj = hardwareMap.dcMotor.get(Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
+
+        auton = new AutonHelper(this,mWheel,false);
     }
 
     private boolean wait(double seconds) {
@@ -73,62 +73,40 @@ final public class AutonSophA extends LinearOpMode {
         stageTime.reset();
         GGrabberRObj.setPosition(0.35);
         GGrabberLObj.setPosition(0.35);
-        GLift.moveLift(GLiftObj, true, false);
-
         if(!wait(1.0)) return;
 
-        //Stage 1
-        stageTime.reset();
-        mWheel.tankDrive(-1, 0);
-        while (opModeIsActive() && stageTime.seconds() <= Statics.Sophomore.Auton.stageOneTime) {
-            telemetry.addData("Current Stage: ", "Moving forward");
-            telemetry.addData("Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
-        mWheel.tankDrive(0, 0);
-        GLift.moveLift(GLiftObj, false, false);
+
+        if(!auton.moveLiftUp(GLiftObj,GLift,1.0)) return;
+
+        //Move forward
+        if(!auton.moveForward(Statics.SOPH_AUTON_STAGE_ONE_TIME)) return;
+
 
         if(!wait(3.0)) return;
 
         //Turn left
-        stageTime.reset();
-        mWheel.tankDrive(0, -1);
-        while (opModeIsActive() && stageTime.seconds() <= Statics.Sophomore.Auton.stageTwoTime) {
-            telemetry.addData("Current Stage", "Turning Left");
-            telemetry.addData("Global Time", globalTime.seconds());
-            telemetry.addData("Stage Time", stageTime.seconds());
-        }
-        mWheel.tankDrive(0, 0);
+        if(!auton.turnLeft(Statics.SOPH_AUTON_STAGE_TWO_TIME)) return;
 
         if(!wait(3.0)) return;
 
         //Move forward a little bit
-        stageTime.reset();
-        mWheel.tankDrive(-1, 0);
-        while (opModeIsActive() && stageTime.seconds() <= Statics.Sophomore.Auton.stageThreeTime) {
-            telemetry.addData("Current Stage: ", "Moving forward");
-            telemetry.addData("Global Time: ", globalTime.seconds());
-            telemetry.addData("Stage Time: ", stageTime.seconds());
-            telemetry.update();
-        }
-        mWheel.tankDrive(0, 0);
+        if(!auton.moveForward(Statics.SOPH_AUTON_STAGE_THREE_TIME)) return;
+
         //Release Glyphs
         GGrabberRObj.setPosition(GGrabberL.maxPos);
         GGrabberLObj.setPosition(GGrabberR.maxPos);
+        if(!wait(1.0)) return;
+
+
+        if(!auton.moveBack(0.2)) return;
 
         if(!wait(1.0)) return;
 
-        mWheel.tankDrive(1.0,0);
-        if(!wait(0.2)) return;
-        mWheel.tankDrive(0,0);
+        if(!auton.moveForward(0.2)) return;
 
-        mWheel.tankDrive(-1.0,0);
-        if(!wait(0.2)) return;
-        mWheel.tankDrive(0,0);
+        if(!wait(1.0)) return;
 
-        mWheel.tankDrive(1.0,0);
-        if(!wait(0.05)) return;
-        mWheel.tankDrive(0,0);
+        if (!auton.moveBack(0.05)) return;
+
     }
 }
