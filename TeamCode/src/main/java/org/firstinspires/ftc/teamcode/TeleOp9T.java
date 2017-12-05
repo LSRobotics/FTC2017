@@ -31,8 +31,8 @@ final public class TeleOp9T extends LinearOpMode {
             previous.stat.LB         = gamepad1.left_bumper;
             previous.stat.JLeftY     = gamepad1.left_stick_y != previous.JLeftY;
             previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
-            previous.stat.DPadUp         = gamepad1.dpad_up != previous.DPadUp;
-            previous.stat.DPadDown       = gamepad1.dpad_down != previous.DPadDown;
+            previous.stat.DPadUp         = gamepad1.dpad_up;
+            previous.stat.DPadDown       = gamepad1.dpad_down;
             previous.stat.LT         = gamepad1.left_trigger != 0;
             previous.stat.RT         = gamepad1.right_trigger!= 0;
         }
@@ -45,8 +45,6 @@ final public class TeleOp9T extends LinearOpMode {
             previous.JRightX   = gamepad1.right_stick_x;
             previous.LT        = gamepad1.left_trigger;
             previous.RT        = gamepad1.right_trigger;
-            previous.DPadUp    = gamepad1.dpad_up;
-            previous.DPadDown  = gamepad1.dpad_down;
         }
 
         private void initialize(){
@@ -73,6 +71,9 @@ final public class TeleOp9T extends LinearOpMode {
             waitForStart(); // Wait for the game to start (driver presses PLAY)
             runtime.reset();
 
+            telemetry.addData("Status", "Running");
+            telemetry.update();
+
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
 
@@ -92,24 +93,25 @@ final public class TeleOp9T extends LinearOpMode {
                     tankWheel.tankDrive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
                 } //Drive the bot if any joystick moved
 
-                if(previous.stat.DPadUp || previous.stat.DPadDown) {
-                    GLift.moveLift(GLiftObj,gamepad1.dpad_up,gamepad1.dpad_down);
-                }
+                GLift.moveLift(previous.stat.DPadUp,previous.stat.DPadDown);
 
                 //Intake
-                intake.moveLift(intakeObj,previous.stat.LT,previous.stat.RT);
+                intake.moveLift(previous.stat.LT,previous.stat.RT);
                 //Save Data for next loop
                 saveGPData();
 
                 //Start putting information on the Driver Stations
 
-                telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
+
                 if(Statics.FRESH_VISUALIZING) {
+                    telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
                     telemetry.addData("Tank Wheels   ", " ");
                     telemetry.addData("Left Front Wheel ", tankWheel.getSpeed(1) + "\n\tencoder: ");
                     telemetry.addData("Right Front Wheel", tankWheel.getSpeed(0) + "\n\tencoder: ");
+                    telemetry.update();
                 }
-                telemetry.update();
             }
+            telemetry.addData("Status","Stopped");
+            telemetry.update();
         }
     }

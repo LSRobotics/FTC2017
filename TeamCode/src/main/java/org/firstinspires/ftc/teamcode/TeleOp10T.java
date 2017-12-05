@@ -135,6 +135,8 @@ final public class TeleOp10T extends LinearOpMode {
         waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
 
+        telemetry.addData("Status", "Running");
+        telemetry.update();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -162,9 +164,7 @@ final public class TeleOp10T extends LinearOpMode {
             //Jewel Arm (Currently disabled)
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
-            if (previous.stat.LB || previous.stat.RB) { //L1 & R1 for Glyph Lift
-                GLift.moveLift(GLiftObj, gamepad1.right_bumper, gamepad1.left_bumper);
-            }
+            GLift.moveLift(previous.stat.RB, previous.stat.LB);
 
             //Glyph Grabber
             if(previous.stat.Circle && gamepad1.b) {
@@ -177,17 +177,21 @@ final public class TeleOp10T extends LinearOpMode {
             saveGPData();
 
             //Start putting information on the Driver Station
-            telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
+
 
             if(Statics.SOPH_VISUALIZING) {
+                    telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
                     telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(1));
                     telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(0));
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(1));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
+                    telemetry.update();
             }
-            telemetry.update();
+
         }
+        telemetry.addData("Status", "Stopped");
+        telemetry.update();
     }
 }

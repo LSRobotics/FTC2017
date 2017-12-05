@@ -12,24 +12,27 @@ final public class DcMotorControl {
             public      double  maxSpeed = 1.0;
             private     double  speedLevel = 1.0;
             private     double  motorSpeed = 0;
+            private     DcMotor motorObj;
 
     public DcMotorControl(DcMotor dcMotorObj, boolean forward) {
-        dcMotorObj.setDirection((forward?DcMotor.Direction.FORWARD : DcMotor.Direction.REVERSE));
+
+        this.motorObj = dcMotorObj;
+
+        this.motorObj.setDirection((forward?DcMotor.Direction.FORWARD : DcMotor.Direction.REVERSE));
     }
 
-    public void moveLift(DcMotor dcMotorObj, boolean up, boolean down) {
+    public void moveLift(boolean up, boolean down) {
 
-        motorSpeed = 0;
-        if ((up && down) || (!up && !down)) motorSpeed = 0;
+        if ((up && down) || (!up && !down)) this.motorSpeed = 0;
         else if (up)
-            motorSpeed = sensitivity;
+            this.motorSpeed = this.sensitivity;
         else if (down)
-            motorSpeed = -sensitivity;
+            this.motorSpeed = -this.sensitivity;
 
-        dcMotorObj.setPower(motorSpeed*speedLevel);
+        this.motorObj.setPower(this.motorSpeed*this.speedLevel);
     }
 
     public void updateSpeedLimit(double speed){
-        speedLevel = speed * maxSpeed;
+        this.speedLevel = speed * this.maxSpeed;
     }
 }

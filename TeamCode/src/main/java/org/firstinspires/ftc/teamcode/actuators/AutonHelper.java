@@ -22,70 +22,70 @@ final public class AutonHelper {
     }
 
     private boolean detectOpStat() {
-        if(opModeObj.opModeIsActive()) return true;
+        if(this.opModeObj.opModeIsActive()) return true;
         else return false;
     }
 
     public boolean moveForward(double time) {
 
-        stageTime.reset();
-        if(!isMecanum) driveObj.tankDrive(1,0);
-        else driveObj.mecanumDrive(0,1,0);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        driveObj.tankDrive(0,0); //Stop the robot
+        this.stageTime.reset();
+        if(!this.isMecanum) this.driveObj.tankDrive(1,0);
+        else this.driveObj.mecanumDrive(0,1,0);
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
+        this.driveObj.tankDrive(0,0); //Stop the robot
         return detectOpStat();
 
     }
 
     public boolean moveBack(double time) {
 
-        stageTime.reset();
-        if(!isMecanum) driveObj.tankDrive(-1,0);
-        else driveObj.mecanumDrive(0,-1,0);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        driveObj.tankDrive(0,0);
+        this.stageTime.reset();
+        if(!this.isMecanum) this.driveObj.tankDrive(-1,0);
+        else this.driveObj.mecanumDrive(0,-1,0);
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
+        this.driveObj.tankDrive(0,0);
         return detectOpStat();
 
     }
 
     public boolean turnLeft(double time) {
 
-        stageTime.reset();
-        if(!isMecanum)driveObj.tankDrive(0,-1);
-        else driveObj.mecanumDrive(0,0,-1);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        driveObj.tankDrive(0,0);
+        this.stageTime.reset();
+        if(!this.isMecanum)this.driveObj.tankDrive(0,-1);
+        else this.driveObj.mecanumDrive(0,0,-1);
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
+        this.driveObj.tankDrive(0,0);
         return detectOpStat();
 
     }
 
     public boolean turnRight(double time) {
 
-        stageTime.reset();
-        if(!isMecanum) driveObj.tankDrive(0,1);
-        else driveObj.mecanumDrive(0,0,1);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        driveObj.tankDrive(0,0);
+        this.stageTime.reset();
+        if(!this.isMecanum) this.driveObj.tankDrive(0,1);
+        else this.driveObj.mecanumDrive(0,0,1);
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
+        this.driveObj.tankDrive(0,0);
         return detectOpStat();
 
     }
 
-    public boolean moveLiftUp(DcMotor motorObject, DcMotorControl controlObject, double time) {
+    public boolean moveLiftUp(DcMotorControl controlObject, double time) {
 
-        stageTime.reset();
-        controlObject.moveLift(motorObject,true, false);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        controlObject.moveLift(motorObject,false, false);
+        this.stageTime.reset();
+        controlObject.moveLift(true, false);
+        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time) {continue;}
+        controlObject.moveLift(false, false);
         return detectOpStat();
 
     }
 
-    public boolean moveLiftDown(DcMotor motorObject, DcMotorControl controlObject, double time) {
+    public boolean moveLiftDown(DcMotorControl controlObject, double time) {
 
-        stageTime.reset();
-        controlObject.moveLift(motorObject,false, true);
-        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time) {continue;}
-        controlObject.moveLift(motorObject,false, false);
+        this.stageTime.reset();
+        controlObject.moveLift(false, true);
+        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time) {continue;}
+        controlObject.moveLift(false, false);
         return detectOpStat();
 
     }

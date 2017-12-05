@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.util.Range;
 
 final public class DriveTrain {
 
-    private     static   DcMotor FL                 = null;
-    private     static   DcMotor FR                 = null;
-    private     static   DcMotor RL                 = null;
-    private     static   DcMotor RR                 = null;
+    private              DcMotor FL                 = null;
+    private              DcMotor FR                 = null;
+    private              DcMotor RL                 = null;
+    private              DcMotor RR                 = null;
     public               double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     private              double  frontLeftPower;
@@ -24,43 +24,50 @@ final public class DriveTrain {
     //Constructor for 4WD
     public DriveTrain(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor rearLeftMotor, DcMotor rearRightMotor) {
 
-        FL = frontLeftMotor;FR = frontRightMotor;RL = rearLeftMotor;RR = rearRightMotor;
+        this.FL = frontLeftMotor;
+        this.FR = frontRightMotor;
+        this.RL = rearLeftMotor;
+        this.RR = rearRightMotor;
 
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        RL.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.FORWARD);
-        RR.setDirection(DcMotor.Direction.FORWARD);
+        this.FL.setDirection(DcMotor.Direction.REVERSE);
+        this.RL.setDirection(DcMotor.Direction.REVERSE);
+        this.FR.setDirection(DcMotor.Direction.FORWARD);
+        this.RR.setDirection(DcMotor.Direction.FORWARD);
 
-        is4WD = true;
+        this.is4WD = true;
     }
     //Constructor for 2WD
     public DriveTrain(DcMotor leftMotor, DcMotor rightMotor) {
 
-        FL = leftMotor;FR = rightMotor;
+        this.FL = leftMotor;
+        this.FR = rightMotor;
 
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.FORWARD);
+        this.FL.setDirection(DcMotor.Direction.REVERSE);
+        this.FR.setDirection(DcMotor.Direction.FORWARD);
 
-        is4WD = false;
+        this.is4WD = false;
     }
 
     public void tankDrive(double forwardBack, double rotation) {
 
-        forwardBack = -forwardBack;
-        rotation = -rotation; // FTC 2018 tuning
+        rotation = -rotation * 2; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
-        frontLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
-        frontRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
-        frontLeftPower *= speedLevel;frontRightPower *= speedLevel;
-        if (is4WD) {rearLeftPower = frontLeftPower; rearRightPower = frontRightPower;}
+        this.frontLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
+        this.frontRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
+        this.frontLeftPower *= this.speedLevel;
+        this.frontRightPower *= this.speedLevel;
+        if (is4WD) {
+            this.rearLeftPower = this.frontLeftPower;
+            this.rearRightPower = this.frontRightPower;
+        }
 
         //Pass calculated power level to motors
-        FL.setPower(frontLeftPower);
-        FR.setPower(frontRightPower);
-        if(is4WD) {
-            RL.setPower(rearLeftPower);
-            RR.setPower(rearRightPower);
+        this.FL.setPower(this.frontLeftPower);
+        this.FR.setPower(this.frontRightPower);
+        if(this.is4WD) {
+            this.RL.setPower(this.rearLeftPower);
+            this.RR.setPower(this.rearRightPower);
         }
 
     }
@@ -74,51 +81,51 @@ final public class DriveTrain {
         double r = Math.hypot(sideMove, forwardBack);
         double robotAngle = Math.atan2(forwardBack, sideMove) - Math.PI / 4;
 
-        frontLeftPower = r * Math.cos(robotAngle) + rotation;
-        frontRightPower = r * Math.sin(robotAngle) - rotation;
-        rearLeftPower = r * Math.sin(robotAngle) + rotation;
-        rearRightPower = r * Math.cos(robotAngle) - rotation;
+        this.frontLeftPower = r * Math.cos(robotAngle) + rotation;
+        this.frontRightPower = r * Math.sin(robotAngle) - rotation;
+        this.rearLeftPower = r * Math.sin(robotAngle) + rotation;
+        this.rearRightPower = r * Math.cos(robotAngle) - rotation;
 
-        frontLeftPower *= 0.987; frontRightPower *= 0.987; rearRightPower *= 0.987;
+        this.frontLeftPower *= 0.987; this.frontRightPower *= 0.987; this.rearRightPower *= 0.987;
 
         // Send calculated power to motors
-        FL.setPower(frontLeftPower * speedLevel);
-        FR.setPower(frontRightPower * speedLevel);
-        RL.setPower(rearLeftPower);
-        RR.setPower(rearRightPower * speedLevel);
+        this.FL.setPower(this.frontLeftPower * speedLevel);
+        this.FR.setPower(this.frontRightPower * speedLevel);
+        this.RL.setPower(this.rearLeftPower * speedLevel);
+        this.RR.setPower(this.rearRightPower * speedLevel);
     }
 
     public void updateSpeedLimit(double speed) {
-        speedLevel = speed*maxSpeed;
+        this.speedLevel = speed*this.maxSpeed;
 
-        FL.setPower(frontLeftPower * speedLevel);
-        FR.setPower(frontRightPower * speedLevel);
-        if(is4WD){
-            RL.setPower(rearLeftPower * speedLevel);
-            RR.setPower(rearRightPower * speedLevel);
+        this.FL.setPower(this.frontLeftPower * speedLevel);
+        this.FR.setPower(this.frontRightPower * speedLevel);
+        if(this.is4WD){
+            this.RL.setPower(this.rearLeftPower * speedLevel);
+            this.RR.setPower(this.rearRightPower * speedLevel);
         }
 
     }
 
     public double getEncoderInfo(int motorPosition) {
         switch (motorPosition) {
-            case 0  : return FR.getCurrentPosition();
-            case 1  : return FL.getCurrentPosition();
-            case 2  : return RL.getCurrentPosition();
-            case 3  : return RR.getCurrentPosition();
+            case 0  : return this.FR.getCurrentPosition();
+            case 1  : return this.FL.getCurrentPosition();
+            case 2  : return this.RL.getCurrentPosition();
+            case 3  : return this.RR.getCurrentPosition();
             default : return 256;
         }
     }
 
     public double getSpeed(int motorPosition) {
         switch (motorPosition) {
-            case 0  : return FR.getPower();
-            case 1  : return FL.getPower();
-            case 2  : return RL.getPower();
-            case 3  : return RR.getPower();
+            case 0  : return this.FR.getPower();
+            case 1  : return this.FL.getPower();
+            case 2  : return this.RL.getPower();
+            case 3  : return this.RR.getPower();
             default : return 256;
         }
     }
 
-    public boolean get4WDStat() {return is4WD;}
+    public boolean get4WDStat() {return this.is4WD;}
 }

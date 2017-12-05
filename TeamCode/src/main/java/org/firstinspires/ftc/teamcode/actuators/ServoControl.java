@@ -16,42 +16,53 @@ final public class ServoControl {
     public      double  maxPos      = 0;
     public      double  maxSpeed    = 1.0;
     private     double  speedLevel  = 1.0;
+    private     Servo   servoObj;
 
 
     public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
 
-    public ServoControl(Servo servoObj, boolean forward, double min, double max) {
+    public ServoControl(Servo servoObject, boolean forward, double min, double max) {
         minPos = min;
         maxPos = max;
-        servoObj.setDirection((forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
+        this.servoObj = servoObject;
+        this.servoObj.setDirection((forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
     }
-    public void moveGlyphGrabber(Servo servoObj, boolean inward){
+    public void moveGlyphGrabber(boolean inward){
 
-        if(inward) servoPos -= 0.03*speedLevel;
-        else       servoPos += 0.03*speedLevel;
+        if(inward) this.servoPos -= 0.03*this.speedLevel;
+        else       this.servoPos += 0.03*this.speedLevel;
 
         //Out-of-limit detection & correction
 
-        if(servoPos > maxPos)       servoPos = maxPos;
-        else if (servoPos < minPos) servoPos = minPos;
+        if(this.servoPos > this.maxPos)       this.servoPos = this.maxPos;
+        else if (this.servoPos < this.minPos) this.servoPos = this.minPos;
 
         //Set the position
-        servoObj.setPosition(servoPos);
+        this.servoObj.setPosition(this.servoPos);
     }
     public void moveJewelArm(Servo servoObj) {
-            servoSwitch ++;
+            this.servoSwitch ++;
 
-            switch (servoSwitch) {
-                case 0:     servoPos = maxPos;break;
-                case 1:     servoPos = (maxPos + minPos)/2;break;
-                case 2:     servoPos = minPos; break;
-                default:    servoPos = maxPos;servoSwitch = 0;break;
+            switch (this.servoSwitch) {
+                case 0:
+                    this.servoPos = this.maxPos;
+                    break;
+                case 1:
+                    this.servoPos = (this.maxPos + this.minPos)/2;
+                    break;
+                case 2:
+                    this.servoPos = this.minPos;
+                    break;
+                default:
+                    this.servoPos = this.maxPos;
+                    this.servoSwitch = 0;break;
             }
 
-            servoObj.setPosition(servoPos);
+            this.servoObj.setPosition(this.servoPos);
         }
 
     public double getPos() {
-        return servoPos;
+        return this.servoPos;
     }
+    public void setPos(double position) {this.servoObj.setPosition(position);}
 }

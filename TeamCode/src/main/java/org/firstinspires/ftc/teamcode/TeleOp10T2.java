@@ -90,8 +90,8 @@ final public class TeleOp10T2 extends LinearOpMode {
         previous.stat.LT         = gamepad1.left_trigger != 0;
         previous.stat.RT         = gamepad1.right_trigger!= 0;
         previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp     = gamepad1.dpad_up != previous.DPadUp;
-        previous.stat.DPadDown   = gamepad1.dpad_down != previous.DPadDown;
+        previous.stat.DPadUp     = gamepad1.dpad_up;
+        previous.stat.DPadDown   = gamepad1.dpad_down;
     }
 
     private void saveGPData() {
@@ -103,8 +103,6 @@ final public class TeleOp10T2 extends LinearOpMode {
         previous.LT        = gamepad1.left_trigger;
         previous.RT        = gamepad1.right_trigger;
         previous.Circle    = gamepad1.b;
-        previous.DPadUp    = gamepad1.dpad_up;
-        previous.DPadDown  = gamepad1.dpad_down;
 
     }
 
@@ -140,6 +138,8 @@ final public class TeleOp10T2 extends LinearOpMode {
         waitForStart(); // Wait for the game to start (driver presses PLAY)
         runtime.reset();
 
+        telemetry.addData("Status","Running");
+        telemetry.update();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -171,13 +171,13 @@ final public class TeleOp10T2 extends LinearOpMode {
 
             //Glyph Grabber Inward
             if (previous.stat.LT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj, true);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj, true);
+                GGrabberL.moveGlyphGrabber(true);
+                GGrabberR.moveGlyphGrabber(true);
             }
             //Glyph Grabber Outward
             else if (previous.stat.RT) {
-                GGrabberL.moveGlyphGrabber(GGrabberLObj, false);
-                GGrabberR.moveGlyphGrabber(GGrabberRObj, false);
+                GGrabberL.moveGlyphGrabber(false);
+                GGrabberR.moveGlyphGrabber(false);
             }
 
             if (previous.stat.Circle && gamepad1.b) { //Toggle Grabbers
@@ -186,16 +186,14 @@ final public class TeleOp10T2 extends LinearOpMode {
                 else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
             }
 
-            if (previous.stat.DPadUp || previous.stat.DPadDown) {
-                GLift.moveLift(GLiftObj, gamepad1.dpad_up, gamepad1.dpad_down);
-            }
+            GLift.moveLift(previous.stat.DPadUp, previous.stat.DPadDown);
             //Save Data for next loop
             saveGPData();
 
             //Start putting information on the Driver Station
-            telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
 
             if (Statics.SOPH_VISUALIZING) {
+                    telemetry.addData("Status           ", "Run Time: " + runtime.toString());
                     telemetry.addData("RL encoder: ", "");
                     telemetry.addData("RR encoder: ", "");
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
@@ -203,8 +201,11 @@ final public class TeleOp10T2 extends LinearOpMode {
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
                     telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
+                    telemetry.update();
             }
-            telemetry.update();
         }
+
+        telemetry.addData("Status","Stopped");
+        telemetry.update();
     }
 }

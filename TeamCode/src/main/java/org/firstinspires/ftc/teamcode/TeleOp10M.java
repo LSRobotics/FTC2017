@@ -60,7 +60,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="SOPH_tankDrive_DualStick", group="Sophomore")
+@TeleOp(name="SOPH_mecanumDrive_NFS", group="Sophomore")
 final public class TeleOp10M extends LinearOpMode {
 
 
@@ -138,6 +138,9 @@ final public class TeleOp10M extends LinearOpMode {
         runtime.reset();
 
 
+        telemetry.addData("Status","Running");
+        telemetry.update();
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
@@ -164,32 +167,33 @@ final public class TeleOp10M extends LinearOpMode {
             //Jewel Arm (Currently disabled)
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
-            if (previous.stat.LB || previous.stat.RB) { //L1 & R1 for Glyph Lift
-                GLift.moveLift(GLiftObj, gamepad1.right_bumper, gamepad1.left_bumper);
-            }
+            GLift.moveLift(previous.stat.RB, previous.stat.RB);
 
             //Glyph Grabber
             if(previous.stat.Circle && gamepad1.b) {
                     toCloseGrabbers = !toCloseGrabbers;
-                    if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
-                    else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
+                    if(!toCloseGrabbers) {GGrabberL.setPos(0.6);GGrabberR.setPos(0.6);}
+                    else {GGrabberL.setPos(0.35);GGrabberR.setPos(0.35);}
             }
 
             //Save Data for next loop
             saveGPData();
 
             //Start putting information on the Driver Station
-            telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
 
             if(Statics.SOPH_VISUALIZING) {
+                    telemetry.addData("Status           ", "Run Time: " + runtime.toString());
                     telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(1));
                     telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(0));
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(1));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
+                    telemetry.update();
             }
-            telemetry.update();
         }
+
+        telemetry.addData("Status","Stopped");
+        telemetry.update();
     }
 }

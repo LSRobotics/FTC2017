@@ -76,7 +76,7 @@ final public class AutonSophA extends LinearOpMode {
         if(!wait(1.0)) return;
 
 
-        if(!auton.moveLiftUp(GLiftObj,GLift,1.0)) return;
+        if(!auton.moveLiftUp(GLift,1.0)) return;
 
         //Move forward
         if(!auton.moveForward(Statics.SOPH_AUTON_STAGE_ONE_TIME)) return;
