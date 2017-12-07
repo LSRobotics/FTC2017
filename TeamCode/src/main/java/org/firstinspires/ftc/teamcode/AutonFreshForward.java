@@ -15,8 +15,6 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 @Autonomous(name = "FRESH_POS_FORWARD",group = "Freshman")
 final public class AutonFreshForward extends LinearOpMode {
 
-    //Initialize objects
-    private     DriveTrain      tankWheel;
     private     AutonHelper     autonControl;
     private     DcMotorControl  GIntake;
 
@@ -31,17 +29,17 @@ final public class AutonFreshForward extends LinearOpMode {
         DcMotor GIntakeMotor = hardwareMap.dcMotor.get(Statics.FRESH_INTAKE);
 
         GIntake = new DcMotorControl(GIntakeMotor,false);
-        tankWheel = new DriveTrain(BL,BR);
+        DriveTrain tankWheel = new DriveTrain(BL, BR);
 
-        autonControl = new AutonHelper(this,tankWheel,false);
+        autonControl = new AutonHelper(this, tankWheel,false);
 
     }
 
     private boolean wait(double seconds) {
         stageTime.reset();
-        while(opModeIsActive()&&stageTime.seconds() <= seconds){continue;}
-        if(!opModeIsActive()) return false;
-        else return true;
+        while(opModeIsActive()&&stageTime.seconds() <= seconds){
+        }
+        return opModeIsActive();
 
     }
 
@@ -63,6 +61,7 @@ final public class AutonFreshForward extends LinearOpMode {
         if(!autonControl.moveLiftDown(GIntake,2.0)) return;
 
         //Move a little back for not touching the glyph
-        if(!autonControl.moveBack(0.05)) return;
+        if(!autonControl.moveBack(0.05)) {
+        }
     }
 }

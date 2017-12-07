@@ -12,7 +12,7 @@ final public class DcMotorControl {
             public      double  maxSpeed = 1.0;
             private     double  speedLevel = 1.0;
             private     double  motorSpeed = 0;
-            private     DcMotor motorObj;
+            private final DcMotor motorObj;
 
     public DcMotorControl(DcMotor dcMotorObj, boolean forward) {
 

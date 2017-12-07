@@ -69,10 +69,7 @@ final public class TeleOp10M extends LinearOpMode {
 
     private     ServoControl    GGrabberL;
     private     ServoControl    GGrabberR;
-    private     Servo           GGrabberLObj;
-    private     Servo           GGrabberRObj;
     private DcMotorControl      GLift;
-    private     DcMotor         GLiftObj;
 
     final private GamepadSpace previous = new GamepadSpace();
 
@@ -115,12 +112,12 @@ final public class TeleOp10M extends LinearOpMode {
         //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
 
         //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
+        Servo GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
+        Servo GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
 
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
-        GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
+        DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
 
     }

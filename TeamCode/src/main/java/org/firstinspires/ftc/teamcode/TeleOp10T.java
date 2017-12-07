@@ -60,7 +60,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="SOPH_tankDrive_DualStick", group="Sophomore")
+@TeleOp(name="SOPH_tankDrive_NFS", group="Sophomore")
 final public class TeleOp10T extends LinearOpMode {
 
 
@@ -72,7 +72,6 @@ final public class TeleOp10T extends LinearOpMode {
     private     Servo           GGrabberLObj;
     private     Servo           GGrabberRObj;
     private DcMotorControl      GLift;
-    private     DcMotor         GLiftObj;
 
     final private GamepadSpace previous = new GamepadSpace();
 
@@ -118,7 +117,7 @@ final public class TeleOp10T extends LinearOpMode {
 
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
-        GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
+        DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
 
     }

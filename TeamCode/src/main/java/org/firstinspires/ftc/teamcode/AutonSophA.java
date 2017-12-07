@@ -15,15 +15,12 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 @Autonomous(name = "SOPH_POS_A",group = "Sophomore")
 final public class AutonSophA extends LinearOpMode {
 
-    //Initialize objects
-    private     DriveTrain      mWheel;
     private AutonHelper auton;
     private Servo GGrabberLObj;
     private Servo GGrabberRObj;
     private ServoControl GGrabberL;
     private ServoControl GGrabberR;
     private DcMotorControl GLift;
-    private DcMotor        GLiftObj;
 
     // Declare OpMode members.
     final private ElapsedTime globalTime = new ElapsedTime();
@@ -34,7 +31,7 @@ final public class AutonSophA extends LinearOpMode {
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.SOPH_RL_WHEEL);
         DcMotor BR = hardwareMap.get(DcMotor.class, Statics.SOPH_RR_WHEEL);
 
-        mWheel = new DriveTrain(BL,BR);
+        DriveTrain mWheel = new DriveTrain(BL, BR);
 
         Servo jArmObj = hardwareMap.get(Servo.class, Statics.SOPH_SERVO_JEWEL);
         ServoControl jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
@@ -44,10 +41,10 @@ final public class AutonSophA extends LinearOpMode {
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj, true, -1, 1);
 
-        GLiftObj = hardwareMap.dcMotor.get(Statics.GLYPH_LIFT);
+        DcMotor GLiftObj = hardwareMap.dcMotor.get(Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
 
-        auton = new AutonHelper(this,mWheel,false);
+        auton = new AutonHelper(this, mWheel,false);
     }
 
     private boolean wait(double seconds) {
@@ -58,8 +55,7 @@ final public class AutonSophA extends LinearOpMode {
             telemetry.addData("Stage Time: ", stageTime.seconds());
             telemetry.update();
         }
-        if(opModeIsActive()) return true;
-        else return false;
+        return opModeIsActive();
     }
 
     @Override
@@ -106,7 +102,8 @@ final public class AutonSophA extends LinearOpMode {
 
         if(!wait(1.0)) return;
 
-        if (!auton.moveBack(0.05)) return;
+        if (!auton.moveBack(0.05)) {
+        }
 
     }
 }

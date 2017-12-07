@@ -20,8 +20,6 @@ final public class TeleOp9T extends LinearOpMode {
         private     DriveTrain      tankWheel;
         private     GamepadSpace    previous;
         private     DcMotorControl  GLift;
-        private     DcMotor         GLiftObj;
-    private     DcMotor                intakeObj;
     private     DcMotorControl         intake;
 
         // Declare OpMode members.
@@ -52,10 +50,10 @@ final public class TeleOp9T extends LinearOpMode {
             DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.FRESH_R_WHEEL);
             tankWheel = new DriveTrain(leftMotor,rightMotor);
             previous = new GamepadSpace();
-            GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
+            DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
             GLift = new DcMotorControl(GLiftObj,false);
 
-            intakeObj = hardwareMap.get(DcMotor.class, Statics.FRESH_INTAKE);
+            DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.FRESH_INTAKE);
             intake = new DcMotorControl(intakeObj, true);
             intake.sensitivity = 1.0;
 

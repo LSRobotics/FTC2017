@@ -16,7 +16,7 @@ final public class ServoControl {
     public      double  maxPos      = 0;
     public      double  maxSpeed    = 1.0;
     private     double  speedLevel  = 1.0;
-    private     Servo   servoObj;
+    private final Servo   servoObj;
 
 
     public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
