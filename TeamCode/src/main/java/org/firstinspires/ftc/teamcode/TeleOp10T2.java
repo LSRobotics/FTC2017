@@ -40,8 +40,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
+import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
-import org.firstinspires.ftc.teamcode.databases.GamepadSpace;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
 //import com.qualcomm.robotcore.hardware.DcMotor;
@@ -75,36 +75,10 @@ final public class TeleOp10T2 extends LinearOpMode {
     private     Servo           GGrabberRObj;
     private DcMotorControl      GLift;
     private     DcMotor         GLiftObj;
-
-    final private GamepadSpace previous = new GamepadSpace();
-
+    private GamepadControl      g1;
     // Declare OpMode members.
     final private ElapsedTime runtime = new ElapsedTime();
 
-
-    private void collectGPStat() {
-        //previous.stat.Triangle   = gamepad1.y != previous.Triangle;
-        previous.stat.LB         = gamepad1.left_bumper != previous.LB;
-        previous.stat.JRightX    = gamepad1.right_stick_x != previous.JRightX;
-        previous.stat.JRightY    = gamepad1.right_stick_y != previous.JRightY;
-        previous.stat.LT         = gamepad1.left_trigger != 0;
-        previous.stat.RT         = gamepad1.right_trigger!= 0;
-        previous.stat.Circle     = gamepad1.b != previous.Circle;
-        previous.stat.DPadUp     = gamepad1.dpad_up;
-        previous.stat.DPadDown   = gamepad1.dpad_down;
-    }
-
-    private void saveGPData() {
-
-       // previous.Triangle  = gamepad1.y;
-        previous.LB        = gamepad1.left_bumper;
-        previous.JRightY   = gamepad1.right_stick_y;
-        previous.JRightX   = gamepad1.right_stick_x;
-        previous.LT        = gamepad1.left_trigger;
-        previous.RT        = gamepad1.right_trigger;
-        previous.Circle    = gamepad1.b;
-
-    }
 
     private void initialize(){
         DcMotor BL = hardwareMap.get(DcMotor.class, Statics.SOPH_RL_WHEEL);
@@ -122,6 +96,8 @@ final public class TeleOp10T2 extends LinearOpMode {
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
         GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
         GLift = new DcMotorControl(GLiftObj,false);
+
+        g1 = new GamepadControl(this.gamepad1);
     }
 
     @Override
@@ -144,11 +120,9 @@ final public class TeleOp10T2 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            collectGPStat();
-
             //Toggle Snipping Mode
-            if (previous.stat.LB) {
-                if (gamepad1.left_bumper) globalSpeed = 0.6;
+            if (g1.L1) {
+                if (g1.current.L1)        globalSpeed = 0.6;
                 else                      globalSpeed = 1.0;
 
                 //Apply Speed
@@ -161,8 +135,8 @@ final public class TeleOp10T2 extends LinearOpMode {
 
 
             //Right joystick for driving
-            if (previous.stat.JRightY || previous.stat.JRightX) {
-                mWheel.tankDrive(-gamepad1.right_stick_y, gamepad1.right_stick_x);
+            if (g1.JRightX || g1.JRightY) {
+                mWheel.tankDrive(-g1.current.JRightY, g1.current.JRightX);
             }
 
 
@@ -170,27 +144,25 @@ final public class TeleOp10T2 extends LinearOpMode {
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
             //Glyph Grabber Inward
-            if (previous.stat.LT) {
+            if (g1.current.L2 > 0) {
                 GGrabberL.moveGlyphGrabber(true);
                 GGrabberR.moveGlyphGrabber(true);
             }
             //Glyph Grabber Outward
-            else if (previous.stat.RT) {
+            else if (g1.current.R2 > 0) {
                 GGrabberL.moveGlyphGrabber(false);
                 GGrabberR.moveGlyphGrabber(false);
             }
 
-            if (previous.stat.Circle && gamepad1.b) { //Toggle Grabbers
+            if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
                 if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
                 else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
             }
 
-            GLift.moveLift(previous.stat.DPadUp, previous.stat.DPadDown);
-            //Save Data for next loop
-            saveGPData();
-
-            //Start putting information on the Driver Station
+            if (g1.DPadUp || g1.DPadDown){
+                GLift.moveLift(g1.current.DPadUp, g1.current.DPadDown);
+            }
 
             if (Statics.SOPH_VISUALIZING) {
                     telemetry.addData("Status           ", "Run Time: " + runtime.toString());
