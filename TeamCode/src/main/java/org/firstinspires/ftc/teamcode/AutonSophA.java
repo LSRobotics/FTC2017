@@ -33,8 +33,8 @@ final public class AutonSophA extends LinearOpMode {
 
         DriveTrain mWheel = new DriveTrain(BL, BR);
 
-        Servo jArmObj = hardwareMap.get(Servo.class, Statics.SOPH_SERVO_JEWEL);
-        ServoControl jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
+        //Servo jArmObj = hardwareMap.get(Servo.class, Statics.SOPH_SERVO_JEWEL);
+        //ServoControl jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
         //Glyph Grabbers
         GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
         GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
@@ -102,8 +102,6 @@ final public class AutonSophA extends LinearOpMode {
 
         if(!wait(1.0)) return;
 
-        if (!auton.moveBack(0.05)) {
-        }
-
+        auton.moveBack(0.05);
     }
 }

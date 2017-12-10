@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by LBYPatrick on 12/4/2017.
  */
 
+@SuppressWarnings("StatementWithEmptyBody")
 final public class AutonHelper {
 
     private final ElapsedTime stageTime = new ElapsedTime();
@@ -21,19 +22,14 @@ final public class AutonHelper {
         this.isMecanum = isMecanum;
     }
 
-    private boolean detectOpStat() {
-        return this.opModeObj.opModeIsActive();
-    }
-
     public boolean moveForward(double time) {
 
         this.stageTime.reset();
         if(!this.isMecanum) this.driveObj.tankDrive(1,0);
         else this.driveObj.mecanumDrive(0,1,0);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0); //Stop the robot
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 
@@ -42,10 +38,9 @@ final public class AutonHelper {
         this.stageTime.reset();
         if(!this.isMecanum) this.driveObj.tankDrive(-1,0);
         else this.driveObj.mecanumDrive(0,-1,0);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0);
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 
@@ -54,10 +49,9 @@ final public class AutonHelper {
         this.stageTime.reset();
         if(!this.isMecanum)this.driveObj.tankDrive(0,-1);
         else this.driveObj.mecanumDrive(0,0,-1);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0);
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 
@@ -66,10 +60,9 @@ final public class AutonHelper {
         this.stageTime.reset();
         if(!this.isMecanum) this.driveObj.tankDrive(0,1);
         else this.driveObj.mecanumDrive(0,0,1);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0);
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 
@@ -77,10 +70,9 @@ final public class AutonHelper {
 
         this.stageTime.reset();
         controlObject.moveLift(true, false);
-        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time);
         controlObject.moveLift(false, false);
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 
@@ -88,10 +80,9 @@ final public class AutonHelper {
 
         this.stageTime.reset();
         controlObject.moveLift(false, true);
-        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time) {
-        }
+        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time);
         controlObject.moveLift(false, false);
-        return detectOpStat();
+        return this.opModeObj.opModeIsActive();
 
     }
 

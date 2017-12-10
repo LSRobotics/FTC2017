@@ -12,14 +12,14 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 /**
  * Created by LBYPatrick on 11/14/2017.
  */
+@SuppressWarnings("StatementWithEmptyBody")
 @Autonomous(name = "FRESH_POS_FORWARD",group = "Freshman")
 final public class AutonFreshForward extends LinearOpMode {
 
     private     AutonHelper     autonControl;
     private     DcMotorControl  GIntake;
 
-    // Declare OpMode members.
-    final private ElapsedTime globalTime = new ElapsedTime();
+    // Declare OpMode members
     final private ElapsedTime stageTime = new ElapsedTime();
 
     private void initialize() {
@@ -37,8 +37,7 @@ final public class AutonFreshForward extends LinearOpMode {
 
     private boolean wait(double seconds) {
         stageTime.reset();
-        while(opModeIsActive()&&stageTime.seconds() <= seconds){
-        }
+        while(opModeIsActive()&&stageTime.seconds() <= seconds);
         return opModeIsActive();
 
     }
@@ -61,7 +60,6 @@ final public class AutonFreshForward extends LinearOpMode {
         if(!autonControl.moveLiftDown(GIntake,2.0)) return;
 
         //Move a little back for not touching the glyph
-        if(!autonControl.moveBack(0.05)) {
-        }
+        autonControl.moveBack(0.05);
     }
 }

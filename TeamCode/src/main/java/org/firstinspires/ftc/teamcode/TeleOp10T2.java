@@ -103,7 +103,7 @@ final public class TeleOp10T2 extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        boolean toShowSecondPage = false;
+        //boolean toShowSecondPage = false;
         boolean toCloseGrabbers = true;
         double  globalSpeed;
 
