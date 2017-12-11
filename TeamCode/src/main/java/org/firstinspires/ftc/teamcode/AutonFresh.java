@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 11/14/2017.
  */
 @SuppressWarnings("StatementWithEmptyBody")
-@Autonomous(name = "FRESH_POS_FORWARD",group = "Freshman")
-final public class AutonFreshForward extends LinearOpMode {
+@Autonomous(name = "FRESH_FORWARD",group = "Freshman")
+final public class AutonFresh extends LinearOpMode {
 
     private     AutonHelper     autonControl;
     private     DcMotorControl  GIntake;
