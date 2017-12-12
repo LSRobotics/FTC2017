@@ -12,17 +12,28 @@ import android.graphics.Color;
 final public class RGBSensorControl {
 
     private final ColorSensor device;
+    public int redVal = 0;
+    public int blueVal = 0;
+    public int greenVal = 0;
 
-    public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject; device.enableLed(true);}
+    public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject;}
 
     public int getBallColor() {
+        int returnVal = 0;
 
-        if (device.blue() > device.red()) return 0;
-        else if (device.red() > device.blue()) return 1;
-        else return 2;
+        this.device.enableLed(true);
+        if (this.device.blue() > this.device.red()) returnVal = 0;
+        else if (this.device.red() > this.device.blue()) returnVal = 1;
+        else returnVal = 2;
+        this.device.enableLed(false);
+        return returnVal;
     }
 
-    public void shutdown() {
-        device.enableLed(false);
+    public void updateColorData() {
+        this.device.enableLed(true);
+        this.redVal = device.red();
+        this.greenVal = device.green();
+        this.blueVal = device.blue();
+        this.device.enableLed(false);
     }
 }
