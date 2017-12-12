@@ -9,16 +9,24 @@ import com.qualcomm.robotcore.util.Range;
 
 final public class DriveTrain {
 
+
+    public enum Wheels{
+        FRONT_LEFT,
+        FRONT_RIGHT,
+        REAR_LEFT,
+        REAR_RIGHT,
+    }
+
     private              DcMotor FL                 = null;
     private              DcMotor FR                 = null;
     private              DcMotor RL                 = null;
     private              DcMotor RR                 = null;
     public               double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
-    private              double  frontLeftPower;
-    private              double  frontRightPower;
-    private              double  rearLeftPower;
-    private              double  rearRightPower;
+    private              double  frontLeftPower     = 0;
+    private              double  frontRightPower    = 0;
+    private              double  rearLeftPower      = 0;
+    private              double  rearRightPower     = 0;
     private              boolean is4WD              = false;
 
     //Constructor for 4WD
@@ -39,11 +47,11 @@ final public class DriveTrain {
     //Constructor for 2WD
     public DriveTrain(DcMotor leftMotor, DcMotor rightMotor) {
 
-        this.FL = leftMotor;
-        this.FR = rightMotor;
+        this.RL = leftMotor;
+        this.RR = rightMotor;
 
-        this.FL.setDirection(DcMotor.Direction.REVERSE);
-        this.FR.setDirection(DcMotor.Direction.FORWARD);
+        this.RL.setDirection(DcMotor.Direction.REVERSE);
+        this.RR.setDirection(DcMotor.Direction.FORWARD);
 
         this.is4WD = false;
     }
@@ -53,21 +61,26 @@ final public class DriveTrain {
         rotation = -rotation; // FTC 2018 tuning
 
         //Calculate Adequate Power Level for motors
-        this.frontLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
-        this.frontRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
-        this.frontLeftPower *= this.speedLevel;
-        this.frontRightPower *= this.speedLevel;
+        this.rearLeftPower = Range.clip(forwardBack + rotation, -1.0, 1.0);
+        this.rearRightPower = Range.clip(forwardBack - rotation, -1.0, 1.0);
+
         if (is4WD) {
-            this.rearLeftPower = this.frontLeftPower;
-            this.rearRightPower = this.frontRightPower;
+            this.frontLeftPower = this.rearLeftPower;
+            this.frontRightPower = this.rearRightPower;
         }
 
+        this.rearLeftPower *= this.speedLevel;
+        this.rearRightPower *= this.speedLevel;
+        this.frontLeftPower *= this.speedLevel;
+        this.frontRightPower *= this.speedLevel;
+
+
         //Pass calculated power level to motors
-        this.FL.setPower(this.frontLeftPower);
-        this.FR.setPower(this.frontRightPower);
+        this.RL.setPower(this.rearLeftPower);
+        this.RR.setPower(this.rearRightPower);
         if(this.is4WD) {
-            this.RL.setPower(this.rearLeftPower);
-            this.RR.setPower(this.rearRightPower);
+            this.FL.setPower(this.frontLeftPower);
+            this.FR.setPower(this.frontRightPower);
         }
 
     }
@@ -86,7 +99,9 @@ final public class DriveTrain {
         this.rearLeftPower = r * Math.sin(robotAngle) + rotation;
         this.rearRightPower = r * Math.cos(robotAngle) - rotation;
 
-        this.frontLeftPower *= 0.987; this.frontRightPower *= 0.987; this.rearRightPower *= 0.987;
+        this.frontLeftPower *= 0.987;
+        this.frontRightPower *= 0.987;
+        this.rearRightPower *= 0.987;
 
         // Send calculated power to motors
         this.FL.setPower(this.frontLeftPower * speedLevel);
@@ -97,33 +112,25 @@ final public class DriveTrain {
 
     public void updateSpeedLimit(double speed) {
         this.speedLevel = speed*this.maxSpeed;
-
-        this.FL.setPower(this.frontLeftPower * speedLevel);
-        this.FR.setPower(this.frontRightPower * speedLevel);
-        if(this.is4WD){
-            this.RL.setPower(this.rearLeftPower * speedLevel);
-            this.RR.setPower(this.rearRightPower * speedLevel);
-        }
-
     }
 
-    public double getEncoderInfo(int motorPosition) {
-        switch (motorPosition) {
-            case 0  : return this.FR.getCurrentPosition();
-            case 1  : return this.FL.getCurrentPosition();
-            case 2  : return this.RL.getCurrentPosition();
-            case 3  : return this.RR.getCurrentPosition();
-            default : return 256;
+    public double getEncoderInfo(Wheels position) {
+        switch (position) {
+            case FRONT_LEFT  : return this.FR.getCurrentPosition();
+            case FRONT_RIGHT : return this.FL.getCurrentPosition();
+            case REAR_LEFT   : return this.RL.getCurrentPosition();
+            case REAR_RIGHT  : return this.RR.getCurrentPosition();
+            default          : return 666; // Actually it won't happen because the enum has already limited the actual parameter
         }
     }
 
-    public double getSpeed(int motorPosition) {
-        switch (motorPosition) {
-            case 0  : return this.FR.getPower();
-            case 1  : return this.FL.getPower();
-            case 2  : return this.RL.getPower();
-            case 3  : return this.RR.getPower();
-            default : return 256;
+    public double getSpeed(Wheels position) {
+        switch (position) {
+            case FRONT_LEFT  : return this.FR.getPower();
+            case FRONT_RIGHT : return this.FL.getPower();
+            case REAR_LEFT   : return this.RL.getPower();
+            case REAR_RIGHT  : return this.RR.getPower();
+            default          : return 666; // Won't happen because of the enum in parameter
         }
     }
 
