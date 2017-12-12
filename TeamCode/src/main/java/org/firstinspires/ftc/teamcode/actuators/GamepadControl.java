@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 final public class GamepadControl {
 
-    private final Gamepad gamepad;
+    private Gamepad gamepad;
 
     //Status
     public boolean DPadUp   = false,
@@ -46,14 +46,15 @@ final public class GamepadControl {
                        Circle= false,
                        L1= false,
                        R1= false;
+
     }
 
 
-    private DataContainer previous;
-    public DataContainer current;
+    private DataContainer previous = new DataContainer();
+    public DataContainer current = new DataContainer();
 
-    public GamepadControl(Gamepad gamepad) {
-        this.gamepad = gamepad;
+    public GamepadControl(Gamepad gp) {
+        this.gamepad = gp;
     }
 
     private void updateControllerData() {
@@ -88,10 +89,10 @@ final public class GamepadControl {
         this.Square = this.current.Square != this.previous.Square;
         this.Triangle = this.current.Triangle != this.previous.Triangle;
         this.Circle = this.current.Circle != this.previous.Circle;
-        this.L1     = this.current.L1 != this. previous.L1;
+        this.L1     = this.current.L1 != this.previous.L1;
         this.R1     = this.current.R1 != this.previous.R1;
-        this.L2     = this.current.L2 != this.current.L2;
-        this.R2     = this.current.R2 != this.current.R2;
+        this.L2     = this.current.L2 != this.previous.L2;
+        this.R2     = this.current.R2 != this.previous.R2;
     }
 
     public void updateStatus() {

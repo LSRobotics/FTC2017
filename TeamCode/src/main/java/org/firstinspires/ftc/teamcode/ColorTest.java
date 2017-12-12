@@ -41,9 +41,11 @@ public class ColorTest extends LinearOpMode {
                          break;
             }
 
+            armColorSensor.updateColorData();
+            telemetry.addData("RGB:", "R:" + armColorSensor.redVal + " G:" + armColorSensor.greenVal + " B:" + armColorSensor.blueVal);
+
             telemetry.addData("Ball color",ballColor);
             telemetry.update();
         }
-
     }
 }
