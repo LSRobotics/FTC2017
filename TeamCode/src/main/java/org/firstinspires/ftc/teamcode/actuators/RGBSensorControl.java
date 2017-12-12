@@ -40,4 +40,8 @@ final public class RGBSensorControl {
     public void shutdown() {
         device.enableLed(false);
     }
+
+    public void shutdown() {
+        device.enableLed(false);
+    }
 }
