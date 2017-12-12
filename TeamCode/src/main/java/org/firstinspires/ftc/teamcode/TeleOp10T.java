@@ -157,11 +157,11 @@ final public class TeleOp10T extends LinearOpMode {
 
             if(Statics.SOPH_VISUALIZING) {
                     telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.
-                    telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(1));
-                    telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(0));
+                    telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
+                    telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(DriveTrain.Wheels.REAR_RIGHT));
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
-                    telemetry.addData("RL Wheel:        ", mWheel.getSpeed(1));
-                    telemetry.addData("RR Wheel:        ", mWheel.getSpeed(0));
+                    telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
+                    telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
                     telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
 
             }

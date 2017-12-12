@@ -13,11 +13,16 @@ final public class RGBSensorControl {
 
     private final ColorSensor device;
 
-    public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject;}
+    public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject; device.enableLed(true);}
+
     public int getBallColor() {
 
         if (device.blue() > device.red()) return 0;
         else if (device.red() > device.blue()) return 1;
         else return 2;
+    }
+
+    public void shutdown() {
+        device.enableLed(false);
     }
 }
