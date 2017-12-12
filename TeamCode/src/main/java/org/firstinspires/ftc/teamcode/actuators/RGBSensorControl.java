@@ -36,12 +36,4 @@ final public class RGBSensorControl {
         this.blueVal = device.blue();
         this.device.enableLed(false);
     }
-
-    public void shutdown() {
-        device.enableLed(false);
-    }
-
-    public void shutdown() {
-        device.enableLed(false);
-    }
 }
