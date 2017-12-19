@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 final public class DcMotorControl {
 
-            public      double  sensitivity = 1.0;
-            public      double  maxSpeed = 1.0;
+            private     double  sensitivity = 1.0;
+            private     double  maxSpeed = 1.0;
             private     double  speedLevel = 1.0;
             private     double  motorSpeed = 0;
             private final DcMotor motorObj;
@@ -20,6 +20,9 @@ final public class DcMotorControl {
 
         this.motorObj.setDirection((forward?DcMotor.Direction.FORWARD : DcMotor.Direction.REVERSE));
     }
+
+    public void setClockSpeed(double speed) { this.maxSpeed = speed;}
+    public void setSensitivity(double sensitivity) {this.sensitivity = sensitivity;}
 
     public void moveLift(boolean up, boolean down) {
 

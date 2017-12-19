@@ -12,18 +12,22 @@ final public class ServoControl {
     //private static Servo servoObj = null;
     private     double  servoPos    = 0;
     private     int     servoSwitch = -1;
-    public      double  minPos      = 0;
-    public      double  maxPos      = 0;
-    public      double  maxSpeed    = 1.0;
+    private     double  minPos      = 0;
+    private     double  maxPos      = 0;
+    private     double  maxSpeed    = 1.0;
     private     double  speedLevel  = 1.0;
     private final Servo   servoObj;
 
 
-    public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
+    public double getMaxPos() {return maxPos;}
+
+    public void setClockSpeed(double speed) {this.maxSpeed = speed;}
+
+    public void updateSpeedLimit(double speed){this.speedLevel = speed * this.maxSpeed;}
 
     public ServoControl(Servo servoObject, boolean forward, double min, double max) {
-        minPos = min;
-        maxPos = max;
+        this.minPos = min;
+        this.maxPos = max;
         this.servoObj = servoObject;
         this.servoObj.setDirection((forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
     }

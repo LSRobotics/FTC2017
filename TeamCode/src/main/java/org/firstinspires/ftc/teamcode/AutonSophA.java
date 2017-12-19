@@ -89,8 +89,8 @@ final public class AutonSophA extends LinearOpMode {
         if(!auton.moveForward(Statics.SOPH_AUTON_STAGE_THREE_TIME)) return;
 
         //Release Glyphs
-        GGrabberRObj.setPosition(GGrabberL.maxPos);
-        GGrabberLObj.setPosition(GGrabberR.maxPos);
+        GGrabberRObj.setPosition(GGrabberL.getMaxPos());
+        GGrabberLObj.setPosition(GGrabberR.getMaxPos());
         if(!wait(1.0)) return;
 
 

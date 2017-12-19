@@ -21,7 +21,7 @@ final public class DriveTrain {
     private              DcMotor FR                 = null;
     private              DcMotor RL                 = null;
     private              DcMotor RR                 = null;
-    public               double  maxSpeed           = 1.0;
+    private              double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     private              double  frontLeftPower     = 0;
     private              double  frontRightPower    = 0;
@@ -44,6 +44,7 @@ final public class DriveTrain {
 
         this.is4WD = true;
     }
+
     //Constructor for 2WD
     public DriveTrain(DcMotor leftMotor, DcMotor rightMotor) {
 
@@ -55,6 +56,8 @@ final public class DriveTrain {
 
         this.is4WD = false;
     }
+
+    public void setClockSpeed(double speed) {this.maxSpeed = speed;}
 
     public void tankDrive(double forwardBack, double rotation) {
 
@@ -120,7 +123,7 @@ final public class DriveTrain {
             case FRONT_RIGHT : return this.FL.getCurrentPosition();
             case REAR_LEFT   : return this.RL.getCurrentPosition();
             case REAR_RIGHT  : return this.RR.getCurrentPosition();
-            default          : return 666; // Actually it won't happen because the enum has already limited the actual parameter
+            default          : return 666; // Actually won't happen because the enum has already limited the actual parameter
         }
     }
 
