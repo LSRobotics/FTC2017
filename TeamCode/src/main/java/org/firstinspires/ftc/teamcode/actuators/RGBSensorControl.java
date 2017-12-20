@@ -5,27 +5,41 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import android.graphics.Color;
+
+import java.util.Queue;
+
 /**
  * Created by LBYPatrick on 12/6/2017.
  */
 
 final public class RGBSensorControl {
 
+    public enum Ball {
+        BLUE,
+        RED,
+        UNKNOWN
+    }
+
     private final ColorSensor device;
     public int redVal = 0;
     public int blueVal = 0;
     public int greenVal = 0;
+    private float [] hsvValue = new float[3];
 
     public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject;}
 
-    public int getBallColor() {
-        int returnVal = 0;
+    public Ball getBallColor() {
+        Ball returnVal = Ball.UNKNOWN;
 
-        this.device.enableLed(true);
-        if (this.device.blue() > this.device.red()) returnVal = 0;
-        else if (this.device.red() > this.device.blue()) returnVal = 1;
-        else returnVal = 2;
-        this.device.enableLed(false);
+        //Update color sensor data
+        updateColorData();
+
+        Color.RGBToHSV((redVal * 255) / 800, (greenVal * 255) / 800, (blueVal * 255) / 800, hsvValue);
+
+        if(hsvValue[1] > 0.6) {
+            if (hsvValue[0] >= 210 && hsvValue[0] <= 275) returnVal = Ball.BLUE;
+            else if (hsvValue[0] >= 330 || hsvValue[0] <= 40) returnVal = Ball.RED;
+        }
         return returnVal;
     }
 

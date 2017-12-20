@@ -32,19 +32,10 @@ public class ColorTest extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            switch(armColorSensor.getBallColor()) {
-                case 0 : ballColor = "Blue";
-                         break;
-                case 1 : ballColor = "Red";
-                         break;
-                case 2 : ballColor = "Unknown";
-                         break;
-            }
-
             armColorSensor.updateColorData();
             telemetry.addData("RGB:", "R:" + armColorSensor.redVal + " G:" + armColorSensor.greenVal + " B:" + armColorSensor.blueVal);
 
-            telemetry.addData("Ball color",ballColor);
+            telemetry.addData("Ball color",armColorSensor.getBallColor());
             telemetry.update();
         }
     }
