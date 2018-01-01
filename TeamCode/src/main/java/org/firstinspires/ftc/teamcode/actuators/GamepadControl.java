@@ -58,6 +58,7 @@ final public class GamepadControl {
     }
 
     private void updateControllerData() {
+        current  = new DataContainer();
         this.current.DPadUp = this.gamepad.dpad_up;
         this.current.DPadDown = this.gamepad.dpad_down;
         this.current.DPadLeft = this.gamepad.dpad_left;
