@@ -78,7 +78,7 @@ final public class TeleOp9T extends LinearOpMode {
 
 
                 if (gamepad.JLeftY || gamepad.JRightX)
-                    tankWheel.tankDrive(-gamepad.current.JLeftY, gamepad.current.JRightX); //Drive the bot if any joystick moved
+                    tankWheel.tankDrive(gamepad.current.JLeftY, gamepad.current.JRightX); //Drive the bot if any joystick moved
 
                 if(gamepad.DPadUp || gamepad.DPadDown)
                     GLift.moveLift(gamepad.current.DPadUp, gamepad.current.DPadDown);

@@ -25,7 +25,7 @@ final public class AutonHelper {
     public boolean moveForward(double time) {
 
         this.stageTime.reset();
-        if(!this.isMecanum) this.driveObj.tankDrive(1,0);
+        if(!this.isMecanum) this.driveObj.tankDrive(-1,0);
         else this.driveObj.mecanumDrive(0,1,0);
         while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0); //Stop the robot
@@ -36,7 +36,7 @@ final public class AutonHelper {
     public boolean moveBack(double time) {
 
         this.stageTime.reset();
-        if(!this.isMecanum) this.driveObj.tankDrive(-1,0);
+        if(!this.isMecanum) this.driveObj.tankDrive(1,0);
         else this.driveObj.mecanumDrive(0,-1,0);
         while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         this.driveObj.tankDrive(0,0);

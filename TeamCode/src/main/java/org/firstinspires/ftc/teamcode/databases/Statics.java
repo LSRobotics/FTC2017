@@ -7,8 +7,8 @@ package org.firstinspires.ftc.teamcode.databases;
 final public class Statics {
 
         //Output info switch
-        public static final boolean FRESH_VISUALIZING = false;
-        public static final boolean SOPH_VISUALIZING = false;
+        public static final boolean FRESH_VISUALIZING = true;
+        public static final boolean SOPH_VISUALIZING = true;
 
         //Freshman's wheels
         public static final String  FRESH_L_WHEEL = "left_tank_motor";
