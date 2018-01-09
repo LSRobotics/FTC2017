@@ -157,8 +157,8 @@ final public class TeleOp10T2 extends LinearOpMode {
 
             if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
-                else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
+                if(!toCloseGrabbers) {GGrabberL.setPosition(0.6);GGrabberR.setPosition(0.6);}
+                else {GGrabberL.setPosition(0.35);GGrabberR.setPosition(0.35);}
             }
 
             if (g1.DPadUp || g1.DPadDown){
@@ -172,7 +172,7 @@ final public class TeleOp10T2 extends LinearOpMode {
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-                    telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
+                    telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
                     telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
             }
             telemetry.update();

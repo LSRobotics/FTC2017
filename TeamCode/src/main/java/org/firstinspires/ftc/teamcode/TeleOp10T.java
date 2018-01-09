@@ -149,8 +149,8 @@ final public class TeleOp10T extends LinearOpMode {
             //Glyph Grabber
             if(g1.Circle && g1.current.Circle) {
                     toCloseGrabbers = !toCloseGrabbers;
-                    if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
-                    else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
+                    if(!toCloseGrabbers) {GGrabberL.setPosition(0.6);GGrabberR.setPosition(0.6);}
+                    else {GGrabberL.setPosition(0.35);GGrabberR.setPosition(0.35);}
             }
             //Start putting information on the Driver Station
 
@@ -162,7 +162,7 @@ final public class TeleOp10T extends LinearOpMode {
                     //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                     telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
                     telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-                    telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
+                    telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
 
             }
             telemetry.update();

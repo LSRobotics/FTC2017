@@ -172,7 +172,7 @@ final public class TeleOp10M2 extends LinearOpMode {
                 //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                 telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
                 telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-                telemetry.addData("GGrabbers:       ", GGrabberL.getPos());
+                telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
                 telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
             }
             telemetry.update();
