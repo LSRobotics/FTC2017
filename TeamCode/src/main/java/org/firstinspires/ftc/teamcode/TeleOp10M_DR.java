@@ -160,11 +160,11 @@ final public class TeleOp10M_DR extends LinearOpMode {
 
             if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberL.setPosition(0.6);GGrabberR.setPosition(0.6);}
-                else {GGrabberL.setPosition(0.35);GGrabberR.setPosition(0.35);}
+                if(!toCloseGrabbers) {GGrabberL.setPosition(Statics.GGRABBERL_OPEN);GGrabberR.setPosition(Statics.GGRABBERR_OPEN);}
+                else {GGrabberL.setPosition(Statics.GGRABBERL_CLOSE);GGrabberR.setPosition(Statics.GGRABBERR_CLOSE);}
             }
 
-            if (g1.DPadUp || g1.DPadDown){
+            if (g1.DPadUp || g1.DPadDown) {
                 GLift.moveLift(g1.current.DPadUp, g1.current.DPadDown);
             }
 

@@ -42,4 +42,10 @@ final public class Statics {
         //Shared Device names
         public static final String ARM_COLOR = "arm_color_sensor";
         public static final String GLYPH_LIFT = "glyph_lift_motor";
+
+        public static final double GGRABBERR_CLOSE = 1.0;
+        public static final double GGRABBERR_OPEN  = 0.7;
+        public static final double GGRABBERL_CLOSE = 0.2;
+        public static final double GGRABBERL_OPEN  = -0.2;
+
 }

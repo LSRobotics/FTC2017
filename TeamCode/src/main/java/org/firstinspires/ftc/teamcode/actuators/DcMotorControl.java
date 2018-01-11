@@ -35,6 +35,22 @@ final public class DcMotorControl {
         this.motorObj.setPower(this.motorSpeed*this.speedLevel);
     }
 
+    public double getPower() {
+        return this.motorObj.getPower();
+    }
+
+    public double getSpeed() {
+        return getPower();
+    }
+
+    public int getPosition() {
+        return this.motorObj.getCurrentPosition();
+    }
+
+    public int getCurrentPosition() {
+        return getPosition();
+    }
+
     public void updateSpeedLimit(double speed){
         this.speedLevel = speed * this.maxSpeed;
     }

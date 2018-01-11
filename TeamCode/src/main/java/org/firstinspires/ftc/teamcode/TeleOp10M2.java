@@ -96,7 +96,7 @@ final public class TeleOp10M2 extends LinearOpMode {
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
         GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new DcMotorControl(GLiftObj,false);
+        GLift = new DcMotorControl(GLiftObj,true);
 
         g1 = new GamepadControl(this.gamepad1);
     }
@@ -136,7 +136,6 @@ final public class TeleOp10M2 extends LinearOpMode {
 
             }
 
-
             //Right joystick for driving
             if (g1.JRightX || g1.JRightY || g1.JLeftX) {
                 mWheel.mecanumDrive(g1.current.JLeftX,-g1.current.JRightY, g1.current.JRightX);
@@ -157,8 +156,8 @@ final public class TeleOp10M2 extends LinearOpMode {
 
             if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberLObj.setPosition(0.6);GGrabberRObj.setPosition(0.6);}
-                else {GGrabberLObj.setPosition(0.35);GGrabberRObj.setPosition(0.35);}
+                if(!toCloseGrabbers) {GGrabberL.setPosition(Statics.GGRABBERL_OPEN);GGrabberR.setPosition(Statics.GGRABBERR_OPEN);}
+                else {GGrabberL.setPosition(Statics.GGRABBERL_CLOSE);GGrabberR.setPosition(Statics.GGRABBERR_CLOSE);}
             }
 
             if (g1.DPadUp || g1.DPadDown){
@@ -169,11 +168,10 @@ final public class TeleOp10M2 extends LinearOpMode {
                 telemetry.addData("Status           ", "Run Time: " + runtime.toString());
                 telemetry.addData("RL encoder: ", "");
                 telemetry.addData("RR encoder: ", "");
-                //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
                 telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
                 telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
                 telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
-                telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
+                telemetry.addData("Lift Encoder:    ", GLift.getCurrentPosition());
             }
             telemetry.update();
         }
