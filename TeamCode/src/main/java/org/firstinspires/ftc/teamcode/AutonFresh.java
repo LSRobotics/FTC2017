@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.*;
@@ -17,19 +16,21 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 final public class AutonFresh extends LinearOpMode {
 
     private     AutonHelper     autonControl;
-    private     DcMotorControl  GIntake;
+    private     MotorControl    intakes;
+    private     MotorControl    lift;
+
 
     // Declare OpMode members
     final private ElapsedTime stageTime = new ElapsedTime();
 
     private void initialize() {
 
-        DcMotor BL = hardwareMap.dcMotor.get(Statics.FRESH_L_WHEEL);
-        DcMotor BR = hardwareMap.dcMotor.get(Statics.FRESH_R_WHEEL);
-        DcMotor GIntakeMotor = hardwareMap.dcMotor.get(Statics.FRESH_INTAKE);
+        MotorControl leftWheel = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_L_WHEEL));
+        MotorControl rightWheel = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_R_WHEEL));
+        intakes = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_INTAKE),false);
+        lift    = new MotorControl(hardwareMap.dcMotor.get(Statics.GLYPH_LIFT),false);
 
-        GIntake = new DcMotorControl(GIntakeMotor,false);
-        DriveTrain tankWheel = new DriveTrain(BL, BR);
+        DriveTrain tankWheel = new DriveTrain(leftWheel,rightWheel);
 
         autonControl = new AutonHelper(this, tankWheel,false);
 
@@ -49,17 +50,17 @@ final public class AutonFresh extends LinearOpMode {
         waitForStart();
 
         //Take the glyph in
-        if(!autonControl.moveLiftUp(GIntake,2.0)) return;
+        if(!autonControl.runMotor(intakes,1,0)) return;
         if(!wait(1.5)) return;
 
         //Move forward
-        if(!autonControl.moveForward(0.328)) return;
+        if(!autonControl.drive(1,0,0.328)) return;
         if(!wait(2.0)) return;
 
         //Shoot the glyph out
-        if(!autonControl.moveLiftDown(GIntake,2.0)) return;
+        if(!autonControl.runMotor(intakes,-1,0)) return;
 
         //Move a little back for not touching the glyph
-        autonControl.moveBack(0.05);
+        autonControl.drive(-1, 0, 0.05);
     }
 }

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
 /**
  * Created by LBYPatrick on 12/4/2017.
  */
@@ -13,75 +13,36 @@ final public class AutonHelper {
     private final ElapsedTime stageTime = new ElapsedTime();
     private final LinearOpMode opModeObj;
     private final DriveTrain driveObj;
-    private boolean isMecanum = false;
+    private boolean isMecanum;
 
 
     public AutonHelper(LinearOpMode opMode, DriveTrain driveTrainObject, boolean isMecanum) {
-        this.opModeObj = opMode;
-        this.driveObj = driveTrainObject;
+        opModeObj = opMode;
+        driveObj = driveTrainObject;
         this.isMecanum = isMecanum;
     }
 
-    public boolean moveForward(double time) {
+    public boolean drive(double forwardBack, double leftRight, double time) {
+        stageTime.reset();
 
-        this.stageTime.reset();
-        if(!this.isMecanum) this.driveObj.tankDrive(-1,0);
-        else this.driveObj.mecanumDrive(0,1,0);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
-        this.driveObj.tankDrive(0,0); //Stop the robot
+        if(isMecanum) {driveObj.mecanumDrive(0,forwardBack,leftRight);}
+        else driveObj.tankDrive(forwardBack,leftRight);
+
+        while(this.opModeObj.opModeIsActive() && stageTime.milliseconds() <= time);
+        driveObj.tankDrive(0,0);
+
         return this.opModeObj.opModeIsActive();
 
     }
 
-    public boolean moveBack(double time) {
+    public boolean runMotor(MotorControl motor,double speed,double time) {
 
         this.stageTime.reset();
-        if(!this.isMecanum) this.driveObj.tankDrive(1,0);
-        else this.driveObj.mecanumDrive(0,-1,0);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
-        this.driveObj.tankDrive(0,0);
-        return this.opModeObj.opModeIsActive();
 
-    }
-
-    public boolean turnLeft(double time) {
-
-        this.stageTime.reset();
-        if(!this.isMecanum)this.driveObj.tankDrive(0,-1);
-        else this.driveObj.mecanumDrive(0,0,-1);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
-        this.driveObj.tankDrive(0,0);
-        return this.opModeObj.opModeIsActive();
-
-    }
-
-    public boolean turnRight(double time) {
-
-        this.stageTime.reset();
-        if(!this.isMecanum) this.driveObj.tankDrive(0,1);
-        else this.driveObj.mecanumDrive(0,0,1);
-        while(this.opModeObj.opModeIsActive() && stageTime.seconds() <= time);
-        this.driveObj.tankDrive(0,0);
-        return this.opModeObj.opModeIsActive();
-
-    }
-
-    public boolean moveLiftUp(DcMotorControl controlObject, double time) {
-
-        this.stageTime.reset();
-        controlObject.moveLift(true, false);
+        motor.move(speed);
         while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time);
-        controlObject.moveLift(false, false);
-        return this.opModeObj.opModeIsActive();
+        motor.move(0);
 
-    }
-
-    public boolean moveLiftDown(DcMotorControl controlObject, double time) {
-
-        this.stageTime.reset();
-        controlObject.moveLift(false, true);
-        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time);
-        controlObject.moveLift(false, false);
         return this.opModeObj.opModeIsActive();
 
     }

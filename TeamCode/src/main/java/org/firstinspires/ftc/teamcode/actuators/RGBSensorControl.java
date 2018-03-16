@@ -4,9 +4,6 @@ package org.firstinspires.ftc.teamcode.actuators;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import android.graphics.Color;
-
-import java.util.Queue;
 
 /**
  * Created by LBYPatrick on 12/6/2017.
@@ -14,10 +11,8 @@ import java.util.Queue;
 
 final public class RGBSensorControl {
 
-    public enum Ball {
-        BLUE,
-        RED,
-        UNKNOWN
+    public class BallColor {
+        final public static int BLUE = 0, RED = 1, UNKNOWN = 2;
     }
 
     private final ColorSensor device;
@@ -28,8 +23,7 @@ final public class RGBSensorControl {
 
     public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject;}
 
-    public Ball getBallColor() {
-        Ball returnVal = Ball.UNKNOWN;
+    public int getBallColor() {
 
         //Update color sensor data
         updateColorData();
@@ -37,17 +31,18 @@ final public class RGBSensorControl {
         Color.RGBToHSV((redVal * 255) / 800, (greenVal * 255) / 800, (blueVal * 255) / 800, hsvValue);
 
         if(hsvValue[1] > 0.6) {
-            if (hsvValue[0] >= 210 && hsvValue[0] <= 275) returnVal = Ball.BLUE;
-            else if (hsvValue[0] >= 330 || hsvValue[0] <= 40) returnVal = Ball.RED;
+            if (hsvValue[0] >= 210 && hsvValue[0] <= 275) return BallColor.BLUE;
+            else if (hsvValue[0] >= 330 || hsvValue[0] <= 40) return BallColor.RED;
         }
-        return returnVal;
+
+        return BallColor.UNKNOWN;
     }
 
     public void updateColorData() {
-        this.device.enableLed(true);
-        this.redVal = device.red();
-        this.greenVal = device.green();
-        this.blueVal = device.blue();
-        this.device.enableLed(false);
+        device.enableLed(true);
+        redVal = device.red();
+        greenVal = device.green();
+        blueVal = device.blue();
+        device.enableLed(false);
     }
 }

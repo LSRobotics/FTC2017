@@ -54,51 +54,50 @@ final public class GamepadControl {
     public DataContainer current = new DataContainer();
 
     public GamepadControl(Gamepad gp) {
-        this.gamepad = gp;
-    }
-
-    private void updateControllerData() {
-        current  = new DataContainer();
-        this.current.DPadUp = this.gamepad.dpad_up;
-        this.current.DPadDown = this.gamepad.dpad_down;
-        this.current.DPadLeft = this.gamepad.dpad_left;
-        this.current.DPadRight = this.gamepad.dpad_right;
-        this.current.JLeftX = this.gamepad.left_stick_x;
-        this.current.JLeftY = this.gamepad.left_stick_y;
-        this.current.JRightX = this.gamepad.right_stick_x;
-        this.current.JRightY = this.gamepad.right_stick_y;
-        this.current.Cross = this.gamepad.a;
-        this.current.Square = this.gamepad.x;
-        this.current.Triangle = this.gamepad.y;
-        this.current.Circle = this.gamepad.b;
-        this.current.L1     = this.gamepad.left_bumper;
-        this.current.R1     = this.gamepad.right_bumper;
-        this.current.L2     = this.gamepad.left_trigger;
-        this.current.R2     = this.gamepad.right_trigger;
-    }
-
-    private void updateControllerStatus() {
-        this.DPadUp = this.current.DPadUp != this.previous.DPadUp;
-        this.DPadDown = this.current.DPadDown != this.previous.DPadDown;
-        this.DPadLeft = this.current.DPadLeft != this.previous.DPadLeft;
-        this.DPadRight = this.current.DPadRight != this.previous.DPadRight;
-        this.JLeftX = this.current.JLeftX != this.previous.JLeftX;
-        this.JLeftY = this.current.JLeftY != this.previous.JLeftY;
-        this.JRightX = this.current.JRightX != this.previous.JRightX;
-        this.JRightY = this.current.JRightY != this.previous.JRightY;
-        this.Cross = this.current.Cross != this.previous.Cross;
-        this.Square = this.current.Square != this.previous.Square;
-        this.Triangle = this.current.Triangle != this.previous.Triangle;
-        this.Circle = this.current.Circle != this.previous.Circle;
-        this.L1     = this.current.L1 != this.previous.L1;
-        this.R1     = this.current.R1 != this.previous.R1;
-        this.L2     = this.current.L2 != this.previous.L2;
-        this.R2     = this.current.R2 != this.previous.R2;
+        gamepad = gp;
     }
 
     public void updateStatus() {
-            updateControllerData();
-            updateControllerStatus();
-            previous = current;
+
+        //Fetch Data
+        current  = new DataContainer();
+        current.DPadUp = gamepad.dpad_up;
+        current.DPadDown = gamepad.dpad_down;
+        current.DPadLeft = gamepad.dpad_left;
+        current.DPadRight = gamepad.dpad_right;
+        current.JLeftX = gamepad.left_stick_x;
+        current.JLeftY = gamepad.left_stick_y;
+        current.JRightX = gamepad.right_stick_x;
+        current.JRightY = gamepad.right_stick_y;
+        current.Cross = gamepad.a;
+        current.Square = gamepad.x;
+        current.Triangle = gamepad.y;
+        current.Circle = gamepad.b;
+        current.L1     = gamepad.left_bumper;
+        current.R1     = gamepad.right_bumper;
+        current.L2     = gamepad.left_trigger;
+        current.R2     = gamepad.right_trigger;
+
+        //Data Comparison
+        DPadUp = current.DPadUp != previous.DPadUp;
+        DPadDown = current.DPadDown != previous.DPadDown;
+        DPadLeft = current.DPadLeft != previous.DPadLeft;
+        DPadRight = current.DPadRight != previous.DPadRight;
+        JLeftX = current.JLeftX != previous.JLeftX;
+        JLeftY = current.JLeftY != previous.JLeftY;
+        JRightX = current.JRightX != previous.JRightX;
+        JRightY = current.JRightY != previous.JRightY;
+        Cross = current.Cross != previous.Cross;
+        Square = current.Square != previous.Square;
+        Triangle = current.Triangle != previous.Triangle;
+        Circle = current.Circle != previous.Circle;
+        L1     = current.L1 != previous.L1;
+        R1     = current.R1 != previous.R1;
+        L2     = current.L2 != previous.L2;
+        R2     = current.R2 != previous.R2;
+
+        previous = current;
+
     }
+
 }

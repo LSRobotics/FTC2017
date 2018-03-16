@@ -14,12 +14,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 final public class VuforiaControl {
 
-    enum Positions {
-        LEFT,
-        CENTER,
-        RIGHT,
-        UNKNOWN,
-        ERROR
+    public class Positions {
+        final public static int LEFT = 0, CENTER = 1, RIGHT = 2, UNKNOWN = 3, ERROR = 4;
     }
 
     private final VuforiaTrackable relicTemplate;
@@ -45,13 +41,13 @@ final public class VuforiaControl {
         VuforiaLocalizer device = ClassFactory.createVuforiaLocalizer(parameters);
 
         //Load Vuforia template for FTC relic recovery
-        this.relicTrackables = device.loadTrackablesFromAsset("RelicVuMark");
-        this.relicTemplate = relicTrackables.get(0);
+        relicTrackables = device.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
 
-        this.relicTrackables.activate();
+        relicTrackables.activate();
     }
 
-    public Positions getPosition() {
+    public int getPosition() {
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
         switch(vuMark) {

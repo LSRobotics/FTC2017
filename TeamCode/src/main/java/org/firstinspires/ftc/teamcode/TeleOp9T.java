@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
+import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
 import org.firstinspires.ftc.teamcode.databases.Statics;
@@ -19,8 +19,8 @@ final public class TeleOp9T extends LinearOpMode {
         //Initialize objects
         private     DriveTrain      tankWheel;
         private     GamepadControl   gamepad;
-        private     DcMotorControl      GLift;
-        private     DcMotorControl     intake;
+        private MotorControl GLift;
+        private MotorControl intake;
 
         // Declare OpMode members.
         final private ElapsedTime runtime = new ElapsedTime();
@@ -28,18 +28,17 @@ final public class TeleOp9T extends LinearOpMode {
         private void initialize(){
 
             //Tank Wheels
-            DcMotor leftMotor = hardwareMap.get(DcMotor.class, Statics.FRESH_L_WHEEL);
-            DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.FRESH_R_WHEEL);
+            MotorControl leftMotor = new MotorControl(hardwareMap.get(DcMotor.class, Statics.FRESH_L_WHEEL));
+            MotorControl rightMotor = new MotorControl(hardwareMap.get(DcMotor.class, Statics.FRESH_R_WHEEL));
             tankWheel = new DriveTrain(leftMotor,rightMotor);
 
             //Glyph Lift
             DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-            GLift = new DcMotorControl(GLiftObj,false);
+            GLift = new MotorControl(GLiftObj,false);
 
             //Glyph Intake
             DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.FRESH_INTAKE);
-            intake = new DcMotorControl(intakeObj, true);
-            intake.setClockSpeed(1.0);
+            intake = new MotorControl(intakeObj, true);
 
             //gamepad
             gamepad = new GamepadControl(this.gamepad1);
@@ -81,12 +80,12 @@ final public class TeleOp9T extends LinearOpMode {
                     tankWheel.tankDrive(gamepad.current.JLeftY, gamepad.current.JRightX); //Drive the bot if any joystick moved
 
                 if(gamepad.DPadUp || gamepad.DPadDown)
-                    GLift.moveLift(gamepad.current.DPadUp, gamepad.current.DPadDown);
+                    GLift.moveWithButton(gamepad.current.DPadUp, gamepad.current.DPadDown);
 
 
                 //Intake
                 if(gamepad.L2 || gamepad.R2)
-                    intake.moveLift(gamepad.current.L2 != 0,gamepad.current.R2 != 0);
+                    intake.moveWithButton(gamepad.current.L2 != 0,gamepad.current.R2 != 0);
 
                 //Start putting information on the Driver Stations
                 if(Statics.FRESH_VISUALIZING) {

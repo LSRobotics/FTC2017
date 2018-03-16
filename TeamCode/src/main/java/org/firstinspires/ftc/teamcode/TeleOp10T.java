@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
+import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
@@ -71,7 +71,7 @@ final public class TeleOp10T extends LinearOpMode {
     private     ServoControl    GGrabberR;
     private     Servo           GGrabberLObj;
     private     Servo           GGrabberRObj;
-    private DcMotorControl      GLift;
+    private MotorControl GLift;
 
     private GamepadControl g1;
 
@@ -97,7 +97,7 @@ final public class TeleOp10T extends LinearOpMode {
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
         DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new DcMotorControl(GLiftObj,false);
+        GLift = new MotorControl(GLiftObj,false);
 
     }
 
@@ -144,13 +144,13 @@ final public class TeleOp10T extends LinearOpMode {
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
             if(g1.R1 || g1.L1)
-            GLift.moveLift(g1.current.R1, g1.current.L1);
+            GLift.moveWithButton(g1.current.R1, g1.current.L1);
 
             //Glyph Grabber
             if(g1.Circle && g1.current.Circle) {
                     toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberL.setPosition(Statics.GGRABBERL_OPEN);GGrabberR.setPosition(Statics.GGRABBERR_OPEN);}
-                else {GGrabberL.setPosition(Statics.GGRABBERL_CLOSE);GGrabberR.setPosition(Statics.GGRABBERR_CLOSE);}
+                if(!toCloseGrabbers) {GGrabberL.move(Statics.GGRABBERL_OPEN);GGrabberR.move(Statics.GGRABBERR_OPEN);}
+                else {GGrabberL.move(Statics.GGRABBERL_CLOSE);GGrabberR.move(Statics.GGRABBERR_CLOSE);}
             }
             //Start putting information on the Driver Station
 

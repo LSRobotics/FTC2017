@@ -66,7 +66,7 @@ final public class TeleOp10M extends LinearOpMode {
 
     private     ServoControl    GGrabberL;
     private     ServoControl    GGrabberR;
-    private DcMotorControl      GLift;
+    private MotorControl GLift;
 
     private GamepadControl g1;
 
@@ -74,11 +74,10 @@ final public class TeleOp10M extends LinearOpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
     private void initialize(){
-        DcMotor BL = hardwareMap.dcMotor.get(Statics.SOPH_RL_WHEEL);
-        DcMotor BR = hardwareMap.dcMotor.get(Statics.SOPH_RR_WHEEL);
-        DcMotor FL = hardwareMap.dcMotor.get(Statics.SOPH_FL_WHEEL);
-        DcMotor FR = hardwareMap.dcMotor.get(Statics.SOPH_FR_WHEEL);
-        mWheel = new DriveTrain(FL,FR,BL,BR);
+        mWheel = new DriveTrain(hardwareMap.dcMotor.get(Statics.SOPH_FL_WHEEL),
+                                hardwareMap.dcMotor.get(Statics.SOPH_RL_WHEEL),
+                                hardwareMap.dcMotor.get(Statics.SOPH_RR_WHEEL),
+                                hardwareMap.dcMotor.get(Statics.SOPH_FR_WHEEL));
 
         //jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
@@ -92,7 +91,7 @@ final public class TeleOp10M extends LinearOpMode {
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
         DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new DcMotorControl(GLiftObj,false);
+        GLift = new MotorControl(GLiftObj,false);
 
     }
 
@@ -142,13 +141,13 @@ final public class TeleOp10M extends LinearOpMode {
             //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
 
             if (g1.R1 || g1.L1)
-                GLift.moveLift(g1.current.R1, g1.current.L1);
+                GLift.moveWithButton(g1.current.R1, g1.current.L1);
 
             //Toggle Glyph Grabber
             if(g1.Circle && g1.current.Circle) {
                     toCloseGrabbers = !toCloseGrabbers;
-                    if(!toCloseGrabbers) {GGrabberL.setPosition(Statics.GGRABBERL_OPEN);GGrabberR.setPosition(Statics.GGRABBERR_OPEN);}
-                    else {GGrabberL.setPosition(Statics.GGRABBERL_CLOSE);GGrabberR.setPosition(Statics.GGRABBERR_CLOSE);}
+                    if(!toCloseGrabbers) {GGrabberL.move(Statics.GGRABBERL_OPEN);GGrabberR.move(Statics.GGRABBERR_OPEN);}
+                    else {GGrabberL.move(Statics.GGRABBERL_CLOSE);GGrabberR.move(Statics.GGRABBERR_CLOSE);}
             }
 
             //Start putting information on the Driver Station

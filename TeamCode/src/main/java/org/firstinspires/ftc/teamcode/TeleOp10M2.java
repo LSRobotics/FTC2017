@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
+import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
@@ -72,7 +72,7 @@ final public class TeleOp10M2 extends LinearOpMode {
     private     ServoControl    GGrabberR;
     private     Servo           GGrabberLObj;
     private     Servo           GGrabberRObj;
-    private DcMotorControl      GLift;
+    private MotorControl GLift;
     private     DcMotor         GLiftObj;
     private GamepadControl      g1;
     // Declare OpMode members.
@@ -96,7 +96,7 @@ final public class TeleOp10M2 extends LinearOpMode {
         GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
         GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
         GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new DcMotorControl(GLiftObj,true);
+        GLift = new MotorControl(GLiftObj,true);
 
         g1 = new GamepadControl(this.gamepad1);
     }
@@ -156,12 +156,12 @@ final public class TeleOp10M2 extends LinearOpMode {
 
             if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
                 toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberL.setPosition(Statics.GGRABBERL_OPEN);GGrabberR.setPosition(Statics.GGRABBERR_OPEN);}
-                else {GGrabberL.setPosition(Statics.GGRABBERL_CLOSE);GGrabberR.setPosition(Statics.GGRABBERR_CLOSE);}
+                if(!toCloseGrabbers) {GGrabberL.move(Statics.GGRABBERL_OPEN);GGrabberR.move(Statics.GGRABBERR_OPEN);}
+                else {GGrabberL.move(Statics.GGRABBERL_CLOSE);GGrabberR.move(Statics.GGRABBERR_CLOSE);}
             }
 
             if (g1.DPadUp || g1.DPadDown){
-                GLift.moveLift(g1.current.DPadUp, g1.current.DPadDown);
+                GLift.moveWithButton(g1.current.DPadUp, g1.current.DPadDown);
             }
 
             if (Statics.SOPH_VISUALIZING) {
