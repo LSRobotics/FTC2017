@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 /**
  * Created by LBYPatrick on 11/9/2017.
  */
@@ -16,6 +18,10 @@ public class MotorControl {
 
         motor = dcMotorObj;
         motor.setDirection((isForward?DcMotor.Direction.FORWARD : DcMotor.Direction.REVERSE));
+    }
+
+    public void setReverse(boolean isReverse) {
+        motor.setDirection(isReverse? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
     }
 
     public MotorControl(DcMotor dcMotorObj) {

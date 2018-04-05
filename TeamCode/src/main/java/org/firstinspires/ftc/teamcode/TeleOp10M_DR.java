@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
-import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
+import org.firstinspires.ftc.teamcode.actuators.Controller;
 import org.firstinspires.ftc.teamcode.actuators.ServoControl;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
@@ -63,123 +63,41 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 @TeleOp(name="SOPH_mecanumDrive_dualDriver", group="Sophomore")
 final public class TeleOp10M_DR extends LinearOpMode {
 
+
     //Initialize objects
-    private     DriveTrain      mWheel;
+    static TeleOp10 teleOp;
 
-    //private     ServoControl    jArm;
-    //private     Servo           jArmObj;
-    private     ServoControl    GGrabberL;
-    private     ServoControl    GGrabberR;
-    private     Servo           GGrabberLObj;
-    private     Servo           GGrabberRObj;
-    private MotorControl GLift;
-    private     DcMotor         GLiftObj;
-    private GamepadControl      g1,g2;
-    // Declare OpMode members.
-    final private ElapsedTime runtime = new ElapsedTime();
-
-
-    private void initialize(){
-        DcMotor RL = hardwareMap.dcMotor.get(Statics.SOPH_RL_WHEEL);
-        DcMotor RR = hardwareMap.dcMotor.get(Statics.SOPH_RR_WHEEL);
-        DcMotor FL = hardwareMap.dcMotor.get(Statics.SOPH_FL_WHEEL);
-        DcMotor FR = hardwareMap.dcMotor.get(Statics.SOPH_FR_WHEEL);
-        mWheel = new DriveTrain(FL,FR,RL,RR);
-
-        //jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
-        //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
-
-        //Glyph Grabbers
-        GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
-        GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
-
-        GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
-        GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
-        GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new MotorControl(GLiftObj,false);
-
-        g1 = new GamepadControl(this.gamepad1);
-        g2 = new GamepadControl(this.gamepad2);
+    private void initialize() {
+        teleOp = new TeleOp10(hardwareMap,gamepad1);
+        teleOp.setMecanum(true);
+        teleOp.setDriveMode(TeleOp10.DriveMode.NFSControl);
+        teleOp.useSecondGamepad(new Controller(gamepad2));
     }
 
     @Override
     public void runOpMode() {
-
-        //boolean toShowSecondPage = false;
-        boolean toCloseGrabbers = true;
-        double  globalSpeed;
-
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         initialize();
         waitForStart(); // Wait for the game to start (driver presses PLAY)
-        runtime.reset();
 
         telemetry.addData("Status","Running");
         telemetry.update();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        //Block when OpMode is not active
+        while (!opModeIsActive());
 
+        teleOp.start();
 
-            g1.updateStatus();
-            g2.updateStatus();
-
-            //Toggle Snipping Mode
-            if (g1.L1) {
-                if (g1.current.L1)        globalSpeed = 0.6;
-                else                      globalSpeed = 1.0;
-
-                //Apply Speed
-                mWheel.updateSpeedLimit(globalSpeed);
-                GGrabberL.updateSpeedLimit(globalSpeed);
-                GGrabberR.updateSpeedLimit(globalSpeed);
-                GLift.updateSpeedLimit(globalSpeed);
-
-            }
-
-
-            //Right joystick for driving
-            if (g2.JRightX || g2.JRightY || g2.JLeftX) {
-                mWheel.mecanumDrive(g2.current.JLeftX,-g2.current.JRightY, g2.current.JRightX);
-            }
-            //Jewel Arm (Currently Disabled)
-            //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
-
-            //Glyph Grabber Inward
-            if (g1.current.L2 > 0) {
-                GGrabberL.moveGlyphGrabber(true);
-                GGrabberR.moveGlyphGrabber(true);
-            }
-            //Glyph Grabber Outward
-            else if (g1.current.R2 > 0) {
-                GGrabberL.moveGlyphGrabber(false);
-                GGrabberR.moveGlyphGrabber(false);
-            }
-
-            if (g1.Circle && g1.current.Circle) { //Toggle Grabbers
-                toCloseGrabbers = !toCloseGrabbers;
-                if(!toCloseGrabbers) {GGrabberL.move(Statics.GGRABBERL_OPEN);GGrabberR.move(Statics.GGRABBERR_OPEN);}
-                else {GGrabberL.move(Statics.GGRABBERL_CLOSE);GGrabberR.move(Statics.GGRABBERR_CLOSE);}
-            }
-
-            if (g1.DPadUp || g1.DPadDown) {
-                GLift.moveWithButton(g1.current.DPadUp, g1.current.DPadDown);
-            }
-
+        while(opModeIsActive()) {
             if (Statics.SOPH_VISUALIZING) {
-                telemetry.addData("Status           ", "Run Time: " + runtime.toString());
-                telemetry.addData("RL encoder: ", "");
-                telemetry.addData("RR encoder: ", "");
-                //telemetry.addData("Jewel Arm:  ", jArm.servoPos);
-                telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
-                telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-                telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
-                telemetry.addData("Lift Encoder:    ", GLiftObj.getCurrentPosition());
+                teleOp.showData(telemetry);
+                telemetry.update();
             }
-            telemetry.update();
         }
+
+        teleOp.stopWorking();
 
         telemetry.addData("Status","Stopped");
         telemetry.update();

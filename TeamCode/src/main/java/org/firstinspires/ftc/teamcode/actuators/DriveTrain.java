@@ -28,6 +28,7 @@ final public class DriveTrain {
     private              double  rearLeftPower      = 0;
     private              double  rearRightPower     = 0;
     private              boolean is4WD              = false;
+    private              boolean isMecanum          = false;
 
     //Constructor for 4WD
     public DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
@@ -36,6 +37,9 @@ final public class DriveTrain {
         FR = frontRightMotor;
         RL = rearLeftMotor;
         RR = rearRightMotor;
+
+        FL.setReverse(true);
+        FR.setReverse(true);
 
         is4WD = true;
     }
@@ -56,6 +60,15 @@ final public class DriveTrain {
         RR = rightMotor;
 
         is4WD = false;
+    }
+
+    public void setWheelMode(boolean isMecanum) {
+        this.isMecanum = isMecanum;
+    }
+
+    public void drive(double sideMove, double forwardBack, double rotation) {
+        if(isMecanum) mecanumDrive(sideMove, forwardBack,rotation);
+        else tankDrive(forwardBack,rotation);
     }
 
     public void tankDrive(double forwardBack, double rotation) {
@@ -93,9 +106,9 @@ final public class DriveTrain {
 
         // Send calculated power to motors
         FL.move(frontLeftPower);
-        FR.move(-frontRightPower);
+        FR.move(frontRightPower);
         RL.move(rearLeftPower);
-        RR.move(-rearRightPower);
+        RR.move(rearRightPower);
     }
 
     public void updateSpeedLimit(double speed) {

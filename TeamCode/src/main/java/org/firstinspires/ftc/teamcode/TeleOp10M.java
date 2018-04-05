@@ -60,109 +60,40 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 @TeleOp(name="SOPH_mecanumDrive_NFS", group="Sophomore")
 final public class TeleOp10M extends LinearOpMode {
 
-
-    //Initialize objects
-    private     DriveTrain      mWheel;
-
-    private     ServoControl    GGrabberL;
-    private     ServoControl    GGrabberR;
-    private MotorControl GLift;
-
-    private GamepadControl g1;
-
-    // Declare OpMode members.
-    final private ElapsedTime runtime = new ElapsedTime();
+    //TeleOp10 Object
+    static TeleOp10 teleOp;
 
     private void initialize(){
-        mWheel = new DriveTrain(hardwareMap.dcMotor.get(Statics.SOPH_FL_WHEEL),
-                                hardwareMap.dcMotor.get(Statics.SOPH_RL_WHEEL),
-                                hardwareMap.dcMotor.get(Statics.SOPH_RR_WHEEL),
-                                hardwareMap.dcMotor.get(Statics.SOPH_FR_WHEEL));
-
-        //jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
-        //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
-
-        g1 = new GamepadControl(this.gamepad1);
-
-        //Glyph Grabbers
-        Servo GGrabberLObj = hardwareMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER);
-        Servo GGrabberRObj = hardwareMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER);
-
-        GGrabberL = new ServoControl(GGrabberLObj, false, -1, 1);
-        GGrabberR = new ServoControl(GGrabberRObj,true,-1,1);
-        DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-        GLift = new MotorControl(GLiftObj,false);
-
+        teleOp = new TeleOp10(hardwareMap,gamepad1);
+        teleOp.setMecanum(true);
+        teleOp.setDriveMode(TeleOp10.DriveMode.NFSControl);
     }
 
     @Override
     public void runOpMode() {
-
-        boolean toCloseGrabbers = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         initialize();
         waitForStart(); // Wait for the game to start (driver presses PLAY)
-        runtime.reset();
-
 
         telemetry.addData("Status","Running");
         telemetry.update();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+        //Block when OpMode is not active
+        while (!opModeIsActive());
 
-            g1.updateStatus();
+        teleOp.start();
 
-            if (g1.Square) { //Sniping Mode Switch
-
-                if(g1.current.Square) {
-                    mWheel.updateSpeedLimit(0.6);
-                    GLift.updateSpeedLimit(0.6);
-                    GGrabberL.updateSpeedLimit(0.6);
-                    GGrabberR.updateSpeedLimit(0.6);
-                }
-
-                else {
-                    mWheel.updateSpeedLimit(1.0);
-                    GLift.updateSpeedLimit(1.0);
-                    GGrabberL.updateSpeedLimit(1.0);
-                    GGrabberR.updateSpeedLimit(1.0);
+            while(opModeIsActive()) {
+                if (Statics.SOPH_VISUALIZING) {
+                    teleOp.showData(telemetry);
+                    telemetry.update();
                 }
             }
 
-            if(g1.L2 || g1.R2 || g1.JLeftX)
-                mWheel.mecanumDrive(0,-(g1.current.R2-g1.current.L2),g1.current.JLeftX);
-
-
-            //Jewel Arm (Currently disabled)
-            //if (previous.stat.Triangle) jArm.moveJewelArm(jArmObj);
-
-            if (g1.R1 || g1.L1)
-                GLift.moveWithButton(g1.current.R1, g1.current.L1);
-
-            //Toggle Glyph Grabber
-            if(g1.Circle && g1.current.Circle) {
-                    toCloseGrabbers = !toCloseGrabbers;
-                    if(!toCloseGrabbers) {GGrabberL.move(Statics.GGRABBERL_OPEN);GGrabberR.move(Statics.GGRABBERR_OPEN);}
-                    else {GGrabberL.move(Statics.GGRABBERL_CLOSE);GGrabberR.move(Statics.GGRABBERR_CLOSE);}
-            }
-
-            //Start putting information on the Driver Station
-
-            if(Statics.SOPH_VISUALIZING) {
-                    telemetry.addData("Status           ", "Run Time: " + runtime.toString());
-                    telemetry.addData("RL encoder: ", mWheel.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
-                    telemetry.addData("RR encoder: ", mWheel.getEncoderInfo(DriveTrain.Wheels.REAR_RIGHT));
-                    telemetry.addData("RL Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_LEFT));
-                    telemetry.addData("RR Wheel:        ", mWheel.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-                    telemetry.addData("GGrabbers:       ", GGrabberL.getPosition());
-
-            }
-            telemetry.update();
-        }
+            teleOp.stopWorking();
 
         telemetry.addData("Status","Stopped");
         telemetry.update();
