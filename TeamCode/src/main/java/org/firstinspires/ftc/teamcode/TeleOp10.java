@@ -24,9 +24,9 @@ public class TeleOp10 implements Runnable{
      Telemetry telemetry;
 
      int driveMode = 2;
+     int wheelMode = 1;
      boolean       isSNP = false,
                    isRSNP = false,
-                   isMecanum = false,
                    isDriveOnly,
                    isTeleOpEnded = false,
                    isForceUpdate = false,
@@ -70,9 +70,8 @@ public class TeleOp10 implements Runnable{
             lift = new MotorControl(
                     hwMap.get(DcMotor.class, Statics.GLYPH_LIFT)
                     , false);
-
-            runtime = new ElapsedTime();
         }
+        runtime = new ElapsedTime();
     }
 
     public void setDriveMode(int driveMode) {
@@ -81,9 +80,8 @@ public class TeleOp10 implements Runnable{
         }
     }
 
-    public void setMecanum(boolean value) {
-        isMecanum = value;
-        dt.setWheelMode(value);
+    public void setWheelMode(int wheeMode) {
+        dt.setWheelMode(wheeMode);
     }
 
     public void useSecondGamepad(Controller another) {
@@ -152,10 +150,10 @@ public class TeleOp10 implements Runnable{
                         || gp1.isKeyChanged(Controller.jRightY)
                         || gp1.isKeyChanged(Controller.jLeftX)) {
 
-                    if(isMecanum) {
-                        dt.mecanumDrive(
+                    if(wheelMode != 0) {
+                        dt.drive(
                                 gp1.getValue(Controller.jLeftX),
-                                -gp1.getValue(Controller.jRightY),
+                                -gp1.getValue(Controller.jLeftY),
                                 gp1.getValue(Controller.jRightX));
                     }
                     else { //Tank Drive

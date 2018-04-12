@@ -29,7 +29,13 @@ final public class DriveTrain {
     private              double  rearRightPower     = 0;
     private              boolean is4WD              = false;
     private              boolean isMecanum          = false;
+    private              int wheelMode = 1; //OMNI_WHEEL as default
 
+    static public class WheelMode {
+        final static public int TANK_WHEEL = 0,
+                                OMNI_WHEEL = 1,
+                                MECANUM_WHEEL = 2;
+    }
     //Constructor for 4WD
     public DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
 
@@ -62,13 +68,22 @@ final public class DriveTrain {
         is4WD = false;
     }
 
-    public void setWheelMode(boolean isMecanum) {
-        this.isMecanum = isMecanum;
+    public void setWheelMode(int wheelMode) {
+        if(wheelMode >= 0 && wheelMode <= 2) {this.wheelMode = wheelMode;}
     }
 
     public void drive(double sideMove, double forwardBack, double rotation) {
-        if(isMecanum) mecanumDrive(sideMove, forwardBack,rotation);
-        else tankDrive(forwardBack,rotation);
+        switch(wheelMode) {
+            case WheelMode.TANK_WHEEL:
+                tankDrive(forwardBack,rotation);
+                break;
+
+            case WheelMode.OMNI_WHEEL:
+                omniDrive(sideMove,forwardBack,rotation);
+                break;
+            case WheelMode.MECANUM_WHEEL:
+                mecanumDrive(sideMove,forwardBack,rotation);
+        }
     }
 
     public void tankDrive(double forwardBack, double rotation) {
@@ -93,9 +108,22 @@ final public class DriveTrain {
 
     }
 
+    //From http://ftckey.com/programming/advanced-programming/
+    public void omniDrive(double sideMove,double forwardBack, double rotation) {
+        FR.move(getLimited(forwardBack+sideMove-rotation));
+        FL.move(getLimited(forwardBack-sideMove+rotation));
+        RL.move(getLimited(forwardBack-sideMove-rotation));
+        RR.move(getLimited(forwardBack+sideMove+rotation));
+    }
+
+    public double getLimited(double value) {
+        if(value < -1) return -1;
+        else if(value > 1) return 1;
+        else return value;
+    }
+
     public void mecanumDrive(double sideMove, double forwardBack, double rotation) {
 
-        forwardBack = -forwardBack;
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
         final double r = Math.hypot(sideMove, forwardBack);
         final double robotAngle = Math.atan2(forwardBack, sideMove) - Math.PI / 4;

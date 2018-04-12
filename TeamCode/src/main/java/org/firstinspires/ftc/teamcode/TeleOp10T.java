@@ -12,7 +12,6 @@ final public class TeleOp10T extends LinearOpMode {
 
     private void initialize() {
         teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,true);
-        teleOp.setMecanum(false);
         teleOp.setDriveMode(TeleOp10.DriveMode.NFSControl);
     }
 
