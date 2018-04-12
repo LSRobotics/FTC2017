@@ -16,7 +16,7 @@ final public class TeleOp10M_DR extends LinearOpMode {
     static TeleOp10 teleOp;
 
     private void initialize() {
-        teleOp = new TeleOp10(hardwareMap,gamepad1);
+        teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,true);
         teleOp.setMecanum(true);
         teleOp.setDriveMode(TeleOp10.DriveMode.NFSControl);
         teleOp.useSecondGamepad(new Controller(gamepad2));
@@ -33,19 +33,7 @@ final public class TeleOp10M_DR extends LinearOpMode {
         telemetry.addData("Status","Running");
         telemetry.update();
 
-        //Block when OpMode is not active
-        while (!opModeIsActive());
-
-        teleOp.start();
-
-        while(opModeIsActive()) {
-            if (Statics.SOPH_VISUALIZING) {
-                teleOp.showData(telemetry);
-                telemetry.update();
-            }
-        }
-
-        teleOp.stopWorking();
+        teleOp.run();
 
         telemetry.addData("Status","Stopped");
         telemetry.update();

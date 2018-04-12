@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.actuators.*;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
-public class TeleOp10 extends Thread{
+public class TeleOp10 implements Runnable{
 
      DriveTrain dt;
      MotorControl lift;
@@ -19,15 +20,18 @@ public class TeleOp10 extends Thread{
      Controller gp1, gp2;
 
      ElapsedTime runtime;
+     LinearOpMode opMode;
+     Telemetry telemetry;
 
      int driveMode = 2;
      boolean       isSNP = false,
                    isRSNP = false,
                    isMecanum = false,
+                   isDriveOnly,
                    isTeleOpEnded = false,
                    isForceUpdate = false,
-                   isGrabberClosed = false;
-
+                   isGrabberClosed = false,
+                   isVisualizing = false;
     public static class DriveMode {
         final public static int OneStick = 0,
                                 TwoStick = 1,
@@ -35,32 +39,40 @@ public class TeleOp10 extends Thread{
 
     }
 
-    public TeleOp10(HardwareMap hwMap,Gamepad gamepad1) {
+    public TeleOp10(HardwareMap hwMap,Gamepad gamepad1,LinearOpMode opMode,Telemetry telemetry,boolean isDriveOnly) {
         dt = new DriveTrain(hwMap.dcMotor.get(Statics.SOPH_FL_WHEEL),
                 hwMap.dcMotor.get(Statics.SOPH_RL_WHEEL),
                 hwMap.dcMotor.get(Statics.SOPH_RR_WHEEL),
                 hwMap.dcMotor.get(Statics.SOPH_FR_WHEEL));
 
+        this.opMode = opMode;
+        this.telemetry = telemetry;
         //jArmObj = hardwareMap.get(Servo.class, Statics.Sophomore.Servos.jewel);
         //jArm = new ServoControl(jArmObj, true, 0.13, 0.7);
 
         gp1 = new Controller(gamepad1);
 
-        grabberLeft = new ServoControl(hwMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER),
-                                        false,
-                                        -1,
-                                        1);
+        gp2 = gp1;
 
-        grabberRight = new ServoControl(hwMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER),
-                                        true,
-                                        -1,
-                                        1);
+        this.isDriveOnly = isDriveOnly;
 
-        lift = new MotorControl(
-                            hwMap.get(DcMotor.class, Statics.GLYPH_LIFT)
-                        ,false);
+        if(!isDriveOnly) {
+            grabberLeft = new ServoControl(hwMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER),
+                    false,
+                    -1,
+                    1);
 
-        runtime = new ElapsedTime();
+            grabberRight = new ServoControl(hwMap.get(Servo.class, Statics.SOPH_RIGHT_GLYPH_GRABBER),
+                    true,
+                    -1,
+                    1);
+
+            lift = new MotorControl(
+                    hwMap.get(DcMotor.class, Statics.GLYPH_LIFT)
+                    , false);
+
+            runtime = new ElapsedTime();
+        }
     }
 
     public void setDriveMode(int driveMode) {
@@ -78,38 +90,47 @@ public class TeleOp10 extends Thread{
         gp2 = another;
     }
 
+    public void setVisualizing(boolean value) {
+        isVisualizing = value;
+    }
+
     public void run() {
 
         runtime.reset();
 
-        while(!isTeleOpEnded) {
+        while(opMode.opModeIsActive()) {
             gp1.updateStatus();
             if(gp2 != gp1) gp2.updateStatus();
 
             speedControl();
             driveControl();
-            liftControl();
-            grabberControl();
+            if(!isDriveOnly) {
+                liftControl();
+                grabberControl();
+            }
             isForceUpdate = false;
+
+            if(isVisualizing) {
+                showData();
+            }
         }
     }
 
-    synchronized void speedControl() {
+    void speedControl() {
         if(gp1.isKeyToggled(Controller.RB)) {
-            isSNP = !isSNP;
 
+            isSNP = !isSNP;
             dt.updateSpeedLimit(isSNP? 0.6 : 1.0);
         }
 
-        if(gp2.isKeyToggled(Controller.RB)) {
+        if(gp2.isKeyToggled(Controller.RB) && !isDriveOnly) {
 
             isRSNP = !isRSNP;
-
             lift.updateSpeedLimit(isRSNP ? 0.6 : 1.0);
         }
     }
 
-     synchronized void grabberControl() {
+    void grabberControl() {
         if(gp2.isKeyChanged(Controller.B)) {
             isGrabberClosed = !isGrabberClosed;
             if(!isGrabberClosed) {grabberLeft.move(Statics.GGRABBERL_OPEN);grabberRight.move(Statics.GGRABBERR_OPEN);}
@@ -117,13 +138,13 @@ public class TeleOp10 extends Thread{
         }
     }
 
-     synchronized void liftControl() {
+    void liftControl() {
         if(isForceUpdate || gp2.isKeyChanged(Controller.dPadUp) || gp2.isKeyChanged(Controller.dPadDown)) {
             lift.moveWithButton(gp2.isKeyHeld(Controller.dPadUp),gp2.isKeyHeld(Controller.dPadDown));
         }
     }
 
-     synchronized void driveControl() {
+    void driveControl() {
         switch (driveMode) {
             case DriveMode.OneStick:
                 if(isForceUpdate
@@ -182,17 +203,17 @@ public class TeleOp10 extends Thread{
         return isLeft? grabberLeft : grabberRight;
     }
 
-    synchronized public void stopWorking() {
-        isTeleOpEnded = true;
-        this.interrupt();
-    }
-
-    synchronized public void showData(Telemetry telemetry) {
+    public void showData() {
         telemetry.addData("Status           ", "Run Time: " + runtime.toString());
         telemetry.addData("RL encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_RIGHT));
         telemetry.addData("RL Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
-        telemetry.addData("GGrabbers:       ", grabberLeft.getPosition());
+
+        if(!isDriveOnly) {
+            telemetry.addData("GGrabbers:       ", grabberLeft.getPosition());
+        }
+
+        telemetry.update();
     }
 }

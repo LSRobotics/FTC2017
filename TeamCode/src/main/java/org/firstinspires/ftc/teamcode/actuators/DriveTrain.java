@@ -95,6 +95,7 @@ final public class DriveTrain {
 
     public void mecanumDrive(double sideMove, double forwardBack, double rotation) {
 
+        forwardBack = -forwardBack;
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
         final double r = Math.hypot(sideMove, forwardBack);
         final double robotAngle = Math.atan2(forwardBack, sideMove) - Math.PI / 4;

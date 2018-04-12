@@ -91,42 +91,46 @@ final public class Controller {
 
     public void updateStatus() {
 
-        ValueContainer current = new ValueContainer();
+        try {
+            ValueContainer current = new ValueContainer();
 
-        //data Collection
-        current.preciseKey[jLeftX] = xGP.left_stick_x;
-        current.preciseKey[jLeftY] = xGP.left_stick_y;
-        current.preciseKey[jRightX] = xGP.right_stick_x;
-        current.preciseKey[jRightY] = xGP.right_stick_y;
-        current.preciseKey[LT] = xGP.left_trigger;
-        current.preciseKey[RT] = xGP.right_trigger;
-        current.normalkey[A - NUM_PRECISE_KEY] = xGP.a;
-        current.normalkey[B - NUM_PRECISE_KEY] = xGP.b;
-        current.normalkey[X - NUM_PRECISE_KEY] = xGP.x;
-        current.normalkey[Y - NUM_PRECISE_KEY] = xGP.y;
-        current.normalkey[LB - NUM_PRECISE_KEY] = xGP.left_bumper;
-        current.normalkey[RB - NUM_PRECISE_KEY] = xGP.right_bumper;
-        current.normalkey[back - NUM_PRECISE_KEY] = xGP.back;
-        current.normalkey[start - NUM_PRECISE_KEY] = xGP.start;
-        current.normalkey[jLeftDown - NUM_PRECISE_KEY] = xGP.left_stick_button;
-        current.normalkey[jRightDown - NUM_PRECISE_KEY] = xGP.right_stick_button;
+            //data Collection
+            current.preciseKey[jLeftX] = xGP.left_stick_x;
+            current.preciseKey[jLeftY] = xGP.left_stick_y;
+            current.preciseKey[jRightX] = xGP.right_stick_x;
+            current.preciseKey[jRightY] = xGP.right_stick_y;
+            current.preciseKey[LT] = xGP.left_trigger;
+            current.preciseKey[RT] = xGP.right_trigger;
+            current.normalkey[A - NUM_PRECISE_KEY] = xGP.a;
+            current.normalkey[B - NUM_PRECISE_KEY] = xGP.b;
+            current.normalkey[X - NUM_PRECISE_KEY] = xGP.x;
+            current.normalkey[Y - NUM_PRECISE_KEY] = xGP.y;
+            current.normalkey[LB - NUM_PRECISE_KEY] = xGP.left_bumper;
+            current.normalkey[RB - NUM_PRECISE_KEY] = xGP.right_bumper;
+            current.normalkey[back - NUM_PRECISE_KEY] = xGP.back;
+            current.normalkey[start - NUM_PRECISE_KEY] = xGP.start;
+            current.normalkey[jLeftDown - NUM_PRECISE_KEY] = xGP.left_stick_button;
+            current.normalkey[jRightDown - NUM_PRECISE_KEY] = xGP.right_stick_button;
 
-        //Dpad -- No POV in FTC, makes life easier...
-        current.normalkey[dPadUp-NUM_PRECISE_KEY] = xGP.dpad_up;
-        current.normalkey[dPadDown-NUM_PRECISE_KEY] = xGP.dpad_down;
-        current.normalkey[dPadLeft-NUM_PRECISE_KEY] = xGP.dpad_left;
-        current.normalkey[dPadRight-NUM_PRECISE_KEY] = xGP.dpad_right;
-        //State Comparison
+            //Dpad -- No POV in FTC, makes life easier...
+            current.normalkey[dPadUp - NUM_PRECISE_KEY] = xGP.dpad_up;
+            current.normalkey[dPadDown - NUM_PRECISE_KEY] = xGP.dpad_down;
+            current.normalkey[dPadLeft - NUM_PRECISE_KEY] = xGP.dpad_left;
+            current.normalkey[dPadRight - NUM_PRECISE_KEY] = xGP.dpad_right;
+            //State Comparison
 
-        for(int i = 0; i < NUM_PRECISE_KEY; ++i) {
-            state[i] = current.preciseKey[i] != previous.preciseKey[i];
+            for (int i = 0; i < NUM_PRECISE_KEY; ++i) {
+                state[i] = current.preciseKey[i] != previous.preciseKey[i];
+            }
+
+            for (int i = 0; i < NUM_NORMAL_KEY; ++i) {
+                state[i + NUM_PRECISE_KEY] = current.normalkey[i] != previous.normalkey[i];
+            }
+
+            previous = current;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        for(int i = 0; i < NUM_NORMAL_KEY; ++i) {
-            state[i + NUM_PRECISE_KEY] = current.normalkey[i] != previous.normalkey[i];
-        }
-
-        previous = current;
     }
 
 }
