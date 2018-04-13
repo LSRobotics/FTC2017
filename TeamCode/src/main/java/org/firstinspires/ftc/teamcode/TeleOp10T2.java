@@ -2,22 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.actuators.MotorControl;
-import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
-import org.firstinspires.ftc.teamcode.actuators.Controller;
-import org.firstinspires.ftc.teamcode.actuators.ServoControl;
-import org.firstinspires.ftc.teamcode.databases.Statics;
 
 
 @TeleOp(name="SOPH_tankDrive_monoStick", group="Sophomore")
-final public class TeleOp10T2 extends LinearOpMode {
+final class TeleOp10T2 extends LinearOpMode {
 
     //Initialize objects
-    static TeleOp10 teleOp;
+    private static TeleOp10 teleOp;
 
     private void initialize() {
         teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,true);

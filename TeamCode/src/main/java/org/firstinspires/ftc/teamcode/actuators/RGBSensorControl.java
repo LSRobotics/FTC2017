@@ -11,8 +11,10 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 final public class RGBSensorControl {
 
-    public class BallColor {
-        final public static int BLUE = 0, RED = 1, UNKNOWN = 2;
+    class BallColor {
+        final static int BLUE = 0;
+        final static int RED = 1;
+        final static int UNKNOWN = 2;
     }
 
     private final ColorSensor device;

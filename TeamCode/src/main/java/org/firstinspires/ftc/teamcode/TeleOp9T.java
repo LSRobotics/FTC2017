@@ -10,13 +10,11 @@ import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
-import java.util.ResourceBundle;
-
 /**
  * Created by LBYPatrick on 2017/11/5.
  */
 @TeleOp(name="FRESH_tankDrive", group="Freshman")
-final public class TeleOp9T extends LinearOpMode {
+final class TeleOp9T extends LinearOpMode {
 
         //Initialize objects
         private     DriveTrain      tankWheel;

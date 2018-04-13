@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.actuators.*;
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  */
 @SuppressWarnings("StatementWithEmptyBody")
 @Autonomous(name = "FRESH_FORWARD",group = "Freshman")
-final public class AutonFresh extends LinearOpMode {
+final class AutonFresh extends LinearOpMode {
 
     private     AutonHelper     autonControl;
     private     MotorControl    intakes;

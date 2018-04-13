@@ -22,8 +22,8 @@ final public class Statics {
         //Sophomore's Wheels
         public static final String SOPH_FL_WHEEL = "front_left_drive";
         public static final String SOPH_FR_WHEEL = "front_right_drive";
-        public static final String SOPH_RL_WHEEL = "rear_left_drive";
-        public static final String SOPH_RR_WHEEL = "rear_right_drive";
+        public static final String SOPH_BL_WHEEL = "rear_left_drive";
+        public static final String SOPH_BR_WHEEL = "rear_right_drive";
 
 
         //Sophomore's servos

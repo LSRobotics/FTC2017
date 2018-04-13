@@ -19,26 +19,26 @@ final public class Controller {
     private boolean isDebug = false;
 
     //Indexes for the buttons
-    final public static int jLeftX = 0,
-            jLeftY = 1,
-            jRightX = 2,
-            jRightY = 3,
-            LT = 4,
-            RT = 5,
-            jLeftDown = 6,
-            jRightDown = 7,
-            A = 8,
-            B = 9,
-            X = 10,
-            Y = 11,
-            LB = 12,
-            RB = 13,
-            back = 14,
-            start = 15,
-            dPadUp = 16,
-            dPadDown = 17,
-            dPadLeft = 18,
-            dPadRight = 19;
+    final public static int jLeftX = 0;
+    final public static int jLeftY = 1;
+    final public static int jRightX = 2;
+    private final static int jRightY = 3;
+    final public static int LT = 4;
+    final public static int RT = 5;
+    private final static int jLeftDown = 6;
+    private final static int jRightDown = 7;
+    private final static int A = 8;
+    final public static int B = 9;
+    private final static int X = 10;
+    private final static int Y = 11;
+    final public static int LB = 12;
+    final public static int RB = 13;
+    private final static int back = 14;
+    private final static int start = 15;
+    final public static int dPadUp = 16;
+    final public static int dPadDown = 17;
+    final public static int dPadLeft = 18;
+    final public static int dPadRight = 19;
 
     private ValueContainer previous = new ValueContainer();
     private Gamepad xGP;
@@ -50,11 +50,11 @@ final public class Controller {
     }
     private class ValueContainer {
 
-        public double[] preciseKey = new double[NUM_PRECISE_KEY];
-        public boolean[] normalkey = new boolean[NUM_NORMAL_KEY];
+        double[] preciseKey = new double[NUM_PRECISE_KEY];
+        boolean[] normalkey = new boolean[NUM_NORMAL_KEY];
 
 
-        public ValueContainer() {
+        ValueContainer() {
             for (int i = 0; i < NUM_PRECISE_KEY; ++i) { preciseKey[i] = 0; }
             for (int i = 0; i < NUM_NORMAL_KEY; ++i) { normalkey[i] = false; }
         }
@@ -71,6 +71,14 @@ final public class Controller {
 
     public boolean isKeyHeld(int key) {
         return getValue(key) > 0;
+    }
+
+    public boolean isKeysChanged(int... keys) {
+        for (int key : keys) {
+            if(isKeyChanged(key)) return true;
+        }
+
+        return false;
     }
 
     public boolean isGamepadChanged() {

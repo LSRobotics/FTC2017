@@ -19,8 +19,8 @@ final public class DriveTrain {
 
     private              MotorControl FL                 = null;
     private              MotorControl FR                 = null;
-    private              MotorControl RL                 = null;
-    private              MotorControl RR                 = null;
+    private              MotorControl BL = null;
+    private              MotorControl BR = null;
     private              double  maxSpeed           = 1.0;
     private              double  speedLevel         = 1.0;
     private              double  frontLeftPower     = 0;
@@ -31,21 +31,21 @@ final public class DriveTrain {
     private              boolean isMecanum          = false;
     private              int wheelMode = 1; //OMNI_WHEEL as default
 
-    static public class WheelMode {
-        final static public int TANK_WHEEL = 0,
-                                OMNI_WHEEL = 1,
-                                MECANUM_WHEEL = 2;
+    static class WheelMode {
+        final static int TANK_WHEEL = 0;
+        final static int OMNI_WHEEL = 1;
+        final static int MECANUM_WHEEL = 2;
     }
     //Constructor for 4WD
-    public DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
+    private DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
 
         FL = frontLeftMotor;
         FR = frontRightMotor;
-        RL = rearLeftMotor;
-        RR = rearRightMotor;
+        BL = rearLeftMotor;
+        BR = rearRightMotor;
 
         FL.setReverse(true);
-        FR.setReverse(true);
+        BL.setReverse(true);
 
         is4WD = true;
     }
@@ -62,8 +62,8 @@ final public class DriveTrain {
     //Constructor for 2WD
     public DriveTrain(MotorControl leftMotor, MotorControl rightMotor) {
 
-        RL = leftMotor;
-        RR = rightMotor;
+        BL = leftMotor;
+        BR = rightMotor;
 
         is4WD = false;
     }
@@ -99,8 +99,8 @@ final public class DriveTrain {
             frontRightPower = rearRightPower;
         }
         //Pass calculated power level to motors
-        RL.move(rearLeftPower);
-        RR.move(-rearRightPower);
+        BL.move(rearLeftPower);
+        BR.move(-rearRightPower);
         if(is4WD) {
             FL.move(frontLeftPower);
             FR.move(-frontRightPower);
@@ -109,14 +109,17 @@ final public class DriveTrain {
     }
 
     //From http://ftckey.com/programming/advanced-programming/
-    public void omniDrive(double sideMove,double forwardBack, double rotation) {
+    private void omniDrive(double sideMove, double forwardBack, double rotation) {
+
+        sideMove = -sideMove;
+
         FR.move(getLimited(forwardBack+sideMove-rotation));
         FL.move(getLimited(forwardBack-sideMove+rotation));
-        RL.move(getLimited(forwardBack-sideMove-rotation));
-        RR.move(getLimited(forwardBack+sideMove+rotation));
+        BR.move(getLimited(forwardBack-sideMove-rotation));
+        BL.move(getLimited(forwardBack+sideMove+rotation));
     }
 
-    public double getLimited(double value) {
+    private double getLimited(double value) {
         if(value < -1) return -1;
         else if(value > 1) return 1;
         else return value;
@@ -136,8 +139,8 @@ final public class DriveTrain {
         // Send calculated power to motors
         FL.move(frontLeftPower);
         FR.move(frontRightPower);
-        RL.move(rearLeftPower);
-        RR.move(rearRightPower);
+        BL.move(rearLeftPower);
+        BR.move(rearRightPower);
     }
 
     public void updateSpeedLimit(double speed) {
@@ -146,16 +149,16 @@ final public class DriveTrain {
             FL.updateSpeedLimit(speed);
             FR.updateSpeedLimit(speed);
         }
-        RL.updateSpeedLimit(speed);
-        RR.updateSpeedLimit(speed);
+        BL.updateSpeedLimit(speed);
+        BR.updateSpeedLimit(speed);
     }
 
     public double getEncoderInfo(Wheels position) {
         switch (position) {
             case FRONT_LEFT  : return FR.getCurrentPosition();
             case FRONT_RIGHT : return FL.getCurrentPosition();
-            case REAR_LEFT   : return RL.getCurrentPosition();
-            case REAR_RIGHT  : return RR.getCurrentPosition();
+            case REAR_LEFT   : return BL.getCurrentPosition();
+            case REAR_RIGHT  : return BR.getCurrentPosition();
             default          : return 666; // Actually won't happen because the enum has already limited the actual parameter
         }
     }
@@ -164,8 +167,8 @@ final public class DriveTrain {
         switch (position) {
             case FRONT_LEFT  : return FR.getPower();
             case FRONT_RIGHT : return FL.getPower();
-            case REAR_LEFT   : return RL.getPower();
-            case REAR_RIGHT  : return RR.getPower();
+            case REAR_LEFT   : return BL.getPower();
+            case REAR_RIGHT  : return BR.getPower();
             default          : return 666; // Won't happen because of the enum in parameter
         }
     }

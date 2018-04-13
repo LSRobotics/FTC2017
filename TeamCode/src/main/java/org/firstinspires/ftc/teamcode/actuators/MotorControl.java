@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.actuators;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * Created by LBYPatrick on 11/9/2017.
@@ -28,7 +27,7 @@ public class MotorControl {
         this(dcMotorObj, true);
     }
 
-    public double getLimitedSpeed(double rawSpeed) {return rawSpeed * speedLimit;}
+    private double getLimitedSpeed(double rawSpeed) {return rawSpeed * speedLimit;}
 
     public void moveWithButton(boolean up, boolean down) {
 
@@ -46,7 +45,7 @@ public class MotorControl {
         return getPower();
     }
 
-    public int getPosition() {
+    private int getPosition() {
         return motor.getCurrentPosition();
     }
 

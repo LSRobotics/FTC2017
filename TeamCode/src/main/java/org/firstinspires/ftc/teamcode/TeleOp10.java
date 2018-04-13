@@ -11,39 +11,41 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.actuators.*;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
-public class TeleOp10 implements Runnable{
+class TeleOp10 implements Runnable{
 
-     DriveTrain dt;
-     MotorControl lift;
-     ServoControl grabberLeft,
-                        grabberRight;
-     Controller gp1, gp2;
+     private DriveTrain dt;
+     private MotorControl lift;
+     private ServoControl grabberLeft;
+    private ServoControl grabberRight;
+     private Controller gp1;
+    private Controller gp2;
 
-     ElapsedTime runtime;
-     LinearOpMode opMode;
-     Telemetry telemetry;
+     private ElapsedTime runtime;
+     private LinearOpMode opMode;
+     private Telemetry telemetry;
 
-     int driveMode = 2;
-     int wheelMode = 1;
-     boolean       isSNP = false,
-                   isRSNP = false,
-                   isDriveOnly,
-                   isTeleOpEnded = false,
-                   isForceUpdate = false,
-                   isGrabberClosed = false,
-                   isVisualizing = false;
+     private int driveMode = 2;
+     private int wheelMode = 1;
+     private boolean       isSNP = false;
+    private boolean isRSNP = false;
+    private boolean isDriveOnly;
+    boolean isTeleOpEnded = false;
+    private boolean isForceUpdate = false;
+    private boolean isGrabberClosed = false;
+    private boolean isVisualizing = false;
     public static class DriveMode {
-        final public static int OneStick = 0,
-                                TwoStick = 1,
-                                NFSControl = 2;
+        final public static int OneStick = 0;
+        final static int TwoStick = 1;
+        final public static int NFSControl = 2;
+        final static int ArrowKey = 3;
 
     }
 
     public TeleOp10(HardwareMap hwMap,Gamepad gamepad1,LinearOpMode opMode,Telemetry telemetry,boolean isDriveOnly) {
         dt = new DriveTrain(hwMap.dcMotor.get(Statics.SOPH_FL_WHEEL),
-                hwMap.dcMotor.get(Statics.SOPH_RL_WHEEL),
-                hwMap.dcMotor.get(Statics.SOPH_RR_WHEEL),
-                hwMap.dcMotor.get(Statics.SOPH_FR_WHEEL));
+                hwMap.dcMotor.get(Statics.SOPH_FR_WHEEL),
+                hwMap.dcMotor.get(Statics.SOPH_BL_WHEEL),
+                hwMap.dcMotor.get(Statics.SOPH_BR_WHEEL));
 
         this.opMode = opMode;
         this.telemetry = telemetry;
@@ -114,7 +116,7 @@ public class TeleOp10 implements Runnable{
         }
     }
 
-    void speedControl() {
+    private void speedControl() {
         if(gp1.isKeyToggled(Controller.RB)) {
 
             isSNP = !isSNP;
@@ -128,7 +130,7 @@ public class TeleOp10 implements Runnable{
         }
     }
 
-    void grabberControl() {
+    private void grabberControl() {
         if(gp2.isKeyChanged(Controller.B)) {
             isGrabberClosed = !isGrabberClosed;
             if(!isGrabberClosed) {grabberLeft.move(Statics.GGRABBERL_OPEN);grabberRight.move(Statics.GGRABBERR_OPEN);}
@@ -136,74 +138,80 @@ public class TeleOp10 implements Runnable{
         }
     }
 
-    void liftControl() {
-        if(isForceUpdate || gp2.isKeyChanged(Controller.dPadUp) || gp2.isKeyChanged(Controller.dPadDown)) {
+    private void liftControl() {
+        if(isForceUpdate || gp2.isKeysChanged(Controller.dPadUp,Controller.dPadDown)) {
             lift.moveWithButton(gp2.isKeyHeld(Controller.dPadUp),gp2.isKeyHeld(Controller.dPadDown));
         }
     }
 
-    void driveControl() {
+    private void driveControl() {
         switch (driveMode) {
             case DriveMode.OneStick:
-                if(isForceUpdate
-                        || gp1.isKeyChanged(Controller.jRightX)
-                        || gp1.isKeyChanged(Controller.jRightY)
-                        || gp1.isKeyChanged(Controller.jLeftX)) {
+                if(isForceUpdate ||
+                        gp1.isKeysChanged(
+                                Controller.jLeftX,
+                                Controller.jLeftY,
+                                Controller.jRightX
+                        )) {
 
+                    //Holonomic drive if the wheel mode is not tank drive (then it would be either mecanum or omni)
                     if(wheelMode != 0) {
-                        dt.drive(
-                                gp1.getValue(Controller.jLeftX),
+                        dt.drive(gp1.getValue(Controller.jLeftX),
                                 -gp1.getValue(Controller.jLeftY),
                                 gp1.getValue(Controller.jRightX));
                     }
                     else { //Tank Drive
-                        dt.tankDrive(
-                                -gp1.getValue(Controller.jLeftY),
+                        dt.tankDrive(-gp1.getValue(Controller.jLeftY),
                                 gp1.getValue(Controller.jLeftX));
                     }
                 }
                 break;
             case DriveMode.TwoStick:
                 if(isForceUpdate
-                        || gp1.isKeyChanged(Controller.jLeftY)
-                        || gp1.isKeyChanged(Controller.jRightX)
-                        || gp1.isKeyChanged(Controller.dPadLeft)
-                        || gp1.isKeyChanged(Controller.dPadRight)) {
+                        || gp1.isKeysChanged(
+                                Controller.jLeftY,
+                                Controller.jRightX,
+                                Controller.dPadLeft,
+                                Controller.dPadRight)) {
 
-                    dt.drive(
-                            gp1.getValue(Controller.dPadRight)-gp1.getValue(Controller.dPadLeft),
+                    dt.drive(gp1.getValue(Controller.dPadRight)-gp1.getValue(Controller.dPadLeft),
                             -gp1.getValue(Controller.jLeftY),
                             gp1.getValue(Controller.jRightX));
                 }
                 break;
             case DriveMode.NFSControl:
-                if(isForceUpdate
-                        || gp1.isKeyChanged(Controller.RT)
-                        || gp1.isKeyChanged(Controller.LT)
-                        || gp1.isKeyChanged(Controller.jLeftX)
-                        || gp1.isKeyChanged(Controller.dPadLeft)
-                        || gp1.isKeyChanged(Controller.dPadRight)) {
-                    dt.drive(
-                            gp1.getValue(Controller.dPadRight)-gp1.getValue(Controller.dPadLeft),
+                if(isForceUpdate || gp1.isKeysChanged(
+                            Controller.RT,
+                            Controller.LT,
+                            Controller.jLeftX,
+                            Controller.dPadLeft,
+                            Controller.dPadRight)) {
+
+                    dt.drive(gp1.getValue(Controller.dPadRight)-gp1.getValue(Controller.dPadLeft),
                             gp1.getValue(Controller.RT)-gp1.getValue(Controller.LT),
                             gp1.getValue(Controller.jLeftX));
                 }
                 break;
+            case DriveMode.ArrowKey:
+                if(isForceUpdate
+                    || gp1.isKeysChanged(
+                        Controller.dPadUp,
+                        Controller.dPadDown,
+                        Controller.dPadLeft,
+                        Controller.dPadRight,
+                        Controller.jLeftX)) {
+
+                    dt.drive(gp1.getValue(Controller.dPadLeft) - gp1.getValue(Controller.dPadRight),
+                            gp1.getValue(Controller.dPadUp)-gp1.getValue(Controller.dPadDown),
+                            gp1.getValue(Controller.jLeftX));
+                }
             default : break;
         }
     }
 
-    public DriveTrain getDriveTrain() { return dt; }
-
-    public MotorControl getLift() { return lift; }
-
-    public ServoControl getGrabber(boolean isLeft) {
-        return isLeft? grabberLeft : grabberRight;
-    }
-
-    public void showData() {
+    private void showData() {
         telemetry.addData("Status           ", "Run Time: " + runtime.toString());
-        telemetry.addData("RL encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
+        telemetry.addData("L encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_RIGHT));
         telemetry.addData("RL Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
