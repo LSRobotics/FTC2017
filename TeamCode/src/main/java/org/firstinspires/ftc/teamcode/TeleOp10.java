@@ -72,6 +72,8 @@ class TeleOp10 implements Runnable{
             lift = new MotorControl(
                     hwMap.get(DcMotor.class, Statics.GLYPH_LIFT)
                     , false);
+
+            lift.updateSpeedLimit(0.25);
         }
         runtime = new ElapsedTime();
     }
@@ -126,7 +128,7 @@ class TeleOp10 implements Runnable{
         if(gp2.isKeyToggled(Controller.RB) && !isDriveOnly) {
 
             isRSNP = !isRSNP;
-            lift.updateSpeedLimit(isRSNP ? 0.6 : 1.0);
+            lift.updateSpeedLimit(isRSNP ? 0.15 : 0.25);
         }
     }
 
@@ -139,9 +141,10 @@ class TeleOp10 implements Runnable{
     }
 
     private void liftControl() {
-        if(isForceUpdate || gp2.isKeysChanged(Controller.dPadUp,Controller.dPadDown)) {
-            lift.moveWithButton(gp2.isKeyHeld(Controller.dPadUp),gp2.isKeyHeld(Controller.dPadDown));
-        }
+
+            lift.moveWithButton(
+                    lift.getCurrentPosition() > -900? gp2.isKeyHeld(Controller.dPadDown) : false
+                    ,lift.getCurrentPosition() < 850? gp2.isKeyHeld(Controller.dPadUp) : false);
     }
 
     private void driveControl() {
@@ -215,6 +218,7 @@ class TeleOp10 implements Runnable{
         telemetry.addData("RR encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_RIGHT));
         telemetry.addData("RL Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
+        telemetry.addData("Lift Encoder", lift.getCurrentPosition());
 
         if(!isDriveOnly) {
             telemetry.addData("GGrabbers:       ", grabberLeft.getPosition());

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 12/7/2017.
  */
 @TeleOp (name="Vuforia Test",group="test")
-class VuforiaTest extends LinearOpMode {
+public class VuforiaTest extends LinearOpMode {
 
     private VuforiaControl vuforia;
 

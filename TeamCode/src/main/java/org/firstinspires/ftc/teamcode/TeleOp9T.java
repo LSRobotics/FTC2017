@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 2017/11/5.
  */
 @TeleOp(name="FRESH_tankDrive", group="Freshman")
-final class TeleOp9T extends LinearOpMode {
+final public class TeleOp9T extends LinearOpMode {
 
         //Initialize objects
         private     DriveTrain      tankWheel;

@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="SOPH_tankDrive_monoStick", group="Sophomore")
-final class TeleOp10T2 extends LinearOpMode {
+final public class TeleOp10T2 extends LinearOpMode {
 
     //Initialize objects
     private static TeleOp10 teleOp;
 
     private void initialize() {
-        teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,true);
+        teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,false);
         teleOp.setDriveMode(TeleOp10.DriveMode.OneStick);
     }
 
