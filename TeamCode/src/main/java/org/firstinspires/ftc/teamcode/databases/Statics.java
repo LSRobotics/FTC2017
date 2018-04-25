@@ -43,9 +43,7 @@ final public class Statics {
         public static final String ARM_COLOR = "arm_color_sensor";
         public static final String GLYPH_LIFT = "glyph_lift_motor";
 
-        public static final double GGRABBERR_CLOSE = 1.0;
-        public static final double GGRABBERR_OPEN  = 0.7;
-        public static final double GGRABBERL_CLOSE = 0.2;
-        public static final double GGRABBERL_OPEN  = -0.2;
+        public static final double GGRABBER_CLOSE = 0.44;
+        public static final double GGRABBER_OPEN  = 0.71;
 
 }

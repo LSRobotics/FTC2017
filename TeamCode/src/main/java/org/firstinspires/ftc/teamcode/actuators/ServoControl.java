@@ -12,37 +12,42 @@ final public class ServoControl {
     //private static Servo servoObj = null;
     private double  minPos;
     private double  maxPos;
-    private double  speedLimit  = 0.03;
+    private double  speedLimit  = 0.3;
     private boolean isClockWise;
-    final private Servo servo;
+    private Servo servo;
 
 
     public double getMaxPosition() {return maxPos;}
 
     public void updateSpeedLimit(double speed){this.speedLimit = speed;}
     
-    public double getLimitedSpeed(double speed) {return speed*speedLimit;}
+    double getLimitedSpeed(double speed) {return speed*speedLimit;}
+    double getLimitedPosition(double position) {return (position > maxPos ? maxPos : (position < minPos? minPos : position));}
     
     public ServoControl(Servo servoObject, boolean isForward, double min, double max) {
         minPos = min;
         maxPos = max;
         servo = servoObject;
+        servo.setDirection(Servo.Direction.FORWARD);
         servo.setDirection((isForward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
         isClockWise = isForward;
     }
-    public void moveGlyphGrabber(boolean inward){
-        
+    public void moveWithButton(boolean inward) {
+
         final double currentPosBuffer = servo.getPosition();
-        final double expectedPosition = inward? (currentPosBuffer - (speedLimit*speedLimit))
-                                        : (currentPosBuffer + (speedLimit*speedLimit));
+        final double expectedPosition = inward ? (currentPosBuffer - (speedLimit * speedLimit))
+                : (currentPosBuffer + (speedLimit * speedLimit));
 
-        if(expectedPosition > maxPos || expectedPosition < minPos) return; //Quit if out of range
+        move(expectedPosition);
 
-        if(expectedPosition < currentPosBuffer) {
-            servo.setDirection(isClockWise ? Servo.Direction.REVERSE : Servo.Direction.FORWARD);
-            servo.setPosition(-expectedPosition);
-            servo.setDirection(isClockWise ? Servo.Direction.FORWARD : Servo.Direction.REVERSE);
-        }
+    }
+
+    public void moveFree(boolean inward) {
+        final double currentPosBuffer = servo.getPosition();
+        final double expectedPosition = inward ? (currentPosBuffer - (speedLimit * speedLimit))
+                : (currentPosBuffer + (speedLimit * speedLimit));
+
+        if(!(expectedPosition > 1 || expectedPosition < -1))
         servo.setPosition(expectedPosition);
 
     }
@@ -52,13 +57,17 @@ final public class ServoControl {
     }
 
     public void move(double position) {
+
+        /*
         double currentPosBuffer = servo.getPosition();
+
 
         if(position < currentPosBuffer) {
             servo.setDirection(isClockWise ? Servo.Direction.REVERSE : Servo.Direction.FORWARD);
             servo.setPosition(-position);
             servo.setDirection(isClockWise ? Servo.Direction.FORWARD : Servo.Direction.REVERSE);
         }
-        servo.setPosition(position);
+        */
+        servo.setPosition(getLimitedPosition(position));
     }
 }
