@@ -32,6 +32,7 @@ class TeleOp10 implements Runnable {
     private boolean isForceUpdate = false;
     private boolean isGrabberClosed = false;
     private boolean isVisualizing = false;
+    private boolean isBoostDrive=false;
 
     public TeleOp10(HardwareMap hwMap, Gamepad gamepad1, LinearOpMode opMode, Telemetry telemetry, boolean isDriveOnly) {
         dt = new DriveTrain(hwMap.dcMotor.get(Statics.SOPH_FL_WHEEL),
@@ -117,7 +118,10 @@ class TeleOp10 implements Runnable {
         if (gp1.isKeyToggled(Controller.RB)) {
 
             isSNP = !isSNP;
-            dt.updateSpeedLimit(isSNP ? 0.6 : 1.0);
+            dt.updateSpeedLimit(isSNP ? 0.4 : 1.0);
+        }
+        else if(gp1.isKeyToggled(Controller.X)) {
+            isBoostDrive = !isBoostDrive;
         }
 
         if (gp2.isKeyToggled(Controller.RB) && !isDriveOnly) {
@@ -160,9 +164,9 @@ class TeleOp10 implements Runnable {
 
                     //Holonomic drive if the wheel mode is not tank drive (then it would be either mecanum or omni)
                     if (wheelMode != 0) {
-                        dt.drive(gp1.getValue(Controller.jLeftX),
+                        dt.drive(gp1.getValue(Controller.jLeftX) * (isBoostDrive? 0.2 : 1),
                                 -gp1.getValue(Controller.jLeftY),
-                                gp1.getValue(Controller.jRightX));
+                                gp1.getValue(Controller.jRightX)*(isBoostDrive? 0.2 : 1)*0.6);
                     } else { //Tank Drive
                         dt.tankDrive(-gp1.getValue(Controller.jLeftY),
                                 gp1.getValue(Controller.jLeftX));
