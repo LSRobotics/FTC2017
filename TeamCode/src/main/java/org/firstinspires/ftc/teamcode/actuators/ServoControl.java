@@ -19,10 +19,10 @@ final public class ServoControl {
 
     public double getMaxPosition() {return maxPos;}
 
-    public void updateSpeedLimit(double speed){this.speedLimit = speed;}
+    public void updateSpeedLimit(double speed){speedLimit = speed;}
     
-    double getLimitedSpeed(double speed) {return speed*speedLimit;}
-    double getLimitedPosition(double position) {return (position > maxPos ? maxPos : (position < minPos? minPos : position));}
+    private double getLimitedSpeed(double speed) {return speed*speedLimit;}
+    private double getLimitedPosition(double position) {return (position > maxPos ? maxPos : (position < minPos? minPos : position));}
     
     public ServoControl(Servo servoObject, boolean isForward, double min, double max) {
         minPos = min;

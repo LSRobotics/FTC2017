@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
+
 
 @TeleOp(name="SOPH_tankDrive_monoStick", group="Sophomore")
 final public class TeleOp10T2 extends LinearOpMode {
@@ -13,6 +15,7 @@ final public class TeleOp10T2 extends LinearOpMode {
     private void initialize() {
         teleOp = new TeleOp10(hardwareMap,gamepad1,this,telemetry,false);
         teleOp.setDriveMode(TeleOp10.DriveMode.OneStick);
+        teleOp.setWheelMode(DriveTrain.WheelMode.TANK_WHEEL);
     }
 
     @Override

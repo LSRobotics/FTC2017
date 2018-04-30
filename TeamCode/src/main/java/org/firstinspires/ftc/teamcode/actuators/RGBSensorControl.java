@@ -23,7 +23,7 @@ final public class RGBSensorControl {
     public int greenVal = 0;
     private float [] hsvValue = new float[3];
 
-    public RGBSensorControl (ColorSensor colorSensorObject) {this.device = colorSensorObject;}
+    public RGBSensorControl (ColorSensor device) {this.device = device;}
 
     public int getBallColor() {
 

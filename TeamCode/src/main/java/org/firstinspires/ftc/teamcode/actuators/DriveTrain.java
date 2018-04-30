@@ -49,7 +49,7 @@ final public class DriveTrain {
      * @param rearLeftMotor back left motor.
      * @param rearRightMotor back right motor.
      */
-    private DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
+    public DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
 
         FL = frontLeftMotor;
         FR = frontRightMotor;
@@ -159,7 +159,7 @@ final public class DriveTrain {
      * @param rotation
      */
     //From http://ftckey.com/programming/advanced-programming/
-    private void omniDrive(double sideMove, double forwardBack, double rotation) {
+    public void omniDrive(double sideMove, double forwardBack, double rotation) {
 
         sideMove = -sideMove;
 

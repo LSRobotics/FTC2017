@@ -45,7 +45,7 @@ public class MotorControl {
         return getPower();
     }
 
-    private int getPosition() {
+    public int getPosition() {
         return motor.getCurrentPosition();
     }
 

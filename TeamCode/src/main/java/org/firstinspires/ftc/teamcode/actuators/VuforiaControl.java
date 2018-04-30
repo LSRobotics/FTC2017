@@ -14,12 +14,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 final public class VuforiaControl {
 
-    class Positions {
-        final static int LEFT = 0;
-        final static int CENTER = 1;
-        final static int RIGHT = 2;
-        final static int UNKNOWN = 3;
-        final static int ERROR = 4;
+    public static class Positions {
+        final public static int LEFT = 0;
+        final public static int CENTER = 1;
+        final public static int RIGHT = 2;
+        final public static int UNKNOWN = 3;
+        final public static int ERROR = 4;
     }
 
     private final VuforiaTrackable relicTemplate;

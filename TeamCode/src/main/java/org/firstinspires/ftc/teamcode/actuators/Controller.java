@@ -44,7 +44,7 @@ final public class Controller {
     private Gamepad xGP;
     private boolean[] state = new boolean[NUM_NORMAL_KEY + NUM_PRECISE_KEY];
 
-    private void setDebugMode(boolean value) {
+    public void setDebugMode(boolean value) {
         isDebug = value;
     }
     private class ValueContainer {

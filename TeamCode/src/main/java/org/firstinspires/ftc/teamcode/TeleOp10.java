@@ -83,8 +83,12 @@ class TeleOp10 implements Runnable {
         }
     }
 
-    public void setWheelMode(int wheeMode) {
-        dt.setWheelMode(wheeMode);
+    /**
+     * Sets the wheel mode.
+     * @param wheelMode Wheel Mode. It's in DriveTrain.WheelMode
+     */
+    public void setWheelMode(int wheelMode) {
+        dt.setWheelMode(wheelMode);
     }
 
     public void useSecondGamepad(Controller another) {
