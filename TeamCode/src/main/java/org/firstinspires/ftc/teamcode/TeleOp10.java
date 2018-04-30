@@ -103,8 +103,8 @@ class TeleOp10 implements Runnable {
 
         runtime.reset();
 
-        grabberLeft.move(0);
-        grabberRight.move(0);
+        //grabberLeft.move(0);
+        //grabberRight.move(0);
 
         while (opMode.opModeIsActive()) {
             gp1.updateStatus();
@@ -242,10 +242,6 @@ class TeleOp10 implements Runnable {
         telemetry.addData("RL Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_LEFT));
         telemetry.addData("RR Wheel:        ", dt.getSpeed(DriveTrain.Wheels.REAR_RIGHT));
         telemetry.addData("Lift Encoder", lift.getCurrentPosition());
-
-        if (!isDriveOnly) {
-            telemetry.addData("GGrabbers:       ", grabberLeft.getPosition());
-        }
 
         telemetry.update();
     }
