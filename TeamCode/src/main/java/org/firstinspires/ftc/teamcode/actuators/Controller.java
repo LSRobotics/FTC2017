@@ -44,8 +44,7 @@ final public class Controller {
     private Gamepad xGP;
     private boolean[] state = new boolean[NUM_NORMAL_KEY + NUM_PRECISE_KEY];
 
-
-    public void setDebugMode(boolean value) {
+    private void setDebugMode(boolean value) {
         isDebug = value;
     }
     private class ValueContainer {
@@ -60,11 +59,20 @@ final public class Controller {
         }
     }
 
+    /**
+     * Constructor.
+     * @param gamepad The original Gamepad object(which is going to be "gamepad1" or "gamepad2" in FTC).
+     */
     public Controller(Gamepad gamepad) {
         xGP = gamepad;
         for(int i = 0; i < state.length; ++i) { state[i] = false; }
     }
 
+    /**
+     * To tell whether a key is changed since last scan.
+     * @param key The index of the key.
+     * @return true if the key is changed, false otherwise.
+     */
     public boolean isKeyChanged(int key) {
         return state[key];
     }
@@ -81,6 +89,10 @@ final public class Controller {
         return false;
     }
 
+    /**
+     * To tell whether any of the keys is changed.
+     * @return true if there's any key that's changed, false otherwise.
+     */
     public boolean isGamepadChanged() {
         for(boolean i : state) {
             if(i) return true;
@@ -88,15 +100,28 @@ final public class Controller {
         return false;
     }
 
+    /**
+     * To get the value of a key.
+     * @param key The index of the key.
+     * @return the exact value of the key if it is a precise key, or 1 / 0 if it is a button.
+     */
     public double getValue(int key) {
         if(key < NUM_PRECISE_KEY) return previous.preciseKey[key];
         else return previous.normalkey[key-NUM_PRECISE_KEY]? 1 : 0;
     }
 
+    /**
+     * To tell whether a key is toggled.
+     * @param key The index of the key.
+     * @return true if the key is toggled, false otherwise.
+     */
     public boolean isKeyToggled(int key) {
         return isKeyChanged(key) && (getValue(key) > 0);
     }
 
+    /**
+     * Scans the Gamepad. (Needs to be called before you get any value);
+     */
     public void updateStatus() {
 
         try {

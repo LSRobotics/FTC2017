@@ -15,35 +15,51 @@ final public class AutonHelper {
     private final DriveTrain driveObj;
     private boolean isMecanum;
 
-
-    public AutonHelper(LinearOpMode opMode, DriveTrain driveTrainObject, boolean isMecanum) {
+    /**
+     * Constructor
+     * @param opMode the LinearOpMode object from your class extended from LinearOpMode
+     * @param driveTrainObject The DriveTrain object you initialized to drive the robot
+     */
+    public AutonHelper(LinearOpMode opMode, DriveTrain driveTrainObject) {
         opModeObj = opMode;
         driveObj = driveTrainObject;
-        this.isMecanum = isMecanum;
     }
 
+    /**
+     * Drives the robot.
+     * @param forwardBack the speed for going forward and back.
+     * @param leftRight the speed for robot rotation (if it is a positive value, then it's going to be clockwise, otherwise it's going to be reverse-clockwise)
+     * @param time the time for the move (Will stop immediately afterwards)
+     * @return
+     */
     public boolean drive(double forwardBack, double leftRight, double time) {
         stageTime.reset();
 
-        if(isMecanum) {driveObj.mecanumDrive(0,forwardBack,leftRight);}
-        else driveObj.tankDrive(forwardBack,leftRight);
+        driveObj.drive(0,forwardBack,leftRight);
 
-        while(this.opModeObj.opModeIsActive() && stageTime.milliseconds() <= time);
-        driveObj.tankDrive(0,0);
+        while(opModeObj.opModeIsActive() && stageTime.milliseconds() <= time);
+        driveObj.drive(0,0,0);
 
-        return this.opModeObj.opModeIsActive();
+        return opModeObj.opModeIsActive();
 
     }
 
+    /**
+     * Moves a motor.
+     * @param motor the MotorControl object you want to control
+     * @param speed the speed for the motor
+     * @param time the time for moving the motor
+     * @return
+     */
     public boolean runMotor(MotorControl motor,double speed,double time) {
 
-        this.stageTime.reset();
+        stageTime.reset();
 
         motor.move(speed);
-        while(this.opModeObj.opModeIsActive() && this.stageTime.seconds() <= time);
+        while(opModeObj.opModeIsActive() && stageTime.seconds() <= time);
         motor.move(0);
 
-        return this.opModeObj.opModeIsActive();
+        return opModeObj.opModeIsActive();
 
     }
 

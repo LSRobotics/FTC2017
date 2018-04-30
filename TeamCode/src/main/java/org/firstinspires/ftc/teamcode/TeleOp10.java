@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,6 +16,7 @@ class TeleOp10 implements Runnable {
     boolean isTeleOpEnded = false;
     private DriveTrain dt;
     private MotorControl lift;
+    private MotorControl intake;
     private ServoControl grabberLeft;
     private ServoControl grabberRight;
     private Controller gp1;
@@ -52,6 +52,7 @@ class TeleOp10 implements Runnable {
         this.isDriveOnly = isDriveOnly;
 
         if (!isDriveOnly) {
+            /*
             grabberLeft = new ServoControl(hwMap.get(Servo.class, Statics.SOPH_LEFT_GLYPH_GRABBER),
                     false,
                     Statics.GGRABBER_CLOSE,
@@ -61,6 +62,11 @@ class TeleOp10 implements Runnable {
                     true,
                     Statics.GGRABBER_CLOSE,
                     Statics.GGRABBER_OPEN);
+            */
+
+            intake = new MotorControl(
+                    hwMap.get(DcMotor.class, Statics.INTAKE_MOTOR), false
+                );
 
             lift = new MotorControl(
                     hwMap.get(DcMotor.class, Statics.GLYPH_LIFT)
@@ -104,7 +110,8 @@ class TeleOp10 implements Runnable {
             driveControl();
             if (!isDriveOnly) {
                 liftControl();
-                grabberControl();
+                //grabberControl();
+                intakeControl();
             }
             isForceUpdate = false;
 
@@ -119,6 +126,7 @@ class TeleOp10 implements Runnable {
 
             isSNP = !isSNP;
             dt.updateSpeedLimit(isSNP ? 0.4 : 1.0);
+            intake.updateSpeedLimit(isSNP? 0.4 : 1.0);
         }
         else if(gp1.isKeyToggled(Controller.X)) {
             isBoostDrive = !isBoostDrive;
@@ -217,6 +225,12 @@ class TeleOp10 implements Runnable {
         }
     }
 
+    private void intakeControl() {
+        if(gp2.isKeysChanged(Controller.dPadUp,Controller.dPadDown)) {
+            intake.moveWithButton(gp2.isKeyHeld(Controller.dPadUp), gp2.isKeyHeld(Controller.dPadDown));
+        }
+    }
+
     private void showData() {
         telemetry.addData("Status           ", "Run Time: " + runtime.toString());
         telemetry.addData("RL encoder: ", dt.getEncoderInfo(DriveTrain.Wheels.REAR_LEFT));
@@ -235,8 +249,8 @@ class TeleOp10 implements Runnable {
     public static class DriveMode {
         final public static int OneStick = 0;
         final public static int NFSControl = 2;
-        final static int TwoStick = 1;
-        final static int ArrowKey = 3;
+        final public static int TwoStick = 1;
+        final public static int ArrowKey = 3;
 
     }
 }

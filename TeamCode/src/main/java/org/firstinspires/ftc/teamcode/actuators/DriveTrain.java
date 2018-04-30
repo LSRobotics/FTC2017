@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.util.Range;
 
 final public class DriveTrain {
 
-
+    /**
+     * The positions of the wheels.
+     */
     public enum Wheels{
         FRONT_LEFT,
         FRONT_RIGHT,
@@ -31,12 +33,22 @@ final public class DriveTrain {
     private              boolean isMecanum          = false;
     private              int wheelMode = 1; //OMNI_WHEEL as default
 
-    static class WheelMode {
-        final static int TANK_WHEEL = 0;
-        final static int OMNI_WHEEL = 1;
-        final static int MECANUM_WHEEL = 2;
+    /**
+     * Drive Mode, can be Tank, Omni or Mecanum.
+     */
+    public static class WheelMode {
+        final public static int TANK_WHEEL = 0;
+        final public static int OMNI_WHEEL = 1;
+        final public static int MECANUM_WHEEL = 2;
     }
-    //Constructor for 4WD
+
+    /**
+     * Constructor for 4WD Mode using MotorControl class.
+     * @param frontLeftMotor front left motor.
+     * @param frontRightMotor front right motor.
+     * @param rearLeftMotor back left motor.
+     * @param rearRightMotor back right motor.
+     */
     private DriveTrain(MotorControl frontLeftMotor, MotorControl frontRightMotor, MotorControl rearLeftMotor, MotorControl rearRightMotor) {
 
         FL = frontLeftMotor;
@@ -50,15 +62,32 @@ final public class DriveTrain {
         is4WD = true;
     }
 
+    /**
+     * Constructor for 4WD Mode using the built-in DcMotor Class.
+     * @param frontLeftMotor front left motor.
+     * @param frontRightMotor front right motor.
+     * @param rearLeftMotor back left motor.
+     * @param rearRightMotor back right motor.
+     */
     public DriveTrain(DcMotor frontLeftMotor, DcMotor frontRightMotor, DcMotor rearLeftMotor, DcMotor rearRightMotor) {
         this(new MotorControl(frontLeftMotor), new MotorControl(frontRightMotor), new MotorControl(rearLeftMotor),new MotorControl(rearRightMotor));
     }
 
-    public DriveTrain(DcMotor frontLeftMotor, DcMotor frontRightMotor) {
-        this(new MotorControl(frontLeftMotor), new MotorControl(frontRightMotor));
+    /**
+     * Constructor for 2WD using DcMotor
+     * @param leftMotor
+     * @param rightMotor
+     */
+    public DriveTrain(DcMotor leftMotor, DcMotor rightMotor) {
+        this(new MotorControl(leftMotor), new MotorControl(rightMotor));
     }
 
 
+    /**
+     * Constructor for 2WD using MotorControl
+     * @param leftMotor
+     * @param rightMotor
+     */
     //Constructor for 2WD
     public DriveTrain(MotorControl leftMotor, MotorControl rightMotor) {
 
@@ -68,10 +97,20 @@ final public class DriveTrain {
         is4WD = false;
     }
 
+    /**
+     * Set wheel mode.
+     * @param wheelMode To set which mode it is. There's DriveTrain.WheelMode for you to pass in.
+     */
     public void setWheelMode(int wheelMode) {
         if(wheelMode >= 0 && wheelMode <= 2) {this.wheelMode = wheelMode;}
     }
 
+    /**
+     * Drives the robot.
+     * @param sideMove
+     * @param forwardBack
+     * @param rotation
+     */
     public void drive(double sideMove, double forwardBack, double rotation) {
         switch(wheelMode) {
             case WheelMode.TANK_WHEEL:
@@ -86,6 +125,11 @@ final public class DriveTrain {
         }
     }
 
+    /**
+     * Tank Drive
+     * @param forwardBack
+     * @param rotation
+     */
     public void tankDrive(double forwardBack, double rotation) {
 
         rotation = -rotation; // FTC 2018 tuning
@@ -108,6 +152,12 @@ final public class DriveTrain {
 
     }
 
+    /**
+     * Omni Drive
+     * @param sideMove
+     * @param forwardBack
+     * @param rotation
+     */
     //From http://ftckey.com/programming/advanced-programming/
     private void omniDrive(double sideMove, double forwardBack, double rotation) {
 
@@ -125,6 +175,12 @@ final public class DriveTrain {
         else return value;
     }
 
+    /**
+     * Mecanum Drive
+     * @param sideMove
+     * @param forwardBack
+     * @param rotation
+     */
     public void mecanumDrive(double sideMove, double forwardBack, double rotation) {
 
         //A little Math from https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
@@ -143,6 +199,10 @@ final public class DriveTrain {
         BR.move(rearRightPower);
     }
 
+    /**
+     * Updates speed limit.
+     * @param speed needs to be greater than 0, otherwise the robot would move backwards or stop moving if it is 0
+     */
     public void updateSpeedLimit(double speed) {
 
         if(is4WD) {
@@ -153,6 +213,11 @@ final public class DriveTrain {
         BR.updateSpeedLimit(speed);
     }
 
+    /**
+     * Gets motor encoders' readings.
+     * @param position the position of the Wheel
+     * @return the motor encoder reading of the specified wheel.
+     */
     public double getEncoderInfo(Wheels position) {
         switch (position) {
             case FRONT_LEFT  : return FR.getCurrentPosition();
@@ -163,6 +228,11 @@ final public class DriveTrain {
         }
     }
 
+    /**
+     * Gets motors' speeds.
+     * @param position the position of the Wheel
+     * @return the motor power reading of the specified wheel.
+     */
     public double getSpeed(Wheels position) {
         switch (position) {
             case FRONT_LEFT  : return FR.getPower();
@@ -173,5 +243,9 @@ final public class DriveTrain {
         }
     }
 
+    /**
+     *
+     * @return whether the DriveTrain is 4WD.
+     */
     public boolean get4WDStat() {return is4WD;}
 }

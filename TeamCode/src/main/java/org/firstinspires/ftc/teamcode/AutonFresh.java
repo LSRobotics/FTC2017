@@ -26,12 +26,14 @@ final class AutonFresh extends LinearOpMode {
 
         MotorControl leftWheel = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_L_WHEEL));
         MotorControl rightWheel = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_R_WHEEL));
-        intakes = new MotorControl(hardwareMap.dcMotor.get(Statics.FRESH_INTAKE),false);
+        intakes = new MotorControl(hardwareMap.dcMotor.get(Statics.INTAKE_MOTOR),false);
         lift    = new MotorControl(hardwareMap.dcMotor.get(Statics.GLYPH_LIFT),false);
 
         DriveTrain tankWheel = new DriveTrain(leftWheel,rightWheel);
 
-        autonControl = new AutonHelper(this, tankWheel,false);
+        tankWheel.setWheelMode(DriveTrain.WheelMode.TANK_WHEEL);
+
+        autonControl = new AutonHelper(this, tankWheel);
 
     }
 

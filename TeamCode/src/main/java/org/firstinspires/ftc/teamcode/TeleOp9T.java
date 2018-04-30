@@ -38,7 +38,7 @@ final public class TeleOp9T extends LinearOpMode {
             GLift = new MotorControl(GLiftObj,false);
 
             //Glyph Intake
-            DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.FRESH_INTAKE);
+            DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.INTAKE_MOTOR);
             intake = new MotorControl(intakeObj, true);
 
             //gamepad
