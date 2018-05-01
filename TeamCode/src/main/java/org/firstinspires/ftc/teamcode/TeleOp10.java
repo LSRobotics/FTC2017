@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
 
 class TeleOp10 implements Runnable {
 
-    final double LIFT_SPEED = 0.75;
+    final double LIFT_SPEED = 1;
     boolean isTeleOpEnded = false;
     private DriveTrain dt;
     private MotorControl lift;
@@ -178,7 +178,7 @@ class TeleOp10 implements Runnable {
                     if (wheelMode != 0) {
                         dt.drive(gp1.getValue(Controller.jLeftX) * (isBoostDrive? 0.2 : 1),
                                 -gp1.getValue(Controller.jLeftY),
-                                gp1.getValue(Controller.jRightX)*(isBoostDrive? 0.2 : 1)*0.6);
+                                gp1.getValue(Controller.jRightX)*((isBoostDrive? 0.2 : 1)*0.6));
                     } else { //Tank Drive
                         dt.tankDrive(-gp1.getValue(Controller.jLeftY),
                                 gp1.getValue(Controller.jLeftX));
@@ -230,8 +230,8 @@ class TeleOp10 implements Runnable {
     }
 
     private void intakeControl() {
-        if(gp2.isKeysChanged(Controller.dPadUp,Controller.dPadDown)) {
-            intake.moveWithButton(gp2.isKeyHeld(Controller.dPadUp), gp2.isKeyHeld(Controller.dPadDown));
+        if(gp2.isKeysChanged(Controller.LT,Controller.RT)) {
+            intake.moveWithButton(gp2.isKeyHeld(Controller.RT), gp2.isKeyHeld(Controller.LT));
         }
     }
 
