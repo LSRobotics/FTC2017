@@ -10,59 +10,64 @@ final public class ServoControl {
 
 
     //private static Servo servoObj = null;
-    private     double  servoPos    = 0;
-    private     int     servoSwitch = -1;
-    public      double  minPos      = 0;
-    public      double  maxPos      = 0;
-    public      double  maxSpeed    = 1.0;
-    private     double  speedLevel  = 1.0;
-    private final Servo   servoObj;
+    private double  minPos;
+    private double  maxPos;
+    private double  speedLimit  = 0.3;
+    private boolean isClockWise;
+    private Servo servo;
 
 
-    public void updateSpeedLimit(double speed){speedLevel = speed * maxSpeed;}
+    public double getMaxPosition() {return maxPos;}
 
-    public ServoControl(Servo servoObject, boolean forward, double min, double max) {
+    public void updateSpeedLimit(double speed){speedLimit = speed;}
+    
+    private double getLimitedSpeed(double speed) {return speed*speedLimit;}
+    private double getLimitedPosition(double position) {return (position > maxPos ? maxPos : (position < minPos? minPos : position));}
+    
+    public ServoControl(Servo servoObject, boolean isForward, double min, double max) {
         minPos = min;
         maxPos = max;
-        this.servoObj = servoObject;
-        this.servoObj.setDirection((forward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
+        servo = servoObject;
+        servo.setDirection(Servo.Direction.FORWARD);
+        servo.setDirection((isForward?Servo.Direction.FORWARD : Servo.Direction.REVERSE));
+        isClockWise = isForward;
     }
-    public void moveGlyphGrabber(boolean inward){
+    public void moveWithButton(boolean inward) {
 
-        if(inward) this.servoPos -= 0.03*this.speedLevel;
-        else       this.servoPos += 0.03*this.speedLevel;
+        final double currentPosBuffer = servo.getPosition();
+        final double expectedPosition = inward ? (currentPosBuffer - (speedLimit * speedLimit))
+                : (currentPosBuffer + (speedLimit * speedLimit));
 
-        //Out-of-limit detection & correction
+        move(expectedPosition);
 
-        if(this.servoPos > this.maxPos)       this.servoPos = this.maxPos;
-        else if (this.servoPos < this.minPos) this.servoPos = this.minPos;
-
-        //Set the position
-        this.servoObj.setPosition(this.servoPos);
     }
-    public void moveJewelArm(Servo servoObj) {
-            this.servoSwitch ++;
 
-            switch (this.servoSwitch) {
-                case 0:
-                    this.servoPos = this.maxPos;
-                    break;
-                case 1:
-                    this.servoPos = (this.maxPos + this.minPos)/2;
-                    break;
-                case 2:
-                    this.servoPos = this.minPos;
-                    break;
-                default:
-                    this.servoPos = this.maxPos;
-                    this.servoSwitch = 0;break;
-            }
+    public void moveFree(boolean inward) {
+        final double currentPosBuffer = servo.getPosition();
+        final double expectedPosition = inward ? (currentPosBuffer - (speedLimit * speedLimit))
+                : (currentPosBuffer + (speedLimit * speedLimit));
 
-            this.servoObj.setPosition(this.servoPos);
+        if(!(expectedPosition > 1 || expectedPosition < -1))
+        servo.setPosition(expectedPosition);
+
+    }
+
+    public double getPosition() {
+        return servo.getPosition();
+    }
+
+    public void move(double position) {
+
+        /*
+        double currentPosBuffer = servo.getPosition();
+
+
+        if(position < currentPosBuffer) {
+            servo.setDirection(isClockWise ? Servo.Direction.REVERSE : Servo.Direction.FORWARD);
+            servo.setPosition(-position);
+            servo.setDirection(isClockWise ? Servo.Direction.FORWARD : Servo.Direction.REVERSE);
         }
-
-    public double getPos() {
-        return this.servoPos;
+        */
+        servo.setPosition(getLimitedPosition(position));
     }
-    public void setPos(double position) {this.servoObj.setPosition(position);}
 }

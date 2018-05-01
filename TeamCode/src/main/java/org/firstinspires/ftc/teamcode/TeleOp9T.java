@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.actuators.DcMotorControl;
+import org.firstinspires.ftc.teamcode.actuators.Controller;
+import org.firstinspires.ftc.teamcode.actuators.MotorControl;
 import org.firstinspires.ftc.teamcode.actuators.DriveTrain;
-import org.firstinspires.ftc.teamcode.actuators.GamepadControl;
 import org.firstinspires.ftc.teamcode.databases.Statics;
 
 /**
@@ -18,9 +18,10 @@ final public class TeleOp9T extends LinearOpMode {
 
         //Initialize objects
         private     DriveTrain      tankWheel;
-        private     GamepadControl   gamepad;
-        private     DcMotorControl      GLift;
-        private     DcMotorControl     intake;
+        private Controller gamepad;
+        private MotorControl GLift;
+        private MotorControl intake;
+        private boolean isSNP = false;
 
         // Declare OpMode members.
         final private ElapsedTime runtime = new ElapsedTime();
@@ -28,21 +29,20 @@ final public class TeleOp9T extends LinearOpMode {
         private void initialize(){
 
             //Tank Wheels
-            DcMotor leftMotor = hardwareMap.get(DcMotor.class, Statics.FRESH_L_WHEEL);
-            DcMotor rightMotor = hardwareMap.get(DcMotor.class, Statics.FRESH_R_WHEEL);
+            MotorControl leftMotor = new MotorControl(hardwareMap.get(DcMotor.class, Statics.FRESH_L_WHEEL));
+            MotorControl rightMotor = new MotorControl(hardwareMap.get(DcMotor.class, Statics.FRESH_R_WHEEL));
             tankWheel = new DriveTrain(leftMotor,rightMotor);
 
             //Glyph Lift
             DcMotor GLiftObj = hardwareMap.get(DcMotor.class, Statics.GLYPH_LIFT);
-            GLift = new DcMotorControl(GLiftObj,false);
+            GLift = new MotorControl(GLiftObj,false);
 
             //Glyph Intake
-            DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.FRESH_INTAKE);
-            intake = new DcMotorControl(intakeObj, true);
-            intake.sensitivity = 1.0;
+            DcMotor intakeObj = hardwareMap.get(DcMotor.class, Statics.INTAKE_MOTOR);
+            intake = new MotorControl(intakeObj, true);
 
             //gamepad
-            gamepad = new GamepadControl(this.gamepad1);
+            gamepad = new Controller(this.gamepad1);
 
         }
 
@@ -64,30 +64,29 @@ final public class TeleOp9T extends LinearOpMode {
 
                 gamepad.updateStatus();
 
-                if (gamepad.L1) { //Sniping Mode Switch
-                    // Change the speed of Mecanum Wheels if Y key got pressed
-                    if(gamepad.current.L1) {
-                        tankWheel.updateSpeedLimit(0.6);
-                        GLift.updateSpeedLimit(0.6);
-                    }
-                    else {
-                        tankWheel.updateSpeedLimit(1.0);
-                        GLift.updateSpeedLimit(1.0);
-                    }
+                if (gamepad.isKeyToggled(Controller.LB)) { //Sniping Mode Switch
+
+                    isSNP = !isSNP;
+
+                    final double speedLimit = isSNP ? 0.6 : 1.0;
+
+                    GLift.updateSpeedLimit(speedLimit);
+                    tankWheel.updateSpeedLimit(speedLimit);
+                    intake.updateSpeedLimit(speedLimit);
                 }
 
 
-                if (gamepad.JLeftY || gamepad.JRightX)
-                    tankWheel.tankDrive(-gamepad.current.JLeftY, gamepad.current.JRightX); //Drive the bot if any joystick moved
+                if (gamepad.isKeyChanged(Controller.jLeftY) || gamepad.isKeyChanged(Controller.jRightX)) {
+                    tankWheel.tankDrive(-gamepad.getValue(Controller.jLeftY), gamepad.getValue(Controller.jRightX)); //Drive the bot if any joystick moved
+                }
 
-                if(gamepad.DPadUp || gamepad.DPadDown)
-                    GLift.moveLift(gamepad.current.DPadUp, gamepad.current.DPadDown);
-
+                if(gamepad.isKeyChanged(Controller.dPadUp) || gamepad.isKeyChanged(Controller.dPadDown)) {
+                    GLift.moveWithButton(gamepad.isKeyHeld(Controller.dPadUp), gamepad.isKeyHeld(Controller.dPadDown));
+                }
 
                 //Intake
-                if(gamepad.L2 || gamepad.R2)
-                    intake.moveLift(gamepad.current.L2 != 0,gamepad.current.R2 != 0);
-
+                if(gamepad.isKeyChanged(Controller.LT) || gamepad.isKeyChanged(Controller.LT))
+                    intake.moveWithButton(gamepad.isKeyHeld(Controller.LT),gamepad.isKeyHeld(Controller.RT));
                 //Start putting information on the Driver Stations
                 if(Statics.FRESH_VISUALIZING) {
                     telemetry.addData("Status           ", "Run Time: " + runtime.toString());// Show the elapsed game time and wheel power.

@@ -7,23 +7,20 @@ package org.firstinspires.ftc.teamcode.databases;
 final public class Statics {
 
         //Output info switch
-        public static final boolean FRESH_VISUALIZING = false;
-        public static final boolean SOPH_VISUALIZING = false;
+        public static final boolean FRESH_VISUALIZING = true;
+        public static final boolean SOPH_VISUALIZING = true;
 
         //Freshman's wheels
         public static final String  FRESH_L_WHEEL = "left_tank_motor";
         public static final String FRESH_R_WHEEL = "right_tank_motor";
-
-        //Freshman's glyph intake
-        public static final String FRESH_INTAKE = "intake_motor";
 
         public static final double FRESH_AUTON_STAGE_ONE_TIME = 0.32;
 
         //Sophomore's Wheels
         public static final String SOPH_FL_WHEEL = "front_left_drive";
         public static final String SOPH_FR_WHEEL = "front_right_drive";
-        public static final String SOPH_RL_WHEEL = "rear_left_drive";
-        public static final String SOPH_RR_WHEEL = "rear_right_drive";
+        public static final String SOPH_BL_WHEEL = "rear_left_drive";
+        public static final String SOPH_BR_WHEEL = "rear_right_drive";
 
 
         //Sophomore's servos
@@ -42,4 +39,9 @@ final public class Statics {
         //Shared Device names
         public static final String ARM_COLOR = "arm_color_sensor";
         public static final String GLYPH_LIFT = "glyph_lift_motor";
+        public static final String INTAKE_MOTOR = "intake_motor";
+
+        public static final double GGRABBER_CLOSE = 0.44;
+        public static final double GGRABBER_OPEN  = 0.71;
+
 }

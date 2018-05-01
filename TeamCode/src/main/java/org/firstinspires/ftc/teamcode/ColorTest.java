@@ -11,9 +11,7 @@ import org.firstinspires.ftc.teamcode.databases.Statics;
  * Created by LBYPatrick on 12/7/2017.
  */
 @TeleOp (name="Color Sensor Test",group="test")
-
-
-public class ColorTest extends LinearOpMode {
+class ColorTest extends LinearOpMode {
 
     private RGBSensorControl armColorSensor;
 
@@ -32,19 +30,10 @@ public class ColorTest extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            switch(armColorSensor.getBallColor()) {
-                case 0 : ballColor = "Blue";
-                         break;
-                case 1 : ballColor = "Red";
-                         break;
-                case 2 : ballColor = "Unknown";
-                         break;
-            }
-
             armColorSensor.updateColorData();
             telemetry.addData("RGB:", "R:" + armColorSensor.redVal + " G:" + armColorSensor.greenVal + " B:" + armColorSensor.blueVal);
 
-            telemetry.addData("Ball color",ballColor);
+            telemetry.addData("Ball color",armColorSensor.getBallColor());
             telemetry.update();
         }
     }
